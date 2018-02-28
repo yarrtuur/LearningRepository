@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Hello!");
-        System.out.println("Please, set the connect string by format: login | password | database, he");
+        System.out.println("Please, set the connect string by format: login | password | database ");
         System.out.println("or type `help` for list available commands. ");
 
         CommandLineParser clp = new CommandLineParser();
