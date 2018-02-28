@@ -1,4 +1,4 @@
 package maven_sql.sqlCmd;
 
-public class Database {
+ public class Database {
 }
