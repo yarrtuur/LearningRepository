@@ -22,14 +22,13 @@ public class CmdLineParser {
     public void takeUpCmdLine(String args) {
         String[] command = args.split("\\|");
 
-        if( command[0].equals("exit")){
-            setCmdState(CmdLineState.EXIT);
-        }
-        if( command[0].equals("help") ){
-            setCmdState(CmdLineState.WAIT);
-            System.out.println("There is a list of available commands: "
-                    + Arrays.toString(CmdCommandsList.values()));
+        switch (command[0])
+        {
+            case "exit" :setCmdState(CmdLineState.EXIT);  break;
+            case "help" :setCmdState(CmdLineState.WAIT);
+                System.out.println("There is a list of available commands: "
+                        + Arrays.toString(CmdCommandsList.values()));
+                break;
         }
     }
-
 }
