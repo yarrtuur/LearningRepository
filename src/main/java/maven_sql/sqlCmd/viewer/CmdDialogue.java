@@ -19,7 +19,7 @@ public class CmdDialogue {
 
     public void cmdDialogueHolder() {
         System.out.println("Hello!");
-        System.out.println("Please, set the connect string by format: login | password | database ");
+        System.out.println("Please, set the connect string by format: connect | login | password | database ");
         System.out.println("or type `help` for list available commands. ");
 
         CmdLineParser clp = new CmdLineParser();
