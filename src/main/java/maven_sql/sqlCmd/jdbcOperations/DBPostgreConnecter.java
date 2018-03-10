@@ -1,28 +1,26 @@
 package maven_sql.sqlCmd.jdbcOperations;
 
 import maven_sql.sqlCmd.types_enums.ActionResult;
-import maven_sql.sqlCmd.types_enums.ConnectFeedBack;
+import maven_sql.sqlCmd.types_enums.DBFeedBack;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DBPostgreConnecter extends DBCommand implements DBConnectable{
-    private String login, passwd, sid;
+public class DBPostgreConnecter extends DBCommand {
+    private String[] command;
 
-    public DBPostgreConnecter(String[] args){
+    public DBPostgreConnecter(String[] command){
         //сonnect|postgres|1|postgres
-        this.setLogin(args[1]);
-        this.setPasswd(args[2]);
-        this.setSid(args[3]);
-        this.connectToDB();
+        this.setLogin(command);
+        System.out.println(this.sqlAction("Starting connect..."));
     }
 
     @Override
     public ActionResult getActionResult() {
-        return connectToDB().equals(ConnectFeedBack.OK) ? ActionResult.RESULT_OK : ActionResult.RESULT_WRONG;
+        return connection != null ? ActionResult.ACTION_RESULT_OK : ActionResult.ACTION_RESULT_WRONG;
     }
-    @Override
-    public ConnectFeedBack connectToDB(){
+
+    public DBFeedBack sqlAction(){
 
         System.out.println("-------- PostgreSQL JDBC Connection Testing ------------");
 
@@ -32,39 +30,40 @@ public class DBPostgreConnecter extends DBCommand implements DBConnectable{
             System.out.println("Where is your PostgreSQL JDBC Driver? "
                     + "Include in your library path!");
             e.printStackTrace();
-            return ConnectFeedBack.REFUSE;
+            return DBFeedBack.REFUSE;
         }
 
         System.out.println("PostgreSQL JDBC Driver Registered!");
 
         try {
             connection = DriverManager.getConnection(
-                    this.makeSqlLine() , login,  passwd);
+                    this.makeSqlLine(command) , command[1],  command[2]);
         } catch (SQLException e) {
             System.out.println("Connection Failed! Check output console");
             e.printStackTrace();
-            return ConnectFeedBack.REFUSE;
+            return DBFeedBack.REFUSE;
         }
 
         if (connection != null) {
             System.out.println("You made it, take control your database now!");
-            return ConnectFeedBack.OK;
+            return DBFeedBack.OK;
         } else {
             System.out.println("Failed to make connection!");
         }
-        return ConnectFeedBack.REFUSE;
+        return DBFeedBack.REFUSE;
     }
-    private void setLogin(String login){
-        this.login = login;
+    private void setLogin(String[] command){
+        this.command = command;
     }
-    private void setPasswd(String passwd){
-        this.passwd = passwd;
-    }
-    private void setSid(String sid){
-        this.sid = sid;
-    }
+
     @Override
-    String makeSqlLine(){
-        return "jdbc:postgresql://127.0.0.1:5432/" + sid;
+    DBFeedBack sqlAction(String sql) {
+        System.out.println(sql);
+        return sqlAction();
+    }
+
+    @Override
+    String makeSqlLine(String[] command){
+        return "jdbc:postgresql://127.0.0.1:5432/" + command[3];
     }
 }

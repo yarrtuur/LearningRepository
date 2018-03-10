@@ -24,14 +24,14 @@ public class CmdLineParser {
                 for (EnumCmdsList enumCmdsList : EnumCmdsList.values())
                     System.out.println(enumCmdsList + ": " + enumCmdsList.getDescription());
                 break;
-            case "сonnect" :
+            case "connect" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBPostgreConnecter(command);
                 System.out.println(dbCommand.getActionResult());
                 break;
             case "tables" :
                 setCmdState(CmdLineState.WAIT);
-                dbCommand = new DBDataSelecter(command);
+                dbCommand = new DBTblViewer(command);
                 break;
             case "clear" :
                 setCmdState(CmdLineState.WAIT);
@@ -44,6 +44,7 @@ public class CmdLineParser {
             case "create" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTblCreater(command);
+                System.out.println(dbCommand.getActionResult());
                 break;
             case "find" :
                 setCmdState(CmdLineState.WAIT);
