@@ -13,9 +13,9 @@ public class DBUpdater extends DBCommand {
         return null;
     }
     @Override
-    String makeSqlLine(String[] command) {
+    public String makeSqlLine() {
         return null;
     }
     @Override
-    DBFeedBack sqlAction(String sql){return null;};
+    public DBFeedBack sqlAction(String sql){return null;};
 }

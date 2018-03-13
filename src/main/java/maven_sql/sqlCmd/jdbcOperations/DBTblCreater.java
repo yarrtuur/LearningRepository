@@ -5,35 +5,57 @@ import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBTblCreater extends DBCommand {
-    StringBuilder sb = new StringBuilder();
-    boolean stmtResult = false;
+    private StringBuilder sb = new StringBuilder();
+    private boolean  stmtResult ;
+    private String tblName;
+    private List<String> listColumnData = new ArrayList<>();
+    //create ("create | tableName | column1 | column2 | ... | columnN")
 
     public DBTblCreater(String[] command) {
-        System.out.println(sqlAction(makeSqlLine(command)));
+        this.chkCmdData(command);
+        System.out.println(this.sqlAction(this.makeSqlLine()));
     }
-    @Override
-    String makeSqlLine(String[] command){
 
-        sb.append("CREATE TABLE IF NOT EXISTS ");
-        sb.append(command[1]);
-        sb.append(" ( ");
-        sb.append("rid serial CONSTRAINT id_table_pk PRIMARY KEY, ");
-        for (int i = 2; i < command.length; i++ ) {
+    @Override
+    public void chkCmdData(String[] command) {
+        try{
+            tblName = command[1];
+        }catch(IndexOutOfBoundsException ex){
+            System.out.println("Command string format is wrong. Try again.");
+        }
+        try{
+            for (int i = 2; i < command.length ; i = i + 2 ) {
+                listColumnData.add(command[i]);
+            }
+        }catch(IndexOutOfBoundsException ex){
+            System.out.println("There is no column to create table. Try again.");
+        }
+    }
+
+    @Override
+    public String makeSqlLine(){
+
+        sb.append("CREATE TABLE IF NOT EXISTS ").append(tblName)
+                .append(" ( rid serial CONSTRAINT id_table_pk PRIMARY KEY, ");
+        for (int i = 2; i < listColumnData.size(); i++ ) {
             if ( i != 2){
                 sb.append(",");
             }
-            sb.append(command[i]);
-            sb.append(" varchar(200) ");
+            sb.append(listColumnData.get(i)).append(" varchar(200) ");
         }
         sb.append(");");
 
         return  sb.toString();
     }
+
     @Override
-    DBFeedBack sqlAction(String sql) {
+    public DBFeedBack sqlAction(String sql) {
         if (connection == null ){
             System.out.println("Not connected to DB.");
             return DBFeedBack.REFUSE;
@@ -42,19 +64,18 @@ public class DBTblCreater extends DBCommand {
             System.out.println("Creating table in given database...");
             stmt = connection.createStatement();
             stmtResult = stmt.execute(sql);
-            if(stmtResult == true) {
                 System.out.println("Created table in given database...");
                 return DBFeedBack.OK;
-            }
         }catch(SQLException ex){
-            ex.printStackTrace();
+            System.out.println("Create table is lost in given database...");
             return DBFeedBack.REFUSE;
         }
-        return DBFeedBack.REFUSE;
+
     }
+    
     @Override
     public ActionResult getActionResult() {
-        return (stmtResult == true) ? ActionResult.ACTION_RESULT_OK : ActionResult.ACTION_RESULT_WRONG;
+        return ( stmtResult ) ?  ActionResult.ACTION_RESULT_OK : ActionResult.ACTION_RESULT_WRONG;
     }
 
 }

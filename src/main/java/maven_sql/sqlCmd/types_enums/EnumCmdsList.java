@@ -3,7 +3,7 @@ package maven_sql.sqlCmd.types_enums;
 public enum EnumCmdsList {
     exit ("exit"),
     help ("help"),
-    connect ("connect | username | password | database"),
+    connect ("connect | username | password | database_sid | <IP-addr> | <port> "),
     tables ("tables OR tables | fields "),
     clear ("clear | tableName "),
     drop ("drop | tableName "),

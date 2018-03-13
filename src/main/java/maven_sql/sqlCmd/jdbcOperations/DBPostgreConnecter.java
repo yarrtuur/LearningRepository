@@ -7,11 +7,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBPostgreConnecter extends DBCommand {
-    private String[] command;
+
+    private String login, passwd, dbSid, ipAddr, connPort;
 
     public DBPostgreConnecter(String[] command){
-        //сonnect|postgres|1|postgres
-        this.setLogin(command);
+        //сonnect|postgres|1|postgres|IP|port
+        this.chkCmdData(command);
         System.out.println(this.sqlAction("Starting connect..."));
     }
 
@@ -26,10 +27,10 @@ public class DBPostgreConnecter extends DBCommand {
 
         try {
             Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException ex) {
             System.out.println("Where is your PostgreSQL JDBC Driver? "
                     + "Include in your library path!");
-            e.printStackTrace();
+            //ex.printStackTrace();
             return DBFeedBack.REFUSE;
         }
 
@@ -37,10 +38,10 @@ public class DBPostgreConnecter extends DBCommand {
 
         try {
             connection = DriverManager.getConnection(
-                    this.makeSqlLine(command) , command[1],  command[2]);
+                    this.makeSqlLine() , login, passwd);
         } catch (SQLException e) {
             System.out.println("Connection Failed! Check output console");
-            e.printStackTrace();
+            //e.printStackTrace();
             return DBFeedBack.REFUSE;
         }
 
@@ -52,18 +53,36 @@ public class DBPostgreConnecter extends DBCommand {
         }
         return DBFeedBack.REFUSE;
     }
-    private void setLogin(String[] command){
-        this.command = command;
+    @Override
+    public void chkCmdData(String[] command){
+        try {
+            this.login = command[1];
+            this.passwd = command[2];
+            this.dbSid = command[3];
+        }catch(IndexOutOfBoundsException ex){
+            //ex.printStackTrace();
+            System.out.println("Command string format is wrong. Try again.");
+        }
+            if( command.length > 4 ) {
+                this.ipAddr = command[4];
+            }else{
+                this.ipAddr = "127.0.0.1";
+            }
+            if( command.length > 5 ) {
+                this.connPort = command[5];
+            }else{
+                connPort = "5432";
+            }
     }
 
     @Override
-    DBFeedBack sqlAction(String sql) {
+    public String makeSqlLine(){
+        return String.format("jdbc:postgresql://%s:%s/%s",ipAddr, connPort, dbSid);
+    }
+
+    @Override
+    public DBFeedBack sqlAction(String sql) {
         System.out.println(sql);
         return sqlAction();
-    }
-
-    @Override
-    String makeSqlLine(String[] command){
-        return "jdbc:postgresql://127.0.0.1:5432/" + command[3];
     }
 }

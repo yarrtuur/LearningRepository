@@ -6,13 +6,15 @@ import maven_sql.sqlCmd.types_enums.DBFeedBack;
 import java.sql.Connection;
 import java.sql.Statement;
 
-abstract public class DBCommand {
+abstract public class DBCommand implements DBCommandable{
     static Connection connection = null;
     Statement stmt = null;
 
-    abstract String makeSqlLine(String[] command);
+    public String makeSqlLine(){return null;};
 
-    public abstract ActionResult getActionResult();
+    public ActionResult getActionResult(){return null;};
 
-    abstract DBFeedBack sqlAction(String sql);
+    public DBFeedBack sqlAction(String sql){return null;};
+
+    public void chkCmdData(String[] command){};
 }

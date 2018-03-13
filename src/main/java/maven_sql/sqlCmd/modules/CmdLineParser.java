@@ -13,12 +13,16 @@ public class CmdLineParser {
     }
 
     public void takeUpCmdLine(String args) {
-        String[] command = args.toLowerCase().split("\\|");
+
+        String[] command = args.replaceAll("\\s","").toLowerCase().split("\\|");
         DBCommand dbCommand = null;
         System.out.println(command[0]);
         switch ( command[0] )
         {
-            case "exit" :setCmdState(CmdLineState.EXIT);  break;
+            case "exit" :setCmdState(CmdLineState.EXIT);
+                System.out.println("Bye...");
+                new DBExit();
+                break;
             case "help" :setCmdState(CmdLineState.WAIT);
                 System.out.println("There is a list of available commands: ");
                 for (EnumCmdsList enumCmdsList : EnumCmdsList.values())

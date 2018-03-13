@@ -1,6 +1,5 @@
 package maven_sql.sqlCmd.jdbcOperations;
 
-import maven_sql.sqlCmd.jdbcOperations.DBCommand;
 import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
 
@@ -10,14 +9,20 @@ public class DBDataDeleter extends DBCommand {
     }
 
     @Override
+    public void chkCmdData(String[] command) {
+        super.chkCmdData(command);
+    }
+
+    @Override
     public ActionResult getActionResult() {
         return null;
     }
 
     @Override
-    String makeSqlLine(String[] command) {
+    public String makeSqlLine() {
         return null;
     }
+
     @Override
-    DBFeedBack sqlAction(String sql){return null;};
+    public DBFeedBack sqlAction(String sql){return null;};
 }
