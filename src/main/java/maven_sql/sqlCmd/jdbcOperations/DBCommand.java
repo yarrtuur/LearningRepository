@@ -6,10 +6,13 @@ import maven_sql.sqlCmd.types_enums.DBFeedBack;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 abstract public class DBCommand implements DBCommandable{
     static Connection connection = null;
-    Statement stmt = null;
+
     PreparedStatement preparedStatement = null;
 
     public String makeSqlLine(){return null;};
