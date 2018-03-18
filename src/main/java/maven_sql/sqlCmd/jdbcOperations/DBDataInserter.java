@@ -3,7 +3,7 @@ package maven_sql.sqlCmd.jdbcOperations;
 import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
 
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,14 +13,15 @@ public class DBDataInserter extends DBCommand {
     private Map<String ,String> mapColData = new HashMap<>();
     private int stmtResult ;
     private String tblName ;
+    PreparedStatement preparedStatement;
 
     public DBDataInserter(String[] command) {
-        this.chkCmdData(command);
-        System.out.println(this.sqlAction(this.makeSqlLine()));
-    }
+            this.chkCmdData(command);
+            System.out.println(this.startSqlAction(this.makeSqlLine()));
+        }
 
     @Override
-    public DBFeedBack sqlAction(String sql){
+    public DBFeedBack startSqlAction(String sql){
         if (connection == null ){
             System.out.println("Not connected to DB.");
             return DBFeedBack.REFUSE;
@@ -37,6 +38,7 @@ public class DBDataInserter extends DBCommand {
             ex.printStackTrace();
             return DBFeedBack.REFUSE;
         }
+
     };
 
     @Override

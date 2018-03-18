@@ -9,7 +9,7 @@ public interface DBCommandable {
 
     ActionResult getActionResult();
 
-    DBFeedBack sqlAction(String sql);
+    DBFeedBack startSqlAction(String sql);
 
     void chkCmdData(String[] command);
 }

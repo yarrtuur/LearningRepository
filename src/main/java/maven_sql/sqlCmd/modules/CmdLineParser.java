@@ -32,10 +32,13 @@ public class CmdLineParser {
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBPostgreConnecter(command);
                 System.out.println(dbCommand.getActionResult());
+                dbCommand = null;
                 break;
             case "tables" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTblViewer(command);
+                System.out.println(dbCommand.getActionResult());
+                dbCommand = null;
                 break;
             case "clear" :
                 setCmdState(CmdLineState.WAIT);
@@ -49,6 +52,7 @@ public class CmdLineParser {
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTblCreater(command);
                 System.out.println(dbCommand.getActionResult());
+                dbCommand = null;
                 break;
             case "find" :
                 setCmdState(CmdLineState.WAIT);

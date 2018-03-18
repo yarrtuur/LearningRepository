@@ -17,7 +17,7 @@ public class DBTblCreater extends DBCommand {
 
     public DBTblCreater(String[] command) {
         this.chkCmdData(command);
-            System.out.println(this.sqlAction(this.makeSqlLine()));
+            System.out.println(this.startSqlAction(this.makeSqlLine()));
     }
 
     @Override
@@ -35,7 +35,7 @@ public class DBTblCreater extends DBCommand {
     }
 
     @Override
-    public DBFeedBack sqlAction(String sql) {
+    public DBFeedBack startSqlAction(String sql) {
         if (connection == null ){
             System.out.println("Not connected to DB.");
             return DBFeedBack.REFUSE;
@@ -66,7 +66,7 @@ public class DBTblCreater extends DBCommand {
     public String makeSqlLine(){
 
         sb.append("CREATE TABLE IF NOT EXISTS ").append(tblName)
-                .append(" ( rid serial CONSTRAINT id_table_pk PRIMARY KEY ");
+                .append(" ( rid serial CONSTRAINT id_").append(tblName).append("_pk PRIMARY KEY ");
         for (String aListColumnData : listColumn) {
             sb.append(",").append(aListColumnData).append(" varchar(200) ");
         }

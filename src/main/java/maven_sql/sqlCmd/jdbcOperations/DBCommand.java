@@ -19,7 +19,7 @@ abstract public class DBCommand implements DBCommandable{
 
     public ActionResult getActionResult(){return null;};
 
-    public DBFeedBack sqlAction(String sql){return null;};
+    public DBFeedBack startSqlAction(String sql){return null;};
 
     public void chkCmdData(String[] command){};
 }

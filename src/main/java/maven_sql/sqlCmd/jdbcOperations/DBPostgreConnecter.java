@@ -13,7 +13,7 @@ public class DBPostgreConnecter extends DBCommand {
     public DBPostgreConnecter(String[] command){
         //сonnect|postgres|1|postgres|IP|port
         this.chkCmdData(command);
-        System.out.println(this.sqlAction("Starting connect..."));
+        System.out.println(this.startSqlAction("Starting connect..."));
     }
 
     @Override
@@ -81,7 +81,7 @@ public class DBPostgreConnecter extends DBCommand {
     }
 
     @Override
-    public DBFeedBack sqlAction(String sql) {
+    public DBFeedBack startSqlAction(String sql) {
         System.out.println(sql);
         return sqlAction();
     }

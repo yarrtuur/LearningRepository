@@ -16,5 +16,5 @@ public class DBTblCleaner extends DBCommand {
         return null;
     }
     @Override
-    public DBFeedBack sqlAction(String sql){return null;};
+    public DBFeedBack startSqlAction(String sql){return null;};
 }
