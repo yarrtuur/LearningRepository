@@ -10,6 +10,11 @@ public class DBDataFinder extends DBCommand {
     }
 
     @Override
+    public void chkCmdData(String[] command) {
+
+    }
+
+    @Override
     public String makeSqlLine() {
         return null;
     }
@@ -18,7 +23,8 @@ public class DBDataFinder extends DBCommand {
     public ActionResult getActionResult() {
         return null;
     }
+
     @Override
-    public DBFeedBack startSqlAction(String sql){return null;};
+    public DBFeedBack startSqlAction(String sql){return null;}
 
 }
