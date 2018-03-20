@@ -71,7 +71,8 @@ public class DBTblViewer extends DBCommand {
     @Override
     public String makeSqlLine() {
         StringBuilder sb = new StringBuilder();
-            return sb.append("SELECT t.table_name FROM information_schema.tables t WHERE t.table_schema = 'public'").toString();
+            return sb.append("SELECT t.table_name FROM information_schema.tables t " +
+                    "WHERE t.table_schema = 'public'").toString();
     }
 
     private String makeSqlLine(String tblName){
