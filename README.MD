@@ -44,7 +44,7 @@ F - Команда для получения содержимого указан
    F.1 find - Команда для получения содержимого указанной таблицы
    F.2 Формат: find | tableName
      где tableName - имя таблицы
-   F.3 Формат: find | tableName | column | value
+   F.3 Формат: find | tableName | where |column | value| ... | columnN | valueN
             где tableName - имя таблицы
             column - имя столбца записи которое проверяется
             value - значение которому должен соответствовать столбец column для искомой записи

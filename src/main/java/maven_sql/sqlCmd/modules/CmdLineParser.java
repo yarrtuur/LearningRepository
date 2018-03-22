@@ -57,6 +57,7 @@ public class CmdLineParser {
             case "find" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBDataFinder(command);
+                dbCommand = null;
                 break;
             case "insert" :
                 setCmdState(CmdLineState.WAIT);
