@@ -31,20 +31,14 @@ public class CmdLineParser {
             case "connect" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBPostgreConnecter(command);
-                System.out.println(dbCommand.getActionResult());
-                dbCommand = null;
                 break;
             case "tables" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTblViewer(command);
-                System.out.println(dbCommand.getActionResult());
-                dbCommand = null;
                 break;
             case "clear" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTblCleaner(command);
-                System.out.println(dbCommand.getActionResult());
-                dbCommand = null;
                 break;
             case "drop" :
                 setCmdState(CmdLineState.WAIT);
@@ -53,14 +47,10 @@ public class CmdLineParser {
             case "create" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTblCreater(command);
-                System.out.println(dbCommand.getActionResult());
-                dbCommand = null;
                 break;
             case "find" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBDataFinder(command);
-                System.out.println(dbCommand.getActionResult());
-                dbCommand = null;
                 break;
             case "insert" :
                 setCmdState(CmdLineState.WAIT);
@@ -79,6 +69,8 @@ public class CmdLineParser {
                 System.out.println("Not available command. Please type `help` to list all commands ");
                 break;
         }
+        System.out.println(dbCommand != null ? dbCommand.getActionResult() : null);
+        dbCommand = null;
     }
     public CmdLineState getCMDState() {
         return cmdState;

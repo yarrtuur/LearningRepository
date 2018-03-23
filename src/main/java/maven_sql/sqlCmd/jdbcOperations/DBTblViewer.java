@@ -37,6 +37,10 @@ public class DBTblViewer extends DBCommand {
             while (stmtResultSet.next()) {
                 tblList.add(stmtResultSet.getString("table_name"));
             }
+            if( tblList.size() <= 0 ){
+                System.out.println("No tables in given database...");
+                return DBFeedBack.REFUSE;
+            }
             if ( isDetails ){
                 for ( String step : tblList ) {
 
