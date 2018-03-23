@@ -43,6 +43,8 @@ public class CmdLineParser {
             case "clear" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTblCleaner(command);
+                System.out.println(dbCommand.getActionResult());
+                dbCommand = null;
                 break;
             case "drop" :
                 setCmdState(CmdLineState.WAIT);
@@ -57,6 +59,7 @@ public class CmdLineParser {
             case "find" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBDataFinder(command);
+                System.out.println(dbCommand.getActionResult());
                 dbCommand = null;
                 break;
             case "insert" :

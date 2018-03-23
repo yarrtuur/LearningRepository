@@ -3,18 +3,53 @@ package maven_sql.sqlCmd.jdbcOperations;
 import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class DBTblCleaner extends DBCommand {
-    public DBTblCleaner(String[] args) {
-        System.out.println("Make me!");
+    private int stmtResult ;
+    private String tblName ;
+
+    public DBTblCleaner(String[] command) {
+        this.chkCmdData(command);
+        System.out.println(this.startSqlAction(this.makeSqlLine()));
     }
+
     @Override
-    public ActionResult getActionResult() {
-        return null;
+    public DBFeedBack startSqlAction(String sql){
+        if (connection == null ){
+            System.out.println("Not connected to DB.");
+            return DBFeedBack.REFUSE;
+        }
+        try {
+            System.out.println("Deleting data from table in given database...");
+            preparedStatement = connection.prepareStatement(sql);
+            stmtResult = preparedStatement.executeUpdate();
+            System.out.println("data deleted successfully");
+            return DBFeedBack.OK;
+        }catch(SQLException ex){
+            System.out.println("Create table is lost in given database...");
+            ex.printStackTrace();
+            return DBFeedBack.REFUSE;
+        }
     }
+
     @Override
     public String makeSqlLine() {
-        return null;
+        return String.format("DELETE FROM %s",tblName);
     }
+
     @Override
-    public DBFeedBack startSqlAction(String sql){return null;};
+    public void chkCmdData(String[] command) {
+        try{
+            tblName = command[1];
+        }catch(IndexOutOfBoundsException ex){
+            System.out.println("Command string format is wrong. Try again.");
+        }
+    }
+
+    @Override
+    public ActionResult getActionResult() {
+        return ( stmtResult == 0 ) ?  ActionResult.ACTION_RESULT_OK : ActionResult.ACTION_RESULT_WRONG;
+    }
 }

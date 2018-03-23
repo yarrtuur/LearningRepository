@@ -14,7 +14,6 @@ import java.util.Map;
 public class DBDataFinder extends DBCommand {
     private String tblName ;
     private boolean isColumns = false;
-    private boolean isWhere = false;
     private ResultSet stmtResultSet;
     private ResultSetMetaData stmtResultSetMeta;
     private int stmtResult ;
@@ -27,15 +26,12 @@ public class DBDataFinder extends DBCommand {
 
     @Override
     public void chkCmdData(String[] command) {
-       // find | tableName OR  find | tableName | column | value
         try{
             tblName = command[1];
             if( command.length > 2 ){
                 isColumns = true;
                 columnMap = new HashMap<>();
-                isWhere = command[2].toLowerCase().equals("where");        //for future realisation
-                int i = (command[2].toLowerCase().equals("where")) ? 3 : 2;//for future realisation
-                for (; i < command.length; i = i + 2) {
+                for (int i = 2; i < command.length; i = i + 2) {
                     columnMap.put(command[i], command[i + 1]);
                 }
             }
@@ -43,19 +39,17 @@ public class DBDataFinder extends DBCommand {
             System.out.println("Command string format is wrong. Try again.");
         }
     }
-    //connect|postgres|1|postgres
+
     @Override
     public String makeSqlLine() {
         StringBuilder sb = new StringBuilder();
          sb.append(String.format("SELECT * from public.%s ", tblName));
          if(isColumns){
-            // if(isWhere) {   // has frozen for future realisation
-                 sb.append(" WHERE ");
-                 for (Map.Entry<String, String> step : columnMap.entrySet()) {
-                     sb.append(String.format(" %s = \'%s\' AND", step.getKey(), step.getValue()));
-                 }
-                 sb.replace(sb.length() - 3, sb.length(), " ");
-             //}
+             sb.append(" WHERE ");
+             for (Map.Entry<String, String> step : columnMap.entrySet()) {
+                 sb.append(String.format(" %s = \'%s\' AND", step.getKey(), step.getValue()));
+             }
+             sb.replace(sb.length() - 3, sb.length(), " ");
          }
          return sb.toString();
     }
