@@ -19,40 +19,49 @@ public class CmdLineParser {
         System.out.println(command[0]);
         switch ( command[0] )
         {
-            case "exit" :setCmdState(CmdLineState.EXIT);
+        /**/
+        case "exit" :setCmdState(CmdLineState.EXIT);
                 System.out.println("Bye...");
                 new DBExit();
                 break;
-            case "help" :setCmdState(CmdLineState.WAIT);
+        /**/
+        case "help" :setCmdState(CmdLineState.WAIT);
                 System.out.println("There is a list of available commands: ");
                 for (EnumCmdsList enumCmdsList : EnumCmdsList.values())
                     System.out.println(enumCmdsList + ": " + enumCmdsList.getDescription());
                 break;
-            case "connect" :
+        /**/
+        case "connect" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBPostgreConnecter(command);
                 break;
-            case "tables" :
+        /**/
+        case "tables" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTblViewer(command);
                 break;
+        /**/
             case "clear" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTblCleaner(command);
                 break;
-            case "drop" :
+        /**/
+        case "drop" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTblDroper(command);
                 break;
-            case "create" :
+        /**/
+        case "create" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTblCreater(command);
                 break;
-            case "find" :
+        /**/
+        case "find" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBDataFinder(command);
                 break;
-            case "insert" :
+        /**/
+        case "insert" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBDataInserter(command);
                 break;
