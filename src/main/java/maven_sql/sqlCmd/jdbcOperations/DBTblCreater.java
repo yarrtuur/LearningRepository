@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class DBTblCreater extends DBCommand {
-    private StringBuilder sb = new StringBuilder();
+
     private int stmtResult ;
     private List<String> listColumn = new LinkedList<>();
     private String tblName ;
@@ -41,30 +41,43 @@ public class DBTblCreater extends DBCommand {
             return DBFeedBack.REFUSE;
         }
         try {
-            System.out.println("Creating table in given database...");
-            String sqlstr = String.format("SELECT 1 FROM information_schema.tables WHERE table_name =  \'%s\'",tblName);
-
-            preparedStatement =  connection.prepareStatement(sqlstr);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
+            DBFeedBack chkTableAvailable = searchTableByName();
+            if(chkTableAvailable.equals(DBFeedBack.REFUSE)){
                 System.out.println(String.format("Table %s already exists.",tblName));
-                return DBFeedBack.REFUSE;
-            }else {
-                preparedStatement = connection.prepareStatement(sql);
-                stmtResult = preparedStatement.executeUpdate();
-                System.out.println("CREATE TABLE Query returned successfully");
-                return DBFeedBack.OK;
+                return chkTableAvailable;
+            }
+            else {
+                return createTableWithParams(sql);
             }
         }catch(SQLException ex){
-            System.out.println("Create table is lost in given database...");
+            System.out.println("Create table is interrupted in given database...");
             ex.printStackTrace();
             return DBFeedBack.REFUSE;
         }
     }
 
+    private DBFeedBack createTableWithParams(String sql) throws SQLException {
+        System.out.println("Creating table in given database...");
+        preparedStatement = connection.prepareStatement(sql);
+        stmtResult = preparedStatement.executeUpdate();
+        System.out.println("CREATE TABLE Query returned successfully");
+        return DBFeedBack.OK;
+    }
+
+    private DBFeedBack searchTableByName() throws SQLException{
+        String sqlstr = String.format("SELECT 1 FROM information_schema.tables WHERE table_name =  \'%s\'",tblName);
+        preparedStatement =  connection.prepareStatement(sqlstr);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            return DBFeedBack.REFUSE;
+        }else {
+            return DBFeedBack.OK;
+        }
+    }
+
     @Override
     public String makeSqlLine(){
-
+        StringBuilder sb = new StringBuilder();
         sb.append("CREATE TABLE IF NOT EXISTS ").append(tblName)
                 .append(" ( rid serial CONSTRAINT id_").append(tblName).append("_pk PRIMARY KEY ");
         for (String aListColumnData : listColumn) {

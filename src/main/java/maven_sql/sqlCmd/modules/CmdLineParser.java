@@ -46,7 +46,7 @@ public class CmdLineParser {
         /**/
             case "clear" :
                 setCmdState(CmdLineState.WAIT);
-                dbCommand = new DBTblCleaner(command);
+                dbCommand = new DBTableCleaner(command);
                 break;
         /**/
         case "drop" :

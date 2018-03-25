@@ -3,14 +3,13 @@ package maven_sql.sqlCmd.jdbcOperations;
 import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DBTblCleaner extends DBCommand {
+public class DBTableCleaner extends DBCommand {
     private int stmtResult ;
     private String tblName ;
 
-    public DBTblCleaner(String[] command) {
+    public DBTableCleaner(String[] command) {
         this.chkCmdData(command);
         System.out.println(this.startSqlAction(this.makeSqlLine()));
     }
