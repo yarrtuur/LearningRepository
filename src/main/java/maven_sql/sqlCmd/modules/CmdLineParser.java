@@ -36,7 +36,7 @@ public class CmdLineParser {
                 break;
             case "tables" :
                 setCmdState(CmdLineState.WAIT);
-                dbCommand = new DBTblViewer(command);
+                dbCommand = new DBTableViewer(command);
                 System.out.println(dbCommand.getActionResult());
                 dbCommand = null;
                 break;
