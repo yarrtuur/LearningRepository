@@ -15,7 +15,7 @@ public enum EnumCmdsList {
 
     private String description;
 
-    private EnumCmdsList(String description) {
+    EnumCmdsList(String description) {
         this.description = description;
     }
 

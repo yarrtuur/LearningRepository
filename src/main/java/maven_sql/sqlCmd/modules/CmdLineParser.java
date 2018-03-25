@@ -19,46 +19,55 @@ public class CmdLineParser {
         System.out.println(command[0]);
         switch ( command[0] )
         {
-            case "exit" :setCmdState(CmdLineState.EXIT);
+        /**/
+        case "exit" :setCmdState(CmdLineState.EXIT);
                 System.out.println("Bye...");
                 new DBExit();
                 break;
-            case "help" :setCmdState(CmdLineState.WAIT);
+        /**/
+        case "help" :setCmdState(CmdLineState.WAIT);
                 System.out.println("There is a list of available commands: ");
                 for (EnumCmdsList enumCmdsList : EnumCmdsList.values())
                     System.out.println(enumCmdsList + ": " + enumCmdsList.getDescription());
                 break;
-            case "connect" :
+        /**/
+        case "connect" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBPostgreConnecter(command);
-                System.out.println(dbCommand.getActionResult());
-                dbCommand = null;
                 break;
-            case "tables" :
+        /**/
+        case "tables" :
                 setCmdState(CmdLineState.WAIT);
+<<<<<<< HEAD
                 dbCommand = new DBTableViewer(command);
                 System.out.println(dbCommand.getActionResult());
                 dbCommand = null;
+=======
+                dbCommand = new DBTblViewer(command);
+>>>>>>> 5c36ae9f319959c05d7c08e454d63db1c90cbaf5
                 break;
+        /**/
             case "clear" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTblCleaner(command);
                 break;
-            case "drop" :
+        /**/
+        case "drop" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTblDroper(command);
                 break;
-            case "create" :
+        /**/
+        case "create" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTblCreater(command);
-                System.out.println(dbCommand.getActionResult());
-                dbCommand = null;
                 break;
-            case "find" :
+        /**/
+        case "find" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBDataFinder(command);
                 break;
-            case "insert" :
+        /**/
+        case "insert" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBDataInserter(command);
                 break;
@@ -75,6 +84,8 @@ public class CmdLineParser {
                 System.out.println("Not available command. Please type `help` to list all commands ");
                 break;
         }
+        System.out.println(dbCommand != null ? dbCommand.getActionResult() : null);
+        dbCommand = null;
     }
     public CmdLineState getCMDState() {
         return cmdState;

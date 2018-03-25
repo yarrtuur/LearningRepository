@@ -1,20 +1,23 @@
 package maven_sql.sqlCmd.jdbcOperations;
 
-import maven_sql.sqlCmd.jdbcOperations.DBCommand;
 import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class DBDataFinder extends DBCommand {
     private String tblName ;
     private boolean isColumns = false;
     private ResultSet stmtResultSet;
+    private ResultSetMetaData stmtResultSetMeta;
     private int stmtResult ;
-    Map<String,String> columnMap;
+    private Map<String,String> columnMap;
 
     public DBDataFinder(String[] command) {
         this.chkCmdData(command);
@@ -23,20 +26,18 @@ public class DBDataFinder extends DBCommand {
 
     @Override
     public void chkCmdData(String[] command) {
-       // find | tableName OR  find | tableName | column | value
         try{
             tblName = command[1];
-            if(command.length > 2 ){
+            if( command.length > 2 ){
                 isColumns = true;
                 columnMap = new HashMap<>();
                 for (int i = 2; i < command.length; i = i + 2) {
-                    columnMap.put(command[i],command[i+1]);
+                    columnMap.put(command[i], command[i + 1]);
                 }
             }
         }catch(IndexOutOfBoundsException ex){
             System.out.println("Command string format is wrong. Try again.");
         }
-
     }
 
     @Override
@@ -44,17 +45,18 @@ public class DBDataFinder extends DBCommand {
         StringBuilder sb = new StringBuilder();
          sb.append(String.format("SELECT * from public.%s ", tblName));
          if(isColumns){
-             for (Map.Entry<String, String> step : columnMap.entrySet() ) {
+             sb.append(" WHERE ");
+             for (Map.Entry<String, String> step : columnMap.entrySet()) {
                  sb.append(String.format(" %s = \'%s\' AND", step.getKey(), step.getValue()));
              }
-             sb.replace(sb.length()-3,sb.length()," ");
+             sb.replace(sb.length() - 3, sb.length(), " ");
          }
          return sb.toString();
     }
 
     @Override
     public ActionResult getActionResult() {
-        return null;
+        return ( stmtResult == 0 ) ?  ActionResult.ACTION_RESULT_OK : ActionResult.ACTION_RESULT_WRONG;
     }
 
     @Override
@@ -64,11 +66,11 @@ public class DBDataFinder extends DBCommand {
             return DBFeedBack.REFUSE;
         }
         try {
-            System.out.println("Selecting tables from a schema in given database...");
+            System.out.println("Selecting data from table in given database...");
             preparedStatement = connection.prepareStatement(sql);
             stmtResultSet = preparedStatement.executeQuery();
-
-
+            stmtResultSetMeta = stmtResultSet.getMetaData();
+            printFoundData();
             stmtResult = 0;
             return DBFeedBack.OK;
         }catch(SQLException ex){
@@ -76,6 +78,29 @@ public class DBDataFinder extends DBCommand {
             ex.printStackTrace();
             stmtResult = -1;
             return DBFeedBack.REFUSE;
+        }
+    }
+
+    private void printFoundData() throws SQLException {
+        List<String> columnsList = new LinkedList<>();
+        StringBuilder sb ;
+
+        for (int i = 1; i <= stmtResultSetMeta.getColumnCount(); i++) {
+            columnsList.add(stmtResultSetMeta.getColumnName(i));
+        }
+        sb = new StringBuilder();
+        sb.append(" | ");
+        for (String aColumnsList : columnsList) {
+            sb.append(aColumnsList).append(" | ");
+        }
+        System.out.println(sb.toString());
+        while( stmtResultSet.next() ){
+        sb = new StringBuilder();
+        sb.append(" | ");
+            for (String aColumnsList : columnsList) {
+                sb.append(stmtResultSet.getString(aColumnsList)).append(" | ");
+            }
+            System.out.println(sb.toString());
         }
     }
 
