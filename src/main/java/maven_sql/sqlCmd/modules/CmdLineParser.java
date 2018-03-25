@@ -38,13 +38,10 @@ public class CmdLineParser {
         /**/
         case "tables" :
                 setCmdState(CmdLineState.WAIT);
-<<<<<<< HEAD
                 dbCommand = new DBTableViewer(command);
                 System.out.println(dbCommand.getActionResult());
                 dbCommand = null;
-=======
-                dbCommand = new DBTblViewer(command);
->>>>>>> 5c36ae9f319959c05d7c08e454d63db1c90cbaf5
+                dbCommand = new DBTableViewer(command);
                 break;
         /**/
             case "clear" :

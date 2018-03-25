@@ -32,36 +32,12 @@ public class DBTableViewer extends DBCommand {
         }
         try {
             System.out.println("Selecting tables from a schema in given database...");
-<<<<<<< HEAD:src/main/java/maven_sql/sqlCmd/jdbcOperations/DBTableViewer.java
             int countOfTables = getTablesList(sql);
             if (countOfTables > 0) {
                 if (isDetails) {
                     printTableDetails();
                 } else {
                     printTableList();
-=======
-            preparedStatement = connection.prepareStatement(sql);
-            stmtResultSet = preparedStatement.executeQuery();
-            while (stmtResultSet.next()) {
-                tblList.add(stmtResultSet.getString("table_name"));
-            }
-            if( tblList.size() <= 0 ){
-                System.out.println("No tables in given database...");
-                return DBFeedBack.REFUSE;
-            }
-            if ( isDetails ){
-                for ( String step : tblList ) {
-
-                    columnString = new StringBuilder();
-                    preparedStatement = connection.prepareStatement(makeSqlLine(step));
-                    stmtResultSet = preparedStatement.executeQuery();
-                    while (stmtResultSet.next())
-                    {
-                        columnString.append(" ").append(stmtResultSet.getString("column_name")).append(",");
-                    }
-                    System.out.println(String.format("Table: %s , Columns: %s", step,
-                            columnString.replace(columnString.length()-1,columnString.length()," ").toString() ) );
->>>>>>> 5c36ae9f319959c05d7c08e454d63db1c90cbaf5:src/main/java/maven_sql/sqlCmd/jdbcOperations/DBTblViewer.java
                 }
                 stmtResult = 0;
                 return DBFeedBack.OK;
@@ -117,9 +93,8 @@ public class DBTableViewer extends DBCommand {
     }
 
     private String makeSqlLine(String tblName){
-        StringBuilder sb = new StringBuilder();
-        return sb.append(String.format("SELECT c.column_name FROM information_schema.columns c " +
-                "WHERE c.table_schema = 'public' AND c.table_name = \'%s\' ", tblName ) ).toString();
+        return String.format("SELECT c.column_name FROM information_schema.columns c " +
+                "WHERE c.table_schema = 'public' AND c.table_name = \'%s\' ", tblName );
     }
 
     @Override
