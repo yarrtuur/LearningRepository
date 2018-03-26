@@ -1,4 +1,4 @@
-package maven_sql.sqlCmd.modules;
+package maven_sql.sqlCmd.viewer;
 
 import maven_sql.sqlCmd.jdbcOperations.*;
 import maven_sql.sqlCmd.types_enums.EnumCmdsList;
@@ -19,52 +19,49 @@ public class CmdLineParser {
         System.out.println(command[0]);
         switch ( command[0] )
         {
-        /**/
-        case "exit" :setCmdState(CmdLineState.EXIT);
+        /*OK*/
+            case "exit" :setCmdState(CmdLineState.EXIT);
                 System.out.println("Bye...");
                 new DBExit();
                 break;
-        /**/
-        case "help" :setCmdState(CmdLineState.WAIT);
+        /*OK*/
+            case "help" :setCmdState(CmdLineState.WAIT);
                 System.out.println("There is a list of available commands: ");
                 for (EnumCmdsList enumCmdsList : EnumCmdsList.values())
                     System.out.println(enumCmdsList + ": " + enumCmdsList.getDescription());
                 break;
-        /**/
-        case "connect" :
+        /*OK*/
+            case "connect" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBPostgreConnecter(command);
                 break;
-        /**/
-        case "tables" :
+        /*OK*/
+            case "tables" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTableViewer(command);
-                System.out.println(dbCommand.getActionResult());
-                dbCommand = null;
-                dbCommand = new DBTableViewer(command);
                 break;
-        /**/
+        /*OK*/
             case "clear" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTableCleaner(command);
                 break;
-        /**/
-        case "drop" :
+        /*OK*/
+            case "drop" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTblDroper(command);
                 break;
-        /**/
-        case "create" :
+        /*OK*/
+            case "create" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBTblCreater(command);
                 break;
-        /**/
-        case "find" :
+        /*OK*/
+            case "find" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBDataFinder(command);
                 break;
-        /**/
-        case "insert" :
+        /*OK*/
+            case "insert" :
                 setCmdState(CmdLineState.WAIT);
                 dbCommand = new DBDataInserter(command);
                 break;

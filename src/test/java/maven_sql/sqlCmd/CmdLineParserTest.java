@@ -1,6 +1,6 @@
 package maven_sql.sqlCmd;
 
-import maven_sql.sqlCmd.modules.CmdLineParser;
+import maven_sql.sqlCmd.viewer.CmdLineParser;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 import org.junit.Test;
 

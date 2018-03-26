@@ -9,11 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DBDataInserter extends DBCommand {
-    private StringBuilder sb = new StringBuilder();
-    private Map<String ,String> mapColData = new HashMap<>();
+    private Map<String ,String> mapColumnsData = new HashMap<>();
     private int stmtResult ;
     private String tblName ;
-    PreparedStatement preparedStatement;
 
     public DBDataInserter(String[] command) {
             this.chkCmdData(command);
@@ -28,13 +26,12 @@ public class DBDataInserter extends DBCommand {
         }
         try {
             System.out.println("Inserting data to table in given database...");
-            preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             stmtResult = preparedStatement.executeUpdate();
             System.out.println("insert data into table is done ");
             return DBFeedBack.OK;
-
         }catch(SQLException ex){
-            System.out.println("insert data into  table is lost in given database...");
+            System.out.println("insert data into  table is interrupted in given database...");
             ex.printStackTrace();
             return DBFeedBack.REFUSE;
         }
@@ -48,10 +45,11 @@ public class DBDataInserter extends DBCommand {
 
     @Override
     public String makeSqlLine() {
+        StringBuilder sb = new StringBuilder();
         sb.append("INSERT INTO ").append(tblName).append(" ( ");
         StringBuilder columns = new StringBuilder();
         StringBuilder values = new StringBuilder();
-        for(Map.Entry<String,String> step : mapColData.entrySet()){
+        for(Map.Entry<String,String> step : mapColumnsData.entrySet()){
             columns.append(step.getKey()).append(",");
             values.append("\'").append(step.getValue()).append("\',");
         }
@@ -71,7 +69,7 @@ public class DBDataInserter extends DBCommand {
         }
         try{
             for (int i = 2; i < command.length; i = i + 2) {
-                mapColData.put(command[i], command[i+1]);
+                mapColumnsData.put(command[i], command[i+1]);
             }
         }catch(IndexOutOfBoundsException ex){
             System.out.println("There is no column to insert. Try again.");

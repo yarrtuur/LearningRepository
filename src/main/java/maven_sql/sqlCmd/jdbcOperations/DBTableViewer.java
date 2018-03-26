@@ -16,8 +16,7 @@ public class DBTableViewer extends DBCommand {
     private List<String> tblList = null;
     private int stmtResult ;
     private ResultSet stmtResultSet;
-    private StringBuilder columnString ;
-    private PreparedStatement preparedStatement;
+    private  StringBuilder columnString;
 
     public DBTableViewer(String[] command) {
         this.chkCmdData(command);
@@ -77,7 +76,7 @@ public class DBTableViewer extends DBCommand {
     }
 
     private int getTablesList(String sql) throws SQLException {
-        preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
         stmtResultSet = preparedStatement.executeQuery();
         tblList =  new LinkedList<>();
         while (stmtResultSet.next()) {

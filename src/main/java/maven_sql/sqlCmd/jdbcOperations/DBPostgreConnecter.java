@@ -11,7 +11,6 @@ public class DBPostgreConnecter extends DBCommand {
     private String login, passwd, dbSid, ipAddr, connPort;
 
     public DBPostgreConnecter(String[] command){
-        //сonnect|postgres|1|postgres|IP|port
         this.chkCmdData(command);
         System.out.println(this.startSqlAction("Starting connect..."));
     }
@@ -21,7 +20,7 @@ public class DBPostgreConnecter extends DBCommand {
         return connection != null ? ActionResult.ACTION_RESULT_OK : ActionResult.ACTION_RESULT_WRONG;
     }
 
-    public DBFeedBack sqlAction(){
+    private DBFeedBack sqlAction(){
 
         System.out.println("-------- PostgreSQL JDBC Connection Testing ------------");
 
@@ -30,7 +29,6 @@ public class DBPostgreConnecter extends DBCommand {
         } catch (ClassNotFoundException ex) {
             System.out.println("Where is your PostgreSQL JDBC Driver? "
                     + "Include in your library path!");
-            //ex.printStackTrace();
             return DBFeedBack.REFUSE;
         }
 
@@ -41,7 +39,7 @@ public class DBPostgreConnecter extends DBCommand {
                     this.makeSqlLine() , login, passwd);
         } catch (SQLException e) {
             System.out.println("Connection Failed! Check output console");
-            //e.printStackTrace();
+            e.printStackTrace();
             return DBFeedBack.REFUSE;
         }
 
@@ -53,6 +51,7 @@ public class DBPostgreConnecter extends DBCommand {
         }
         return DBFeedBack.REFUSE;
     }
+
     @Override
     public void chkCmdData(String[] command){
         try {
@@ -60,7 +59,6 @@ public class DBPostgreConnecter extends DBCommand {
             this.passwd = command[2];
             this.dbSid = command[3];
         }catch(IndexOutOfBoundsException ex){
-            //ex.printStackTrace();
             System.out.println("Command string format is wrong. Try again.");
         }
             if( command.length > 4 ) {

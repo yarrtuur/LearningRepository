@@ -17,7 +17,7 @@ public class DBTblCreater extends DBCommand {
 
     public DBTblCreater(String[] command) {
         this.chkCmdData(command);
-            System.out.println(this.startSqlAction(this.makeSqlLine()));
+        System.out.println(this.startSqlAction(this.makeSqlLine()));
     }
 
     @Override

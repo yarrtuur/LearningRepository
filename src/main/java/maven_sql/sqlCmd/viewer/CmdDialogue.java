@@ -1,6 +1,5 @@
 package maven_sql.sqlCmd.viewer;
 
-import maven_sql.sqlCmd.modules.CmdLineParser;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 
 import java.io.BufferedReader;
@@ -26,7 +25,7 @@ public class CmdDialogue {
         try (
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)))
         {
-            /*while getCMDState returns WAIT we are waiting for a new command*/
+            /**while getCMDState returns WAIT we are waiting for a new command*/
             while (clp.getCMDState().equals(CmdLineState.WAIT)) {
                 clp.takeUpCmdLine(reader.readLine());
             }

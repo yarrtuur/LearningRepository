@@ -8,14 +8,22 @@ public class DBUpdater extends DBCommand {
     public DBUpdater(String[] command) {
         System.out.println("Make me!");
     }
+
     @Override
     public ActionResult getActionResult() {
         return null;
     }
+
+    @Override
+    public void chkCmdData(String[] command) {
+        super.chkCmdData(command);
+    }
+
     @Override
     public String makeSqlLine() {
         return null;
     }
+
     @Override
     public DBFeedBack startSqlAction(String sql){return null;};
 }
