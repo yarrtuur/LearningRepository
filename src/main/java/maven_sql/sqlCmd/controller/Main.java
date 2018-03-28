@@ -1,6 +1,4 @@
-package maven_sql.sqlCmd;
-
-import maven_sql.sqlCmd.viewer.CmdDialogue;
+package maven_sql.sqlCmd.controller;
 
 public class Main {
     public static void main(String[] args) {

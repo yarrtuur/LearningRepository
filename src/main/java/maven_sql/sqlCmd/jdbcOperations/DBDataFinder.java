@@ -1,8 +1,10 @@
 package maven_sql.sqlCmd.jdbcOperations;
 
 import maven_sql.sqlCmd.types_enums.ActionResult;
+import maven_sql.sqlCmd.types_enums.CmdLineState;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -19,9 +21,16 @@ public class DBDataFinder extends DBCommand {
     private int stmtResult ;
     private Map<String,String> columnMap;
 
-    public DBDataFinder(String[] command) {
-        this.chkCmdData(command);
+    @Override
+    public boolean canProcess(String singleCommand) {
+        return singleCommand.equals("find");
+    }
+
+    @Override
+    public CmdLineState process(String[] commandLine) {
+        chkCmdData(commandLine);
         System.out.println(this.startSqlAction(this.makeSqlLine()));
+        return CmdLineState.WAIT;
     }
 
     @Override
@@ -65,9 +74,11 @@ public class DBDataFinder extends DBCommand {
             System.out.println("Not connected to DB.");
             return DBFeedBack.REFUSE;
         }
-        try {
+        try(
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                )
+            {
             System.out.println("Selecting data from table in given database...");
-            preparedStatement = connection.prepareStatement(sql);
             stmtResultSet = preparedStatement.executeQuery();
             stmtResultSetMeta = stmtResultSet.getMetaData();
             printFoundData();

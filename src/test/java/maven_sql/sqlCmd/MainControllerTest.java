@@ -1,16 +1,16 @@
 package maven_sql.sqlCmd;
 
-import maven_sql.sqlCmd.viewer.CmdLineParser;
+import maven_sql.sqlCmd.controller.MainController;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class CmdLineParserTest {
+public class MainControllerTest {
 
     @Test
     public void testTakeUpCmdLine() {
-        CmdLineParser clp = new CmdLineParser();
+        MainController clp = new MainController();
         assertEquals(CmdLineState.WAIT, clp.getCMDState());
 
         clp.takeUpCmdLine("exit");

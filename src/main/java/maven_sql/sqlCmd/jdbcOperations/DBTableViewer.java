@@ -1,6 +1,7 @@
 package maven_sql.sqlCmd.jdbcOperations;
 
 import maven_sql.sqlCmd.types_enums.ActionResult;
+import maven_sql.sqlCmd.types_enums.CmdLineState;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
 
 import java.sql.PreparedStatement;
@@ -16,11 +17,18 @@ public class DBTableViewer extends DBCommand {
     private List<String> tblList = null;
     private int stmtResult ;
     private ResultSet stmtResultSet;
-    private  StringBuilder columnString;
+    private StringBuilder columnString;
 
-    public DBTableViewer(String[] command) {
-        this.chkCmdData(command);
+    @Override
+    public boolean canProcess(String singleCommand) {
+        return singleCommand.equals("tables");
+    }
+
+    @Override
+    public CmdLineState process(String[] commandLine) {
+        chkCmdData(commandLine);
         System.out.println(this.startSqlAction(this.makeSqlLine()));
+        return CmdLineState.WAIT;
     }
 
     @Override
@@ -65,11 +73,12 @@ public class DBTableViewer extends DBCommand {
     private void printTableDetails() throws SQLException {
         for (String step : tblList) {
             columnString = new StringBuilder();
-            preparedStatement = connection.prepareStatement(makeSqlLine(step));
+            PreparedStatement preparedStatement = connection.prepareStatement(makeSqlLine(step));
             stmtResultSet = preparedStatement.executeQuery();
             while (stmtResultSet.next()) {
                 columnString.append(" ").append(stmtResultSet.getString("column_name")).append(",");
             }
+            preparedStatement.close();
             System.out.println(String.format("Table: %s , Columns: %s", step,
                     columnString.replace(columnString.length() - 1, columnString.length(), " ").toString()));
         }
@@ -82,6 +91,7 @@ public class DBTableViewer extends DBCommand {
         while (stmtResultSet.next()) {
             tblList.add(stmtResultSet.getString("table_name"));
         }
+        preparedStatement.close();
         return tblList.size();
     }
 

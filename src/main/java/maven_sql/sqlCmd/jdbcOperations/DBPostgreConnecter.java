@@ -1,6 +1,7 @@
 package maven_sql.sqlCmd.jdbcOperations;
 
 import maven_sql.sqlCmd.types_enums.ActionResult;
+import maven_sql.sqlCmd.types_enums.CmdLineState;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
 
 import java.sql.DriverManager;
@@ -10,9 +11,16 @@ public class DBPostgreConnecter extends DBCommand {
 
     private String login, passwd, dbSid, ipAddr, connPort;
 
-    public DBPostgreConnecter(String[] command){
-        this.chkCmdData(command);
+    @Override
+    public boolean canProcess(String singleCommand) {
+        return singleCommand.equals("connect");
+    }
+
+    @Override
+    public CmdLineState process(String[] commandLine){
+        chkCmdData(commandLine);
         System.out.println(this.startSqlAction("Starting connect..."));
+        return CmdLineState.WAIT;
     }
 
     @Override
@@ -53,21 +61,21 @@ public class DBPostgreConnecter extends DBCommand {
     }
 
     @Override
-    public void chkCmdData(String[] command){
+    public void chkCmdData(String[] commandLine){
         try {
-            this.login = command[1];
-            this.passwd = command[2];
-            this.dbSid = command[3];
+            this.login = commandLine[1];
+            this.passwd = commandLine[2];
+            this.dbSid = commandLine[3];
         }catch(IndexOutOfBoundsException ex){
             System.out.println("Command string format is wrong. Try again.");
         }
-            if( command.length > 4 ) {
-                this.ipAddr = command[4];
+            if( commandLine.length > 4 ) {
+                this.ipAddr = commandLine[4];
             }else{
                 this.ipAddr = "127.0.0.1";
             }
-            if( command.length > 5 ) {
-                this.connPort = command[5];
+            if( commandLine.length > 5 ) {
+                this.connPort = commandLine[5];
             }else{
                 connPort = "5432";
             }

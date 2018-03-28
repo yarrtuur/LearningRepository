@@ -1,4 +1,4 @@
-package maven_sql.sqlCmd.viewer;
+package maven_sql.sqlCmd.controller;
 
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 
@@ -8,8 +8,9 @@ import java.io.InputStreamReader;
 
 public class CmdDialogue {
     private static CmdDialogue _instance = null;
-    private CmdDialogue() {
-    }
+
+    private CmdDialogue() {    }
+
     public static synchronized CmdDialogue getInstance() {
         if (_instance == null)
             _instance = new CmdDialogue();
@@ -21,13 +22,12 @@ public class CmdDialogue {
         System.out.println("Please, set the connect string by format: connect | login | password | database ");
         System.out.println("or type `help` for list available commands. ");
 
-        CmdLineParser clp = new CmdLineParser();
+        MainController mainController = new MainController();
         try (
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)))
         {
-            /**while getCMDState returns WAIT we are waiting for a new command*/
-            while (clp.getCMDState().equals(CmdLineState.WAIT)) {
-                clp.takeUpCmdLine(reader.readLine());
+            while (mainController.getCMDState().equals(CmdLineState.WAIT)) {
+                mainController.takeUpCmdLine(reader.readLine());
             }
         } catch ( IOException e)
         {

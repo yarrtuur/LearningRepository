@@ -1,6 +1,7 @@
 package maven_sql.sqlCmd.jdbcOperations;
 
 import maven_sql.sqlCmd.types_enums.ActionResult;
+import maven_sql.sqlCmd.types_enums.CmdLineState;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
 
 import java.sql.PreparedStatement;
@@ -13,10 +14,17 @@ public class DBDataInserter extends DBCommand {
     private int stmtResult ;
     private String tblName ;
 
-    public DBDataInserter(String[] command) {
-            this.chkCmdData(command);
+    @Override
+    public boolean canProcess(String singleCommand) {
+        return singleCommand.equals("insert");
+    }
+
+    @Override
+    public CmdLineState process(String[] commandLine) {
+            chkCmdData(commandLine);
             System.out.println(this.startSqlAction(this.makeSqlLine()));
-        }
+            return CmdLineState.WAIT;
+    }
 
     @Override
     public DBFeedBack startSqlAction(String sql){
@@ -24,9 +32,11 @@ public class DBDataInserter extends DBCommand {
             System.out.println("Not connected to DB.");
             return DBFeedBack.REFUSE;
         }
-        try {
-            System.out.println("Inserting data to table in given database...");
+        try (
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            )
+        {
+            System.out.println("Inserting data to table in given database...");
             stmtResult = preparedStatement.executeUpdate();
             System.out.println("insert data into table is done ");
             return DBFeedBack.OK;

@@ -2,8 +2,10 @@ package maven_sql.sqlCmd.jdbcOperations;
 
 
 import maven_sql.sqlCmd.types_enums.ActionResult;
+import maven_sql.sqlCmd.types_enums.CmdLineState;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import java.sql.SQLException;
@@ -14,10 +16,18 @@ public class DBTblCreater extends DBCommand {
     private int stmtResult ;
     private List<String> listColumn = new LinkedList<>();
     private String tblName ;
+    private PreparedStatement preparedStatement;
 
-    public DBTblCreater(String[] command) {
-        this.chkCmdData(command);
+    @Override
+    public boolean canProcess(String singleCommand) {
+        return singleCommand.equals("create");
+    }
+
+    @Override
+    public CmdLineState process(String[] commandLine) {
+        chkCmdData(commandLine);
         System.out.println(this.startSqlAction(this.makeSqlLine()));
+        return CmdLineState.WAIT;
     }
 
     @Override
@@ -61,6 +71,7 @@ public class DBTblCreater extends DBCommand {
         preparedStatement = connection.prepareStatement(sql);
         stmtResult = preparedStatement.executeUpdate();
         System.out.println("CREATE TABLE Query returned successfully");
+        preparedStatement.close();
         return DBFeedBack.OK;
     }
 
@@ -69,6 +80,7 @@ public class DBTblCreater extends DBCommand {
         preparedStatement =  connection.prepareStatement(sqlstr);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
+            preparedStatement.close();
             return DBFeedBack.REFUSE;
         }else {
             return DBFeedBack.OK;
