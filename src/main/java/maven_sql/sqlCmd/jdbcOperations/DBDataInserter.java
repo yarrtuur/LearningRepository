@@ -1,5 +1,6 @@
 package maven_sql.sqlCmd.jdbcOperations;
 
+import maven_sql.sqlCmd.controller.JdbcDbBridge;
 import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
@@ -10,9 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DBDataInserter extends DBCommand {
-    private Map<String ,String> mapColumnsData = new HashMap<>();
-    private int stmtResult ;
-    private String tblName ;
+    private Map<String ,String> mapColumnsData;
+    private int stmtResult;
+    private String tblName;
+    private JdbcDbBridge jdbcDbBridge;
 
     @Override
     public boolean canProcess(String singleCommand) {
@@ -20,20 +22,24 @@ public class DBDataInserter extends DBCommand {
     }
 
     @Override
-    public CmdLineState process(String[] commandLine) {
-            chkCmdData(commandLine);
-            System.out.println(this.startSqlAction(this.makeSqlLine()));
-            return CmdLineState.WAIT;
+    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge) {
+        this.mapColumnsData = null;
+        this.stmtResult = -1;
+        this.tblName = null;
+        this.jdbcDbBridge = jdbcDbBridge;
+        chkCmdData(commandLine);
+        System.out.println(this.startSqlAction(this.makeSqlLine()));
+        return CmdLineState.WAIT;
     }
 
     @Override
     public DBFeedBack startSqlAction(String sql){
-        if (connection == null ){
+        if ( !jdbcDbBridge.isConnected() ){
             System.out.println("Not connected to DB.");
             return DBFeedBack.REFUSE;
         }
         try (
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = jdbcDbBridge.getConnection().prepareStatement(sql)
             )
         {
             System.out.println("Inserting data to table in given database...");
@@ -46,7 +52,7 @@ public class DBDataInserter extends DBCommand {
             return DBFeedBack.REFUSE;
         }
 
-    };
+    }
 
     @Override
     public ActionResult getActionResult() {
@@ -72,6 +78,7 @@ public class DBDataInserter extends DBCommand {
 
     @Override
     public void chkCmdData(String[] command) {
+        mapColumnsData = new HashMap<>();
         try{
             tblName = command[1];
         }catch(IndexOutOfBoundsException ex){

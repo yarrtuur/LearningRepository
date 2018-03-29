@@ -55,7 +55,6 @@ public class DBPostgreConnecter extends DBCommand {
                     this.makeSqlLine() , login, passwd));
         } catch (SQLException e) {
             System.out.println("Connection Failed! Check output console");
-            e.printStackTrace();
             return DBFeedBack.REFUSE;
         }
 

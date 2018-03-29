@@ -37,14 +37,15 @@ public class DBTblCreater extends DBCommand {
     }
 
     @Override
-    public void chkCmdData(String[] command) {
+    public void chkCmdData(String[] commandLine) {
         try{
-            tblName = command[1];
+            tblName = commandLine[1];
         }catch(IndexOutOfBoundsException ex){
             System.out.println("Command string format is wrong. Try again.");
+            return;
         }
         try{
-            listColumn.addAll(Arrays.asList(command).subList(2, command.length));
+            listColumn.addAll(Arrays.asList(commandLine).subList(2, commandLine.length));
         }catch(IndexOutOfBoundsException ex){
             System.out.println("There is no column to create table. Try again.");
         }
