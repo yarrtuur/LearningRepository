@@ -20,6 +20,9 @@ public class MainController {
         commands.add(new DBTableCleaner());
         commands.add(new DBTblCreater());
         commands.add(new DBTblDroper());
+        commands.add(new DBDataInserter());
+        commands.add(new DBHelp());
+
         /*...*/
         commands.add(new Unreachable());
         setCmdState(CmdLineState.WAIT);
