@@ -1,5 +1,6 @@
 package maven_sql.sqlCmd.jdbcOperations;
 
+import maven_sql.sqlCmd.controller.JdbcDbBridge;
 import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
@@ -20,6 +21,7 @@ public class DBDataFinder extends DBCommand {
     private ResultSetMetaData stmtResultSetMeta;
     private int stmtResult ;
     private Map<String,String> columnMap;
+    private JdbcDbBridge jdbcDbBridge;
 
     @Override
     public boolean canProcess(String singleCommand) {
@@ -27,7 +29,13 @@ public class DBDataFinder extends DBCommand {
     }
 
     @Override
-    public CmdLineState process(String[] commandLine) {
+    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge) {
+        this.jdbcDbBridge = jdbcDbBridge;
+        this.tblName = null;
+        this.isColumns = false;
+        this.stmtResultSet = null;
+        this.stmtResultSetMeta = null;
+        this.stmtResult = -1;
         chkCmdData(commandLine);
         System.out.println(this.startSqlAction(this.makeSqlLine()));
         return CmdLineState.WAIT;
@@ -70,12 +78,12 @@ public class DBDataFinder extends DBCommand {
 
     @Override
     public DBFeedBack startSqlAction(String sql){
-        if (connection == null ){
+        if (!jdbcDbBridge.isConnected()){
             System.out.println("Not connected to DB.");
             return DBFeedBack.REFUSE;
         }
         try(
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = jdbcDbBridge.getConnection().prepareStatement(sql)
                 )
             {
             System.out.println("Selecting data from table in given database...");

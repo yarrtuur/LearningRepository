@@ -1,14 +1,11 @@
 package maven_sql.sqlCmd.jdbcOperations;
 
+import maven_sql.sqlCmd.controller.JdbcDbBridge;
 import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-
 abstract public class DBCommand implements DBCommandable{
-    static Connection connection = null;
 
     @Override
     public boolean canProcess(String singleCommand) {
@@ -16,7 +13,7 @@ abstract public class DBCommand implements DBCommandable{
     }
 
     @Override
-    public CmdLineState process(String[] commandLine) {
+    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge) {
         return null;
     }
 

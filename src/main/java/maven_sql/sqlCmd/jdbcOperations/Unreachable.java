@@ -1,5 +1,6 @@
 package maven_sql.sqlCmd.jdbcOperations;
 
+import maven_sql.sqlCmd.controller.JdbcDbBridge;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 
 public class Unreachable extends DBCommand {
@@ -9,7 +10,7 @@ public class Unreachable extends DBCommand {
     }
 
     @Override
-    public CmdLineState process(String[] commandLine) {
+    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge) {
         System.out.println("Not available command. Please type `help` to list all commands ");
         return CmdLineState.WAIT;
     }

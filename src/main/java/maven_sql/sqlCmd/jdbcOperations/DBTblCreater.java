@@ -1,6 +1,7 @@
 package maven_sql.sqlCmd.jdbcOperations;
 
 
+import maven_sql.sqlCmd.controller.JdbcDbBridge;
 import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
@@ -12,10 +13,10 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class DBTblCreater extends DBCommand {
-
-    private int stmtResult ;
-    private List<String> listColumn = new LinkedList<>();
-    private String tblName ;
+    private JdbcDbBridge jdbcDbBridge;
+    private int stmtResult;
+    private List<String> listColumn;
+    private String tblName;
     private PreparedStatement preparedStatement;
 
     @Override
@@ -24,7 +25,12 @@ public class DBTblCreater extends DBCommand {
     }
 
     @Override
-    public CmdLineState process(String[] commandLine) {
+    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge) {
+        this.jdbcDbBridge = jdbcDbBridge;
+        this.stmtResult = -1;
+        this.listColumn = new LinkedList<>();
+        this.tblName = null;
+
         chkCmdData(commandLine);
         System.out.println(this.startSqlAction(this.makeSqlLine()));
         return CmdLineState.WAIT;
@@ -46,7 +52,7 @@ public class DBTblCreater extends DBCommand {
 
     @Override
     public DBFeedBack startSqlAction(String sql) {
-        if (connection == null ){
+        if ( !jdbcDbBridge.isConnected() ){
             System.out.println("Not connected to DB.");
             return DBFeedBack.REFUSE;
         }
@@ -68,7 +74,7 @@ public class DBTblCreater extends DBCommand {
 
     private DBFeedBack createTableWithParams(String sql) throws SQLException {
         System.out.println("Creating table in given database...");
-        preparedStatement = connection.prepareStatement(sql);
+        preparedStatement = jdbcDbBridge.getConnection().prepareStatement(sql);
         stmtResult = preparedStatement.executeUpdate();
         System.out.println("CREATE TABLE Query returned successfully");
         preparedStatement.close();
@@ -77,7 +83,7 @@ public class DBTblCreater extends DBCommand {
 
     private DBFeedBack searchTableByName() throws SQLException{
         String sqlstr = String.format("SELECT 1 FROM information_schema.tables WHERE table_name =  \'%s\'",tblName);
-        preparedStatement =  connection.prepareStatement(sqlstr);
+        preparedStatement =  jdbcDbBridge.getConnection().prepareStatement(sqlstr);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
             preparedStatement.close();

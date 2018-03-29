@@ -1,5 +1,6 @@
 package maven_sql.sqlCmd.jdbcOperations;
 
+import maven_sql.sqlCmd.controller.JdbcDbBridge;
 import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
@@ -13,11 +14,12 @@ import java.util.List;
 
 public class DBTableViewer extends DBCommand {
 
-    private boolean isDetails = false;
-    private List<String> tblList = null;
+    private boolean isDetails;
+    private List<String> tblList;
     private int stmtResult ;
     private ResultSet stmtResultSet;
     private StringBuilder columnString;
+    private JdbcDbBridge jdbcDbBridge;
 
     @Override
     public boolean canProcess(String singleCommand) {
@@ -25,7 +27,12 @@ public class DBTableViewer extends DBCommand {
     }
 
     @Override
-    public CmdLineState process(String[] commandLine) {
+    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge) {
+        this.isDetails = false;
+        this.tblList = null;
+        this.stmtResult = -1;
+        this.stmtResultSet = null;
+        this.jdbcDbBridge = jdbcDbBridge;
         chkCmdData(commandLine);
         System.out.println(this.startSqlAction(this.makeSqlLine()));
         return CmdLineState.WAIT;
@@ -33,7 +40,7 @@ public class DBTableViewer extends DBCommand {
 
     @Override
     public DBFeedBack startSqlAction(String sql){
-        if (connection == null ){
+        if ( !jdbcDbBridge.isConnected() ){
             System.out.println("Not connected to DB.");
             return DBFeedBack.REFUSE;
         }
@@ -73,7 +80,7 @@ public class DBTableViewer extends DBCommand {
     private void printTableDetails() throws SQLException {
         for (String step : tblList) {
             columnString = new StringBuilder();
-            PreparedStatement preparedStatement = connection.prepareStatement(makeSqlLine(step));
+            PreparedStatement preparedStatement = jdbcDbBridge.getConnection().prepareStatement(makeSqlLine(step));
             stmtResultSet = preparedStatement.executeQuery();
             while (stmtResultSet.next()) {
                 columnString.append(" ").append(stmtResultSet.getString("column_name")).append(",");
@@ -85,7 +92,7 @@ public class DBTableViewer extends DBCommand {
     }
 
     private int getTablesList(String sql) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = jdbcDbBridge.getConnection().prepareStatement(sql);
         stmtResultSet = preparedStatement.executeQuery();
         tblList =  new LinkedList<>();
         while (stmtResultSet.next()) {

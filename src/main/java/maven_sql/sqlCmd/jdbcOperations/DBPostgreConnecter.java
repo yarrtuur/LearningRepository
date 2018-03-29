@@ -1,5 +1,6 @@
 package maven_sql.sqlCmd.jdbcOperations;
 
+import maven_sql.sqlCmd.controller.JdbcDbBridge;
 import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
@@ -10,6 +11,7 @@ import java.sql.SQLException;
 public class DBPostgreConnecter extends DBCommand {
 
     private String login, passwd, dbSid, ipAddr, connPort;
+    private JdbcDbBridge jdbcDbBridge;
 
     @Override
     public boolean canProcess(String singleCommand) {
@@ -17,7 +19,13 @@ public class DBPostgreConnecter extends DBCommand {
     }
 
     @Override
-    public CmdLineState process(String[] commandLine){
+    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge){
+        this.jdbcDbBridge = jdbcDbBridge;
+        this.login = null;
+        this.passwd = null;
+        this.dbSid = null;
+        this.ipAddr = null;
+        this.connPort = null;
         chkCmdData(commandLine);
         System.out.println(this.startSqlAction("Starting connect..."));
         return CmdLineState.WAIT;
@@ -25,7 +33,7 @@ public class DBPostgreConnecter extends DBCommand {
 
     @Override
     public ActionResult getActionResult() {
-        return connection != null ? ActionResult.ACTION_RESULT_OK : ActionResult.ACTION_RESULT_WRONG;
+        return jdbcDbBridge.isConnected() ? ActionResult.ACTION_RESULT_OK : ActionResult.ACTION_RESULT_WRONG;
     }
 
     private DBFeedBack sqlAction(){
@@ -43,15 +51,15 @@ public class DBPostgreConnecter extends DBCommand {
         System.out.println("PostgreSQL JDBC Driver Registered!");
 
         try {
-            connection = DriverManager.getConnection(
-                    this.makeSqlLine() , login, passwd);
+            jdbcDbBridge.setConnection(DriverManager.getConnection(
+                    this.makeSqlLine() , login, passwd));
         } catch (SQLException e) {
             System.out.println("Connection Failed! Check output console");
             e.printStackTrace();
             return DBFeedBack.REFUSE;
         }
 
-        if (connection != null) {
+        if (jdbcDbBridge.isConnected()) {
             System.out.println("You made it, take control your database now!");
             return DBFeedBack.OK;
         } else {

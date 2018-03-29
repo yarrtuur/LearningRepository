@@ -9,8 +9,10 @@ import java.util.List;
 public class MainController {
     private CmdLineState cmdState;
     private List<DBCommand> commands = new LinkedList<>();
+    private JdbcDbBridge jdbcDbBridge;
 
     public MainController() {
+        this.jdbcDbBridge = new JdbcDbBridge();
         commands.add(new DBPostgreConnecter());
         commands.add(new DBExit());
         commands.add(new DBDataFinder());
@@ -27,7 +29,7 @@ public class MainController {
         String[] commandLine = args.replaceAll("\\s","").toLowerCase().split("\\|");
         for (DBCommand dbCommand : commands){
             if( dbCommand.canProcess(commandLine[0])){
-                cmdState = dbCommand.process(commandLine);
+                cmdState = dbCommand.process(commandLine, jdbcDbBridge);
                 break;
             }
         }

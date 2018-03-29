@@ -1,5 +1,6 @@
 package maven_sql.sqlCmd.jdbcOperations;
 
+import maven_sql.sqlCmd.controller.JdbcDbBridge;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 
 import java.sql.SQLException;
@@ -12,13 +13,14 @@ public class DBExit extends DBCommand{
     }
 
     @Override
-    public CmdLineState process(String[] commandLine) {
+    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge) {
         try {
-            if (connection != null) {
-                connection.close();
+            if (jdbcDbBridge.isConnected()) {
+                jdbcDbBridge.getConnection().close();
+                jdbcDbBridge.setConnection(null);
             }
         }catch(SQLException ex){
-            /*NOP*/
+            ex.printStackTrace();
         }
         return CmdLineState.EXIT;
     }
