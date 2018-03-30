@@ -1,9 +1,10 @@
-package maven_sql.sqlCmd.jdbcOperations;
+package maven_sql.sqlCmd.controller.jdbcOperations;
 
 import maven_sql.sqlCmd.controller.JdbcDbBridge;
 import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
+import maven_sql.sqlCmd.viewer.View;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -15,6 +16,7 @@ public class DBDataInserter extends DBCommand {
     private int stmtResult;
     private String tblName;
     private JdbcDbBridge jdbcDbBridge;
+    private View view;
 
     @Override
     public boolean canProcess(String singleCommand) {
@@ -22,32 +24,33 @@ public class DBDataInserter extends DBCommand {
     }
 
     @Override
-    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge) {
+    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge, View view) {
         this.mapColumnsData = null;
         this.stmtResult = -1;
         this.tblName = null;
         this.jdbcDbBridge = jdbcDbBridge;
+        this.view = view;
         chkCmdData(commandLine);
-        System.out.println(this.startSqlAction(this.makeSqlLine()));
+        view.write(this.startSqlAction(this.makeSqlLine()).toString ());
         return CmdLineState.WAIT;
     }
 
     @Override
     public DBFeedBack startSqlAction(String sql){
         if ( !jdbcDbBridge.isConnected() ){
-            System.out.println("Not connected to DB.");
+            view.write("Not connected to DB.");
             return DBFeedBack.REFUSE;
         }
         try (
             PreparedStatement preparedStatement = jdbcDbBridge.getConnection().prepareStatement(sql)
             )
         {
-            System.out.println("Inserting data to table in given database...");
+            view.write("Inserting data to table in given database...");
             stmtResult = preparedStatement.executeUpdate();
-            System.out.println("insert data into table is done ");
+            view.write("insert data into table is done ");
             return DBFeedBack.OK;
         }catch(SQLException ex){
-            System.out.println("insert data into  table is interrupted in given database...");
+            view.write("insert data into  table is interrupted in given database...");
             ex.printStackTrace();
             return DBFeedBack.REFUSE;
         }
@@ -82,14 +85,14 @@ public class DBDataInserter extends DBCommand {
         try{
             tblName = command[1];
         }catch(IndexOutOfBoundsException ex){
-            System.out.println("Command string format is wrong. Try again.");
+            view.write("Command string format is wrong. Try again.");
         }
         try{
             for (int i = 2; i < command.length; i = i + 2) {
                 mapColumnsData.put(command[i], command[i+1]);
             }
         }catch(IndexOutOfBoundsException ex){
-            System.out.println("There is no column to insert. Try again.");
+            view.write("There is no column to insert. Try again.");
         }
     }
 }

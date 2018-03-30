@@ -1,9 +1,10 @@
-package maven_sql.sqlCmd.jdbcOperations;
+package maven_sql.sqlCmd.controller.jdbcOperations;
 
 import maven_sql.sqlCmd.controller.JdbcDbBridge;
 import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
+import maven_sql.sqlCmd.viewer.View;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -12,6 +13,7 @@ public class DBPostgreConnecter extends DBCommand {
 
     private String login, passwd, dbSid, ipAddr, connPort;
     private JdbcDbBridge jdbcDbBridge;
+    private View view;
 
     @Override
     public boolean canProcess(String singleCommand) {
@@ -19,13 +21,14 @@ public class DBPostgreConnecter extends DBCommand {
     }
 
     @Override
-    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge){
+    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge, View view){
         this.jdbcDbBridge = jdbcDbBridge;
         this.login = null;
         this.passwd = null;
         this.dbSid = null;
         this.ipAddr = null;
         this.connPort = null;
+        this.view = view;
         chkCmdData(commandLine);
         System.out.println(this.startSqlAction("Starting connect..."));
         return CmdLineState.WAIT;
@@ -38,31 +41,31 @@ public class DBPostgreConnecter extends DBCommand {
 
     private DBFeedBack sqlAction(){
 
-        System.out.println("-------- PostgreSQL JDBC Connection Testing ------------");
+        view.write ("-------- PostgreSQL JDBC Connection Testing ------------");
 
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException ex) {
-            System.out.println("Where is your PostgreSQL JDBC Driver? "
+            view.write ( "Where is your PostgreSQL JDBC Driver? "
                     + "Include in your library path!");
             return DBFeedBack.REFUSE;
         }
 
-        System.out.println("PostgreSQL JDBC Driver Registered!");
+        view.write ("PostgreSQL JDBC Driver Registered!");
 
         try {
             jdbcDbBridge.setConnection(DriverManager.getConnection(
                     this.makeSqlLine() , login, passwd));
         } catch (SQLException e) {
-            System.out.println("Connection Failed! Check output console");
+            view.write("Connection Failed! Check output console");
             return DBFeedBack.REFUSE;
         }
 
         if (jdbcDbBridge.isConnected()) {
-            System.out.println("You made it, take control your database now!");
+            view.write("You made it, take control your database now!");
             return DBFeedBack.OK;
         } else {
-            System.out.println("Failed to make connection!");
+            view.write("Failed to make connection!");
         }
         return DBFeedBack.REFUSE;
     }
@@ -74,7 +77,7 @@ public class DBPostgreConnecter extends DBCommand {
             this.passwd = commandLine[2];
             this.dbSid = commandLine[3];
         }catch(IndexOutOfBoundsException ex){
-            System.out.println("Command string format is wrong. Try again.");
+            view.write("Command string format is wrong. Try again.");
         }
             if( commandLine.length > 4 ) {
                 this.ipAddr = commandLine[4];

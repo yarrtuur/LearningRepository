@@ -1,9 +1,10 @@
-package maven_sql.sqlCmd.jdbcOperations;
+package maven_sql.sqlCmd.controller.jdbcOperations;
 
 import maven_sql.sqlCmd.controller.JdbcDbBridge;
 import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
+import maven_sql.sqlCmd.viewer.View;
 
 public interface DBCommandable {
 
@@ -17,6 +18,6 @@ public interface DBCommandable {
 
     boolean canProcess(String singleCommand);
 
-    CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge);
+    CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge, View view);
 
 }

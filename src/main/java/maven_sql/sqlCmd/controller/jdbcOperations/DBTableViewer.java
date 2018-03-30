@@ -1,9 +1,10 @@
-package maven_sql.sqlCmd.jdbcOperations;
+package maven_sql.sqlCmd.controller.jdbcOperations;
 
 import maven_sql.sqlCmd.controller.JdbcDbBridge;
 import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
+import maven_sql.sqlCmd.viewer.View;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,6 +21,7 @@ public class DBTableViewer extends DBCommand {
     private ResultSet stmtResultSet;
     private StringBuilder columnString;
     private JdbcDbBridge jdbcDbBridge;
+    private View view;
 
     @Override
     public boolean canProcess(String singleCommand) {
@@ -27,25 +29,25 @@ public class DBTableViewer extends DBCommand {
     }
 
     @Override
-    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge) {
+    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge, View view) {
         this.isDetails = false;
         this.tblList = null;
         this.stmtResult = -1;
         this.stmtResultSet = null;
         this.jdbcDbBridge = jdbcDbBridge;
         chkCmdData(commandLine);
-        System.out.println(this.startSqlAction(this.makeSqlLine()));
+        view.write (this.startSqlAction(this.makeSqlLine()).toString ());
         return CmdLineState.WAIT;
     }
 
     @Override
     public DBFeedBack startSqlAction(String sql){
         if ( !jdbcDbBridge.isConnected() ){
-            System.out.println("Not connected to DB.");
+            view.write ("Not connected to DB.");
             return DBFeedBack.REFUSE;
         }
         try {
-            System.out.println("Selecting tables from a schema in given database...");
+            view.write ("Selecting tables from a schema in given database...");
             int countOfTables = getTablesList(sql);
             if (countOfTables > 0) {
                 if (isDetails) {
@@ -56,12 +58,12 @@ public class DBTableViewer extends DBCommand {
                 stmtResult = 0;
                 return DBFeedBack.OK;
             }else{
-                System.out.println("There are no tables in public scheme.");
+                view.write ("There are no tables in public scheme.");
                 stmtResult = -1;
                 return DBFeedBack.REFUSE;
             }
         }catch(SQLException ex){
-            System.out.println("Select data from table interrupted in given database...");
+            view.write ("Select data from table interrupted in given database...");
             ex.printStackTrace();
             stmtResult = -1;
             return DBFeedBack.REFUSE;
@@ -73,7 +75,7 @@ public class DBTableViewer extends DBCommand {
         for (String step : tblList) {
             columnString.append(" ").append(step).append(",");
         }
-        System.out.println(String.format("Table: %s ",
+        view.write (String.format("Table: %s ",
                 columnString.replace(columnString.length() - 1, columnString.length(), " ").toString()));
     }
 
@@ -86,7 +88,7 @@ public class DBTableViewer extends DBCommand {
                 columnString.append(" ").append(stmtResultSet.getString("column_name")).append(",");
             }
             preparedStatement.close();
-            System.out.println(String.format("Table: %s , Columns: %s", step,
+            view.write (String.format("Table: %s , Columns: %s", step,
                     columnString.replace(columnString.length() - 1, columnString.length(), " ").toString()));
         }
     }
@@ -120,7 +122,7 @@ public class DBTableViewer extends DBCommand {
                 isDetails = true;
             }
         }catch(IndexOutOfBoundsException ex){
-            System.out.println("Command string format is wrong. Try again.");
+            view.write ("Command string format is wrong. Try again.");
         }
     }
 

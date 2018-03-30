@@ -1,7 +1,8 @@
-package maven_sql.sqlCmd.jdbcOperations;
+package maven_sql.sqlCmd.controller.jdbcOperations;
 
 import maven_sql.sqlCmd.controller.JdbcDbBridge;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
+import maven_sql.sqlCmd.viewer.View;
 
 import java.sql.SQLException;
 
@@ -13,12 +14,12 @@ public class DBExit extends DBCommand{
     }
 
     @Override
-    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge) {
+    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge, View view) {
         try {
             if (jdbcDbBridge.isConnected()) {
                 jdbcDbBridge.getConnection().close();
                 jdbcDbBridge.setConnection(null);
-                System.out.println("You are disconnected now. Bye...");
+                view.write ("You are disconnected now. Bye...");
             }
         }catch(SQLException ex){
             ex.printStackTrace();

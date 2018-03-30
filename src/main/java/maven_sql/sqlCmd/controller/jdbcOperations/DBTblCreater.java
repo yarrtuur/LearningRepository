@@ -1,10 +1,11 @@
-package maven_sql.sqlCmd.jdbcOperations;
+package maven_sql.sqlCmd.controller.jdbcOperations;
 
 
 import maven_sql.sqlCmd.controller.JdbcDbBridge;
 import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
+import maven_sql.sqlCmd.viewer.View;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +19,7 @@ public class DBTblCreater extends DBCommand {
     private List<String> listColumn;
     private String tblName;
     private PreparedStatement preparedStatement;
+    private View view;
 
     @Override
     public boolean canProcess(String singleCommand) {
@@ -25,14 +27,15 @@ public class DBTblCreater extends DBCommand {
     }
 
     @Override
-    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge) {
+    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge, View view) {
         this.jdbcDbBridge = jdbcDbBridge;
         this.stmtResult = -1;
         this.listColumn = new LinkedList<>();
         this.tblName = null;
+        this.view = view;
 
         chkCmdData(commandLine);
-        System.out.println(this.startSqlAction(this.makeSqlLine()));
+        view.write(this.startSqlAction(this.makeSqlLine()).toString ());
         return CmdLineState.WAIT;
     }
 
@@ -41,43 +44,43 @@ public class DBTblCreater extends DBCommand {
         try{
             tblName = commandLine[1];
         }catch(IndexOutOfBoundsException ex){
-            System.out.println("Command string format is wrong. Try again.");
+            view.write("Command string format is wrong. Try again.");
             return;
         }
         try{
             listColumn.addAll(Arrays.asList(commandLine).subList(2, commandLine.length));
         }catch(IndexOutOfBoundsException ex){
-            System.out.println("There is no column to create table. Try again.");
+            view.write("There is no column to create table. Try again.");
         }
     }
 
     @Override
     public DBFeedBack startSqlAction(String sql) {
         if ( !jdbcDbBridge.isConnected() ){
-            System.out.println("Not connected to DB.");
+            view.write("Not connected to DB.");
             return DBFeedBack.REFUSE;
         }
         try {
             DBFeedBack chkTableAvailable = searchTableByName();
             if(chkTableAvailable.equals(DBFeedBack.REFUSE)){
-                System.out.println(String.format("Table %s already exists.",tblName));
+                view.write(String.format("Table %s already exists.",tblName));
                 return chkTableAvailable;
             }
             else {
                 return createTableWithParams(sql);
             }
         }catch(SQLException ex){
-            System.out.println("Create table is interrupted in given database...");
+            view.write("Create table is interrupted in given database...");
             ex.printStackTrace();
             return DBFeedBack.REFUSE;
         }
     }
 
     private DBFeedBack createTableWithParams(String sql) throws SQLException {
-        System.out.println("Creating table in given database...");
+        view.write("Creating table in given database...");
         preparedStatement = jdbcDbBridge.getConnection().prepareStatement(sql);
         stmtResult = preparedStatement.executeUpdate();
-        System.out.println("CREATE TABLE Query returned successfully");
+        view.write("CREATE TABLE Query returned successfully");
         preparedStatement.close();
         return DBFeedBack.OK;
     }

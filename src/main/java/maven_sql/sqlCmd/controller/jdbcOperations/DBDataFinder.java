@@ -1,9 +1,10 @@
-package maven_sql.sqlCmd.jdbcOperations;
+package maven_sql.sqlCmd.controller.jdbcOperations;
 
 import maven_sql.sqlCmd.controller.JdbcDbBridge;
 import maven_sql.sqlCmd.types_enums.ActionResult;
 import maven_sql.sqlCmd.types_enums.CmdLineState;
 import maven_sql.sqlCmd.types_enums.DBFeedBack;
+import maven_sql.sqlCmd.viewer.View;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,6 +23,7 @@ public class DBDataFinder extends DBCommand {
     private int stmtResult ;
     private Map<String,String> columnMap;
     private JdbcDbBridge jdbcDbBridge;
+    private View view;
 
     @Override
     public boolean canProcess(String singleCommand) {
@@ -29,13 +31,14 @@ public class DBDataFinder extends DBCommand {
     }
 
     @Override
-    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge) {
+    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge, View view) {
         this.jdbcDbBridge = jdbcDbBridge;
         this.tblName = null;
         this.isColumns = false;
         this.stmtResultSet = null;
         this.stmtResultSetMeta = null;
         this.stmtResult = -1;
+        this.view = view;
         chkCmdData(commandLine);
         System.out.println(this.startSqlAction(this.makeSqlLine()));
         return CmdLineState.WAIT;
@@ -53,7 +56,7 @@ public class DBDataFinder extends DBCommand {
                 }
             }
         }catch(IndexOutOfBoundsException ex){
-            System.out.println("Command string format is wrong. Try again.");
+            view.write ("Command string format is wrong. Try again.");
         }
     }
 
@@ -79,21 +82,21 @@ public class DBDataFinder extends DBCommand {
     @Override
     public DBFeedBack startSqlAction(String sql){
         if (!jdbcDbBridge.isConnected()){
-            System.out.println("Not connected to DB.");
+            view.write ("Not connected to DB.");
             return DBFeedBack.REFUSE;
         }
         try(
             PreparedStatement preparedStatement = jdbcDbBridge.getConnection().prepareStatement(sql)
                 )
             {
-            System.out.println("Selecting data from table in given database...");
+            view.write ("Selecting data from table in given database...");
             stmtResultSet = preparedStatement.executeQuery();
             stmtResultSetMeta = stmtResultSet.getMetaData();
             printFoundData();
             stmtResult = 0;
             return DBFeedBack.OK;
         }catch(SQLException ex){
-            System.out.println("Select data from table interrupted in given database...");
+            view.write("Select data from table interrupted in given database...");
             ex.printStackTrace();
             stmtResult = -1;
             return DBFeedBack.REFUSE;
@@ -119,7 +122,7 @@ public class DBDataFinder extends DBCommand {
             for (String aColumnsList : columnsList) {
                 sb.append(stmtResultSet.getString(aColumnsList)).append(" | ");
             }
-            System.out.println(sb.toString());
+            view.write(sb.toString());
         }
     }
 
