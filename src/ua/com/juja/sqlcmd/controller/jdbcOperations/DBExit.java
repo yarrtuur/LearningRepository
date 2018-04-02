@@ -20,11 +20,11 @@ public class DBExit extends DBCommand{
             if (jdbcDbBridge.isConnected()) {
                 jdbcDbBridge.getConnection().close();
                 jdbcDbBridge.setConnection(null);
-                view.write ("You are disconnected now. Bye...");
             }
         }catch(SQLException ex){
-            ex.printStackTrace();
+            /*NOP*/
         }
+        view.write ("You are disconnected now. Bye...");
         return CmdLineState.EXIT;
     }
 }

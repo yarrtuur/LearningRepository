@@ -50,6 +50,10 @@ public class MainDialogue {
     }
 
     private void takeUpCmdLine(String args) {
+        if(args == null) {
+            setCmdState ( CmdLineState.EXIT );
+            return;
+        }
         String[] commandLine = args.replaceAll("\\s","")
                 .toLowerCase().split("\\|");
         for (DBCommand dbCommand : commands){
@@ -67,11 +71,15 @@ public class MainDialogue {
         view.write ( "Please, set the connect string by format: " );
         view.write ( "connect | login | password | database " );
         view.write ( " or type `help` for list available commands. " );
-
-        while (this.getCMDState ().equals ( CmdLineState.WAIT )) {
-            this.takeUpCmdLine ( view.read () );
+        try {
+            while (this.getCMDState ().equals ( CmdLineState.WAIT ) ) {
+                this.takeUpCmdLine ( view.read () );
+            }
+        }catch(NullPointerException ex){
+            /*NOP*/
+            ex.printStackTrace ();
         }
-        System.out.println ( "See you!" );
+        setCmdState(CmdLineState.EXIT);
     }
 
 }
