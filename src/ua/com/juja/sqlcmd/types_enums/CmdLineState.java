@@ -1,4 +1,4 @@
-package maven_sql.sqlCmd.types_enums;
+package ua.com.juja.sqlcmd.types_enums;
 
 public enum CmdLineState {
     WAIT,

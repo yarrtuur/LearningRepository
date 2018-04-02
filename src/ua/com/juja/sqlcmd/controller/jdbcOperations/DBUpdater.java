@@ -1,11 +1,12 @@
-package maven_sql.sqlCmd.controller.jdbcOperations;
+package ua.com.juja.sqlcmd.controller.jdbcOperations;
 
-import maven_sql.sqlCmd.types_enums.ActionResult;
-import maven_sql.sqlCmd.types_enums.DBFeedBack;
+
+import ua.com.juja.sqlcmd.types_enums.ActionResult;
+import ua.com.juja.sqlcmd.types_enums.DBFeedBack;
 
 public class DBUpdater extends DBCommand {
     public DBUpdater(String[] command) {
-        System.out.println("Make me!");
+        //TODO
     }
 
     @Override
@@ -24,5 +25,5 @@ public class DBUpdater extends DBCommand {
     }
 
     @Override
-    public DBFeedBack startSqlAction(String sql){return null;};
+    public DBFeedBack startSqlAction(String sql){return null;}
 }

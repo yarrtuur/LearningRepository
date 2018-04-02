@@ -1,9 +1,10 @@
-package maven_sql.sqlCmd.controller;
+package ua.com.juja.sqlcmd.controller;
 
-import maven_sql.sqlCmd.controller.jdbcOperations.*;
-import maven_sql.sqlCmd.types_enums.CmdLineState;
-import maven_sql.sqlCmd.viewer.Console;
-import maven_sql.sqlCmd.viewer.View;
+import ua.com.juja.sqlcmd.controller.jdbcOperations.*;
+import ua.com.juja.sqlcmd.types_enums.CmdLineState;
+import ua.com.juja.sqlcmd.viewer.Console;
+import ua.com.juja.sqlcmd.viewer.View;
+
 
 import java.util.LinkedList;
 import java.util.List;
@@ -33,14 +34,14 @@ public class MainDialogue {
         commands.add(new DBTableCleaner ());
         commands.add(new DBTblCreater());
         commands.add(new DBTblDroper());
-        commands.add(new DBDataInserter());
-        commands.add(new DBHelp());
+        commands.add(new DBDataInserter ());
+        commands.add(new DBHelp ());
         /*...*/
         commands.add(new Unreachable());
         setCmdState(CmdLineState.WAIT);
     }
 
-    public CmdLineState getCMDState() {
+    private CmdLineState getCMDState() {
         return cmdState;
     }
 
@@ -48,7 +49,7 @@ public class MainDialogue {
         this.cmdState = cmdState;
     }
 
-    public void takeUpCmdLine(String args) {
+    private void takeUpCmdLine(String args) {
         String[] commandLine = args.replaceAll("\\s","")
                 .toLowerCase().split("\\|");
         for (DBCommand dbCommand : commands){

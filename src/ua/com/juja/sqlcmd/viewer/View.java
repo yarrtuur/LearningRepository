@@ -1,4 +1,4 @@
-package maven_sql.sqlCmd.viewer;
+package ua.com.juja.sqlcmd.viewer;
 
 public interface View {
 

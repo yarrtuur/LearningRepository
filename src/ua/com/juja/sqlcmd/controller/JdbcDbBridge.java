@@ -1,4 +1,4 @@
-package maven_sql.sqlCmd.controller;
+package ua.com.juja.sqlcmd.controller;
 
 import java.sql.Connection;
 

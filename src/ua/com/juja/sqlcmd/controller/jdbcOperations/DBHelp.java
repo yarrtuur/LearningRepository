@@ -1,9 +1,10 @@
-package maven_sql.sqlCmd.controller.jdbcOperations;
+package ua.com.juja.sqlcmd.controller.jdbcOperations;
 
-import maven_sql.sqlCmd.controller.JdbcDbBridge;
-import maven_sql.sqlCmd.types_enums.CmdLineState;
-import maven_sql.sqlCmd.types_enums.EnumCmdsList;
-import maven_sql.sqlCmd.viewer.View;
+
+import ua.com.juja.sqlcmd.controller.JdbcDbBridge;
+import ua.com.juja.sqlcmd.types_enums.CmdLineState;
+import ua.com.juja.sqlcmd.types_enums.EnumCmdsList;
+import ua.com.juja.sqlcmd.viewer.View;
 
 public class DBHelp extends DBCommand{
 
