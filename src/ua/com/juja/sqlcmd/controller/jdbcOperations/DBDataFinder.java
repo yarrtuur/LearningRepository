@@ -97,8 +97,9 @@ public class DBDataFinder extends DBCommand {
             stmtResult = 0;
             return DBFeedBack.OK;
         }catch(SQLException ex){
-            view.write("Select data from table interrupted in given database...");
-            ex.printStackTrace();
+            if( ex.getSQLState ().equals ( "42P01" )){
+                view.write ( "ERROR: table does not exists" );
+            };
             stmtResult = -1;
             return DBFeedBack.REFUSE;
         }

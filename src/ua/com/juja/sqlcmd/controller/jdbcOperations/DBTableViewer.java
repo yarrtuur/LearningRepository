@@ -36,6 +36,7 @@ public class DBTableViewer extends DBCommand {
         this.stmtResult = -1;
         this.stmtResultSet = null;
         this.jdbcDbBridge = jdbcDbBridge;
+        this.view = view;
         chkCmdData(commandLine);
         view.write (this.startSqlAction(this.makeSqlLine()).toString ());
         return CmdLineState.WAIT;
@@ -43,8 +44,13 @@ public class DBTableViewer extends DBCommand {
 
     @Override
     public DBFeedBack startSqlAction(String sql){
-        if ( !jdbcDbBridge.isConnected() ){
-            view.write ("Not connected to DB.");
+        try {
+            if (!jdbcDbBridge.isConnected ()) {
+                view.write ( "Not connected to DB." );
+                return DBFeedBack.REFUSE;
+            }
+        }catch (NullPointerException ex){
+            view.write ( "Not connected to DB." );
             return DBFeedBack.REFUSE;
         }
         try {

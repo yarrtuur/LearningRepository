@@ -52,21 +52,20 @@ public class MainDialogue {
     private void takeUpCmdLine(String args) {
         if(args == null) {
             setCmdState ( CmdLineState.EXIT );
-            return;
-        }
-        String[] commandLine = args.replaceAll("\\s","")
-                .toLowerCase().split("\\|");
-        for (DBCommand dbCommand : commands){
-            if( dbCommand.canProcess(commandLine[0])){
-                setCmdState(dbCommand.process(commandLine, jdbcDbBridge, view));
-                break;
+        }else {
+            String[] commandLine = args.replaceAll ( "\\s", "" )
+                    .toLowerCase ().split ( "\\|" );
+            for (DBCommand dbCommand : commands) {
+                if (dbCommand.canProcess ( commandLine[0] )) {
+                    setCmdState ( dbCommand.process ( commandLine, jdbcDbBridge, view ) );
+                    break;
+                }
             }
         }
     }
 
     public void mainDialogueHolder() {
         initBridge ();
-
         view.write ( "Hello, user!" );
         view.write ( "Please, set the connect string by format: " );
         view.write ( "connect | login | password | database " );
@@ -79,7 +78,6 @@ public class MainDialogue {
             /*NOP*/
             ex.printStackTrace ();
         }
-        setCmdState(CmdLineState.EXIT);
     }
 
 }

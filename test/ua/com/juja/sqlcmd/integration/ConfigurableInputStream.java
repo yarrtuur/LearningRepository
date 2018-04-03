@@ -1,15 +1,11 @@
 package ua.com.juja.sqlcmd.integration;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-
-
-import static java.lang.System.out;
 
 public class ConfigurableInputStream extends InputStream {
    private String line;
+   private  String caret = System.getProperty("line.separator");;
 
     @Override
     public int read() throws IOException {
@@ -17,8 +13,14 @@ public class ConfigurableInputStream extends InputStream {
         if( line.length() == 0 ){
             return  -1;
         }
+
         char ch = line.charAt ( 0 );
         line = line.substring ( 1 );
+
+        if(ch == '\n'){
+            return -1;
+        }
+
         return (int)ch;
     }
 
@@ -26,7 +28,7 @@ public class ConfigurableInputStream extends InputStream {
         if(this.line == null){
             this.line = line;
         }else{
-            this.line +="\n"+line;
+            this.line += caret + line;
         }
     }
 }

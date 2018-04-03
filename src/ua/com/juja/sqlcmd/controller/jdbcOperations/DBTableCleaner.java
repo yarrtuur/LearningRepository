@@ -46,8 +46,9 @@ public class DBTableCleaner extends DBCommand {
             view.write("data deleted successfully");
             return DBFeedBack.OK;
         }catch(SQLException ex){
-            view.write("Create table is lost in given database...");
-            ex.printStackTrace();
+            if( ex.getSQLState ().equals ( "42P01" )){
+                view.write ( "ERROR: table does not exists" );
+            };
             return DBFeedBack.REFUSE;
         }
     }

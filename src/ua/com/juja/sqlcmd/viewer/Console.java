@@ -1,7 +1,8 @@
 package ua.com.juja.sqlcmd.viewer;
 
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 
 public class Console implements View {
@@ -14,9 +15,9 @@ public class Console implements View {
     @Override
     public String read() {
         try {
-            Scanner scanner = new Scanner(System.in);
-            return scanner.nextLine();
-        } catch (NoSuchElementException e) {
+            BufferedReader reader = new BufferedReader ( new InputStreamReader ( System.in ) );
+            return reader.readLine ();
+        }catch(IOException ex){
             return null;
         }
     }

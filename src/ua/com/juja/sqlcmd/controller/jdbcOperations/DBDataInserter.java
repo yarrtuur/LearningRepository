@@ -51,7 +51,7 @@ public class DBDataInserter extends DBCommand {
             return DBFeedBack.OK;
         }catch(SQLException ex){
             view.write("insert data into  table is interrupted in given database...");
-            ex.printStackTrace();
+            //ex.printStackTrace();
             return DBFeedBack.REFUSE;
         }
 
