@@ -1,6 +1,7 @@
-package ua.com.juja.sqlcmd.controller;
+package ua.com.juja.sqlcmd.controller.jdbcOperations;
 
 
+import ua.com.juja.sqlcmd.controller.JdbcDbBridge;
 import ua.com.juja.sqlcmd.controller.jdbcOperations.DBCommand;
 import ua.com.juja.sqlcmd.types_enums.CmdLineState;
 import ua.com.juja.sqlcmd.viewer.View;
