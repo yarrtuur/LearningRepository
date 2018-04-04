@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ConfigurableInputStream extends InputStream {
-    private String line;
     private final String CARET = System.getProperty ( "line.separator" );
+    private String line;
 
     @Override
     public int read() throws IOException {
@@ -24,7 +24,7 @@ public class ConfigurableInputStream extends InputStream {
         return (int) ch;
     }
 
-     void add(String line) {
+    void add(String line) {
         if (this.line == null) {
             this.line = line;
         } else {
