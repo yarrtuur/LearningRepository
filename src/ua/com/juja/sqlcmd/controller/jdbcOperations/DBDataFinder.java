@@ -17,18 +17,18 @@ import java.util.List;
 import java.util.Map;
 
 public class DBDataFinder extends DBCommand {
-    private String tblName ;
+    private String tblName;
     private boolean isColumns = false;
     private ResultSet stmtResultSet;
     private ResultSetMetaData stmtResultSetMeta;
-    private int stmtResult ;
-    private Map<String,String> columnMap;
+    private int stmtResult;
+    private Map<String, String> columnMap;
     private JdbcDbBridge jdbcDbBridge;
     private View view;
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return singleCommand.equals("find");
+        return singleCommand.equals ( "find" );
     }
 
     @Override
@@ -40,91 +40,91 @@ public class DBDataFinder extends DBCommand {
         this.stmtResultSetMeta = null;
         this.stmtResult = -1;
         this.view = view;
-        chkCmdData(commandLine);
-        System.out.println(this.startSqlAction(this.makeSqlLine()));
+        chkCmdData ( commandLine );
+        System.out.println ( this.startSqlAction ( this.makeSqlLine () ) );
         return CmdLineState.WAIT;
     }
 
     @Override
     public void chkCmdData(String[] command) {
-        try{
+        try {
             tblName = command[1];
-            if( command.length > 2 ){
+            if (command.length > 2) {
                 isColumns = true;
-                columnMap = new HashMap<>();
+                columnMap = new HashMap<> ();
                 for (int i = 2; i < command.length; i = i + 2) {
-                    columnMap.put(command[i], command[i + 1]);
+                    columnMap.put ( command[i], command[i + 1] );
                 }
             }
-        }catch(IndexOutOfBoundsException ex){
-            view.write ("Command string format is wrong. Try again.");
+        } catch (IndexOutOfBoundsException ex) {
+            view.write ( "Command string format is wrong. Try again." );
         }
     }
 
     @Override
     public String makeSqlLine() {
-        StringBuilder sb = new StringBuilder();
-         sb.append(String.format("SELECT * from public.%s ", tblName));
-         if(isColumns){
-             sb.append(" WHERE ");
-             for (Map.Entry<String, String> step : columnMap.entrySet()) {
-                 sb.append(String.format(" %s = \'%s\' AND", step.getKey(), step.getValue()));
-             }
-             sb.replace(sb.length() - 3, sb.length(), " ");
-         }
-         return sb.toString();
+        StringBuilder sb = new StringBuilder ();
+        sb.append ( String.format ( "SELECT * from public.%s ", tblName ) );
+        if (isColumns) {
+            sb.append ( " WHERE " );
+            for (Map.Entry<String, String> step : columnMap.entrySet ()) {
+                sb.append ( String.format ( " %s = \'%s\' AND", step.getKey (), step.getValue () ) );
+            }
+            sb.replace ( sb.length () - 3, sb.length (), " " );
+        }
+        return sb.toString ();
     }
 
     @Override
     public ActionResult getActionResult() {
-        return ( stmtResult == 0 ) ?  ActionResult.ACTION_RESULT_OK : ActionResult.ACTION_RESULT_WRONG;
+        return (stmtResult == 0) ? ActionResult.ACTION_RESULT_OK : ActionResult.ACTION_RESULT_WRONG;
     }
 
     @Override
-    public DBFeedBack startSqlAction(String sql){
-        if (!jdbcDbBridge.isConnected()){
-            view.write ("Not connected to DB.");
+    public DBFeedBack startSqlAction(String sql) {
+        if (!jdbcDbBridge.isConnected ()) {
+            view.write ( "Not connected to DB." );
             return DBFeedBack.REFUSE;
         }
-        try(
-            PreparedStatement preparedStatement = jdbcDbBridge.getConnection().prepareStatement(sql)
-                )
-            {
-            view.write ("Selecting data from table in given database...");
-            stmtResultSet = preparedStatement.executeQuery();
-            stmtResultSetMeta = stmtResultSet.getMetaData();
-            printFoundData();
+        try (
+                PreparedStatement preparedStatement = jdbcDbBridge.getConnection ().prepareStatement ( sql )
+        ) {
+            view.write ( "Selecting data from table in given database..." );
+            stmtResultSet = preparedStatement.executeQuery ();
+            stmtResultSetMeta = stmtResultSet.getMetaData ();
+            printFoundData ();
             stmtResult = 0;
             return DBFeedBack.OK;
-        }catch(SQLException ex){
-            if( ex.getSQLState ().equals ( "42P01" )){
+        } catch (SQLException ex) {
+            if (ex.getSQLState ().equals ( "42P01" )) {
                 view.write ( "ERROR: table does not exists" );
-            };
+            }
+
             stmtResult = -1;
             return DBFeedBack.REFUSE;
         }
     }
 
     private void printFoundData() throws SQLException {
-        List<String> columnsList = new LinkedList<>();
-        StringBuilder sb ;
+        List<String> columnsList = new LinkedList<> ();
+        StringBuilder sb;
 
-        for (int i = 1; i <= stmtResultSetMeta.getColumnCount(); i++) {
-            columnsList.add(stmtResultSetMeta.getColumnName(i));
+        for (int i = 1; i <= stmtResultSetMeta.getColumnCount (); i++) {
+            columnsList.add ( stmtResultSetMeta.getColumnName ( i ) );
         }
-        sb = new StringBuilder();
-        sb.append(" | ");
+        sb = new StringBuilder ();
+        sb.append ( " | " );
         for (String aColumnsList : columnsList) {
-            sb.append(aColumnsList).append(" | ");
+            sb.append ( aColumnsList ).append ( " | " );
         }
-        System.out.println(sb.toString());
-        while( stmtResultSet.next() ){
-        sb = new StringBuilder();
-        sb.append(" | ");
+        System.out.println ( sb.toString () );
+        while (stmtResultSet.next ()) {
+            sb = new StringBuilder ();
+            sb.append ( " | " );
             for (String aColumnsList : columnsList) {
-                sb.append(stmtResultSet.getString(aColumnsList)).append(" | ");
+                sb.append ( stmtResultSet.getString ( aColumnsList ) ).append ( " | " );
             }
-            view.write(sb.toString());
+            view.write ( sb.toString () );
         }
     }
 

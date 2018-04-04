@@ -13,7 +13,7 @@ public class Unreachable extends DBCommand {
 
     @Override
     public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge, View view) {
-        view.write ( "Not available command. Please type `help` to list all commands ");
+        view.write ( "Not available command. Please type `help` to list all commands " );
         return CmdLineState.WAIT;
     }
 }

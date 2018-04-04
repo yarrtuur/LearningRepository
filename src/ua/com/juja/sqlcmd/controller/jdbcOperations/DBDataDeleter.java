@@ -11,7 +11,7 @@ public class DBDataDeleter extends DBCommand {
 
     @Override
     public void chkCmdData(String[] command) {
-        super.chkCmdData(command);
+        super.chkCmdData ( command );
     }
 
     @Override
@@ -25,5 +25,7 @@ public class DBDataDeleter extends DBCommand {
     }
 
     @Override
-    public DBFeedBack startSqlAction(String sql){return null;}
+    public DBFeedBack startSqlAction(String sql) {
+        return null;
+    }
 }

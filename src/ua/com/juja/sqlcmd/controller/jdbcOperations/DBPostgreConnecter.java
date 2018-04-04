@@ -18,11 +18,11 @@ public class DBPostgreConnecter extends DBCommand {
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return singleCommand.equals("connect");
+        return singleCommand.equals ( "connect" );
     }
 
     @Override
-    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge, View view){
+    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge, View view) {
         this.jdbcDbBridge = jdbcDbBridge;
         this.login = null;
         this.passwd = null;
@@ -30,76 +30,76 @@ public class DBPostgreConnecter extends DBCommand {
         this.ipAddr = null;
         this.connPort = null;
         this.view = view;
-        chkCmdData(commandLine);
-        System.out.println(this.startSqlAction("Starting connect..."));
+        chkCmdData ( commandLine );
+        System.out.println ( this.startSqlAction ( "Starting connect..." ) );
         return CmdLineState.WAIT;
     }
 
     @Override
     public ActionResult getActionResult() {
-        return jdbcDbBridge.isConnected() ? ActionResult.ACTION_RESULT_OK : ActionResult.ACTION_RESULT_WRONG;
+        return jdbcDbBridge.isConnected () ? ActionResult.ACTION_RESULT_OK : ActionResult.ACTION_RESULT_WRONG;
     }
 
-    private DBFeedBack sqlAction(){
+    private DBFeedBack sqlAction() {
 
-        view.write ("-------- PostgreSQL JDBC Connection Testing ------------");
+        view.write ( "-------- PostgreSQL JDBC Connection Testing ------------" );
 
         try {
-            Class.forName("org.postgresql.Driver");
+            Class.forName ( "org.postgresql.Driver" );
         } catch (ClassNotFoundException ex) {
             view.write ( "Where is your PostgreSQL JDBC Driver? "
-                    + "Include in your library path!");
+                    + "Include in your library path!" );
             return DBFeedBack.REFUSE;
         }
 
-        view.write ("PostgreSQL JDBC Driver Registered!");
+        view.write ( "PostgreSQL JDBC Driver Registered!" );
 
         try {
-            jdbcDbBridge.setConnection(DriverManager.getConnection(
-                    this.makeSqlLine() , login, passwd));
+            jdbcDbBridge.setConnection ( DriverManager.getConnection (
+                    this.makeSqlLine (), login, passwd ) );
         } catch (SQLException e) {
-            view.write("Connection Failed! Check output console");
+            view.write ( "Connection Failed! Check output console" );
             return DBFeedBack.REFUSE;
         }
 
-        if (jdbcDbBridge.isConnected()) {
-            view.write("You made it, take control your database now!");
+        if (jdbcDbBridge.isConnected ()) {
+            view.write ( "You made it, take control your database now!" );
             return DBFeedBack.OK;
         } else {
-            view.write("Failed to make connection!");
+            view.write ( "Failed to make connection!" );
         }
         return DBFeedBack.REFUSE;
     }
 
     @Override
-    public void chkCmdData(String[] commandLine){
+    public void chkCmdData(String[] commandLine) {
         try {
             this.login = commandLine[1];
             this.passwd = commandLine[2];
             this.dbSid = commandLine[3];
-        }catch(IndexOutOfBoundsException ex){
-            view.write("Command string format is wrong. Try again.");
+        } catch (IndexOutOfBoundsException ex) {
+            view.write ( "Command string format is wrong. Try again." );
         }
-            if( commandLine.length > 4 ) {
-                this.ipAddr = commandLine[4];
-            }else{
-                this.ipAddr = "127.0.0.1";
-            }
-            if( commandLine.length > 5 ) {
-                this.connPort = commandLine[5];
-            }else{
-                connPort = "5432";
-            }
+        if (commandLine.length > 4) {
+            this.ipAddr = commandLine[4];
+        } else {
+            this.ipAddr = "127.0.0.1";
+        }
+        if (commandLine.length > 5) {
+            this.connPort = commandLine[5];
+        } else {
+            connPort = "5432";
+        }
     }
 
     @Override
-    public String makeSqlLine(){
-        return String.format("jdbc:postgresql://%s:%s/%s",ipAddr, connPort, dbSid);
+    public String makeSqlLine() {
+        return String.format ( "jdbc:postgresql://%s:%s/%s", ipAddr, connPort, dbSid );
     }
 
     @Override
     public DBFeedBack startSqlAction(String sql) {
-        System.out.println(sql);
-        return sqlAction();
+        System.out.println ( sql );
+        return sqlAction ();
     }
 }

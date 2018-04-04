@@ -15,42 +15,42 @@ public class IntegrationTest {
     private String caret;
 
     @Before
-    public void setup(){
+    public void setup() {
 
         out = new ByteArrayOutputStream ();
         in = new ConfigurableInputStream ();
         System.setIn ( in );
         System.setOut ( new PrintStream ( out ) );
-        caret = System.getProperty("line.separator");
+        caret = System.getProperty ( "line.separator" );
     }
 
     @Test
-    public void testHelp(){
+    public void testHelp() {
         // given
         in.add ( "help" );
         // when
         MainDialogue.getInstance ().mainDialogueHolder ();
 
         // then
-        Assert.assertEquals("Hello, user!" + caret +
-                "Please, set the connect string by format: " + caret +
-                "connect | login | password | database " + caret +
-                " or type `help` for list available commands. " + caret +
-                "List of commands:" + caret +
-                " exit : exit" + caret +
-                " help : help" + caret +
-                " connect : connect | username | password | database_sid | <IP-addr> | <port> " + caret +
-                " tables : tables OR tables | fields " + caret +
-                " clear : clear | tableName " + caret +
-                " drop : drop | tableName " + caret +
-                " create : create | tableName | column1 | column2 | ... | columnN" + caret +
-                " find : find | tableName OR  find | tableName | column | value" + caret +
-                " insert : insert | tableName | column1 | value1 | column2 | value2 | ... | columnN | valueN" + caret
-                , getData());
+        Assert.assertEquals ( "Hello, user!" + caret +
+                        "Please, set the connect string by format: " + caret +
+                        "connect | login | password | database " + caret +
+                        " or type `help` for list available commands. " + caret +
+                        "List of commands:" + caret +
+                        " exit : exit" + caret +
+                        " help : help" + caret +
+                        " connect : connect | username | password | database_sid | <IP-addr> | <port> " + caret +
+                        " tables : tables OR tables | fields " + caret +
+                        " clear : clear | tableName " + caret +
+                        " drop : drop | tableName " + caret +
+                        " create : create | tableName | column1 | column2 | ... | columnN" + caret +
+                        " find : find | tableName OR  find | tableName | column | value" + caret +
+                        " insert : insert | tableName | column1 | value1 | column2 | value2 | ... | columnN | valueN" + caret
+                , getData () );
     }
 
     @Test
-    public void testExit(){
+    public void testExit() {
         // given
         in.add ( "exit" );
         // when
@@ -60,11 +60,11 @@ public class IntegrationTest {
                 "Please, set the connect string by format: " + caret +
                 "connect | login | password | database " + caret +
                 " or type `help` for list available commands. " + caret +
-                "You are disconnected now. Bye..." + caret , getData () );
+                "You are disconnected now. Bye..." + caret, getData () );
     }
 
     @Test
-    public void testWithoutConnect(){
+    public void testWithoutConnect() {
         // given
         in.add ( "drop | table" );
         in.add ( "tables" );
@@ -78,33 +78,33 @@ public class IntegrationTest {
         MainDialogue.getInstance ().mainDialogueHolder ();
         // then
         Assert.assertEquals ( "Hello, user!" + caret +
-                "Please, set the connect string by format: " + caret +
-                "connect | login | password | database " + caret +
-                " or type `help` for list available commands. " + caret +
-                //drop
-                "Not connected to DB." + caret +
-                "REFUSE" + caret +
-                //tables
-                "Not connected to DB." + caret +
-                "REFUSE" + caret +
-                //find
-                "Not connected to DB." + caret +
-                "REFUSE" + caret +
-                //create
-                "Not connected to DB." + caret +
-                "REFUSE" + caret +
-                //clear
-                "Not connected to DB." + caret +
-                "REFUSE" + caret +
-                //command
-                "Not available command. Please type `help` to list all commands " + caret +
-                //exit
-                "You are disconnected now. Bye..." + caret
+                        "Please, set the connect string by format: " + caret +
+                        "connect | login | password | database " + caret +
+                        " or type `help` for list available commands. " + caret +
+                        //drop
+                        "Not connected to DB." + caret +
+                        "REFUSE" + caret +
+                        //tables
+                        "Not connected to DB." + caret +
+                        "REFUSE" + caret +
+                        //find
+                        "Not connected to DB." + caret +
+                        "REFUSE" + caret +
+                        //create
+                        "Not connected to DB." + caret +
+                        "REFUSE" + caret +
+                        //clear
+                        "Not connected to DB." + caret +
+                        "REFUSE" + caret +
+                        //command
+                        "Not available command. Please type `help` to list all commands " + caret +
+                        //exit
+                        "You are disconnected now. Bye..." + caret
                 , getData () );
     }
 
     @Test
-    public void testCreateCreateViewWrongDropWithConnect(){
+    public void testCreateCreateViewWrongDropWithConnect() {
         // given
         in.add ( "connect|postgres|1|postgres" );
         in.add ( "create|integratetable|descr" );
@@ -117,7 +117,7 @@ public class IntegrationTest {
         MainDialogue.getInstance ().mainDialogueHolder ();
 
         // then
-        Assert.assertEquals("Hello, user!" + caret +
+        Assert.assertEquals ( "Hello, user!" + caret +
                         "Please, set the connect string by format: " + caret +
                         "connect | login | password | database " + caret +
                         " or type `help` for list available commands. " + caret +
@@ -144,11 +144,11 @@ public class IntegrationTest {
                         "OK" + caret +
                         //exit
                         "You are disconnected now. Bye..." + caret
-                        , getData());
+                , getData () );
     }
 
     @Test
-    public void testInsertWrongCreateInsertDropWithConnect(){
+    public void testInsertWrongCreateInsertDropWithConnect() {
         // given
         in.add ( "connect|postgres|1|postgres" );
         in.add ( "insert|integratetable|descr|5" );
@@ -161,7 +161,7 @@ public class IntegrationTest {
         MainDialogue.getInstance ().mainDialogueHolder ();
 
         // then
-        Assert.assertEquals("Hello, user!" + caret +
+        Assert.assertEquals ( "Hello, user!" + caret +
                         "Please, set the connect string by format: " + caret +
                         "connect | login | password | database " + caret +
                         " or type `help` for list available commands. " + caret +
@@ -189,11 +189,11 @@ public class IntegrationTest {
                         "OK" + caret +
                         //exit
                         "You are disconnected now. Bye..." + caret
-                         , getData());
+                , getData () );
     }
 
     @Test
-    public void testFinderWrongCreateFindInsertDataFinderDropWithConnect(){
+    public void testFinderWrongCreateFindInsertDataFinderDropWithConnect() {
         // given
         in.add ( "connect|postgres|1|postgres" );
         in.add ( "find | integratetable " );
@@ -208,7 +208,7 @@ public class IntegrationTest {
         MainDialogue.getInstance ().mainDialogueHolder ();
 
         // then
-        Assert.assertEquals("Hello, user!" + caret +
+        Assert.assertEquals ( "Hello, user!" + caret +
                         "Please, set the connect string by format: " + caret +
                         "connect | login | password | database " + caret +
                         " or type `help` for list available commands. " + caret +
@@ -219,9 +219,9 @@ public class IntegrationTest {
                         "You made it, take control your database now!" + caret +
                         "OK" + caret +
                         //find
-                         "Selecting data from table in given database..." + caret +
-                         "ERROR: table does not exists" + caret +
-                         "REFUSE" + caret +
+                        "Selecting data from table in given database..." + caret +
+                        "ERROR: table does not exists" + caret +
+                        "REFUSE" + caret +
                         //create
                         "Creating table in given database..." + caret +
                         "CREATE TABLE Query returned successfully" + caret +
@@ -245,11 +245,11 @@ public class IntegrationTest {
                         "OK" + caret +
                         //exit
                         "You are disconnected now. Bye..." + caret
-                        , getData());
+                , getData () );
     }
 
     @Test
-    public void testCleanerWrongCreateInsertFinderCleanerFinderDropWithConnect(){
+    public void testCleanerWrongCreateInsertFinderCleanerFinderDropWithConnect() {
         // given
         in.add ( "connect|postgres|1|postgres" );
         in.add ( "clear | integratetable " );
@@ -265,7 +265,7 @@ public class IntegrationTest {
         MainDialogue.getInstance ().mainDialogueHolder ();
 
         // then
-        Assert.assertEquals("Hello, user!" + caret +
+        Assert.assertEquals ( "Hello, user!" + caret +
                         "Please, set the connect string by format: " + caret +
                         "connect | login | password | database " + caret +
                         " or type `help` for list available commands. " + caret +
@@ -306,7 +306,7 @@ public class IntegrationTest {
                         "OK" + caret +
                         //exit
                         "You are disconnected now. Bye..." + caret
-                , getData());
+                , getData () );
     }
 
     private String getData() {

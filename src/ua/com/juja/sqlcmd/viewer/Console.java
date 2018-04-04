@@ -9,7 +9,7 @@ public class Console implements View {
 
     @Override
     public void write(String message) {
-        System.out.println(message);
+        System.out.println ( message );
     }
 
     @Override
@@ -17,7 +17,7 @@ public class Console implements View {
         try {
             BufferedReader reader = new BufferedReader ( new InputStreamReader ( System.in ) );
             return reader.readLine ();
-        }catch(IOException ex){
+        } catch (IOException ex) {
             return null;
         }
     }

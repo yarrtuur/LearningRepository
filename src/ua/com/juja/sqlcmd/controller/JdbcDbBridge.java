@@ -3,7 +3,7 @@ package ua.com.juja.sqlcmd.controller;
 import java.sql.Connection;
 
 public class JdbcDbBridge {
-    private Connection connection ;
+    private Connection connection;
 
     public Connection getConnection() {
         return connection;
@@ -13,7 +13,7 @@ public class JdbcDbBridge {
         this.connection = connection;
     }
 
-    public boolean isConnected(){
+    public boolean isConnected() {
         return this.connection != null;
     }
 }

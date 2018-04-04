@@ -18,7 +18,7 @@ public class DBTableViewer extends DBCommand {
 
     private boolean isDetails;
     private List<String> tblList;
-    private int stmtResult ;
+    private int stmtResult;
     private ResultSet stmtResultSet;
     private StringBuilder columnString;
     private JdbcDbBridge jdbcDbBridge;
@@ -26,7 +26,7 @@ public class DBTableViewer extends DBCommand {
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return singleCommand.equals("tables");
+        return singleCommand.equals ( "tables" );
     }
 
     @Override
@@ -37,105 +37,105 @@ public class DBTableViewer extends DBCommand {
         this.stmtResultSet = null;
         this.jdbcDbBridge = jdbcDbBridge;
         this.view = view;
-        chkCmdData(commandLine);
-        view.write (this.startSqlAction(this.makeSqlLine()).toString ());
+        chkCmdData ( commandLine );
+        view.write ( this.startSqlAction ( this.makeSqlLine () ).toString () );
         return CmdLineState.WAIT;
     }
 
     @Override
-    public DBFeedBack startSqlAction(String sql){
+    public DBFeedBack startSqlAction(String sql) {
         try {
             if (!jdbcDbBridge.isConnected ()) {
                 view.write ( "Not connected to DB." );
                 return DBFeedBack.REFUSE;
             }
-        }catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             view.write ( "Not connected to DB." );
             return DBFeedBack.REFUSE;
         }
         try {
-            view.write ("Selecting tables from a schema in given database...");
-            int countOfTables = getTablesList(sql);
+            view.write ( "Selecting tables from a schema in given database..." );
+            int countOfTables = getTablesList ( sql );
             if (countOfTables > 0) {
                 if (isDetails) {
-                    printTableDetails();
+                    printTableDetails ();
                 } else {
-                    printTableList();
+                    printTableList ();
                 }
                 stmtResult = 0;
                 return DBFeedBack.OK;
-            }else{
-                view.write ("There are no tables in public scheme.");
+            } else {
+                view.write ( "There are no tables in public scheme." );
                 stmtResult = -1;
                 return DBFeedBack.REFUSE;
             }
-        }catch(SQLException ex){
-            view.write ("Select data from table interrupted in given database...");
-            ex.printStackTrace();
+        } catch (SQLException ex) {
+            view.write ( "Select data from table interrupted in given database..." );
+            ex.printStackTrace ();
             stmtResult = -1;
             return DBFeedBack.REFUSE;
         }
     }
 
     private void printTableList() {
-        columnString = new StringBuilder();
+        columnString = new StringBuilder ();
         for (String step : tblList) {
-            columnString.append(" ").append(step).append(",");
+            columnString.append ( " " ).append ( step ).append ( "," );
         }
-        view.write (String.format("Table: %s ",
-                columnString.replace(columnString.length() - 1, columnString.length(), " ").toString()));
+        view.write ( String.format ( "Table: %s ",
+                columnString.replace ( columnString.length () - 1, columnString.length (), " " ).toString () ) );
     }
 
     private void printTableDetails() throws SQLException {
         for (String step : tblList) {
-            columnString = new StringBuilder();
-            PreparedStatement preparedStatement = jdbcDbBridge.getConnection().prepareStatement(makeSqlLine(step));
-            stmtResultSet = preparedStatement.executeQuery();
-            while (stmtResultSet.next()) {
-                columnString.append(" ").append(stmtResultSet.getString("column_name")).append(",");
+            columnString = new StringBuilder ();
+            PreparedStatement preparedStatement = jdbcDbBridge.getConnection ().prepareStatement ( makeSqlLine ( step ) );
+            stmtResultSet = preparedStatement.executeQuery ();
+            while (stmtResultSet.next ()) {
+                columnString.append ( " " ).append ( stmtResultSet.getString ( "column_name" ) ).append ( "," );
             }
-            preparedStatement.close();
-            view.write (String.format("Table: %s , Columns: %s", step,
-                    columnString.replace(columnString.length() - 1, columnString.length(), " ").toString()));
+            preparedStatement.close ();
+            view.write ( String.format ( "Table: %s , Columns: %s", step,
+                    columnString.replace ( columnString.length () - 1, columnString.length (), " " ).toString () ) );
         }
     }
 
     private int getTablesList(String sql) throws SQLException {
-        PreparedStatement preparedStatement = jdbcDbBridge.getConnection().prepareStatement(sql);
-        stmtResultSet = preparedStatement.executeQuery();
-        tblList =  new LinkedList<>();
-        while (stmtResultSet.next()) {
-            tblList.add(stmtResultSet.getString("table_name"));
+        PreparedStatement preparedStatement = jdbcDbBridge.getConnection ().prepareStatement ( sql );
+        stmtResultSet = preparedStatement.executeQuery ();
+        tblList = new LinkedList<> ();
+        while (stmtResultSet.next ()) {
+            tblList.add ( stmtResultSet.getString ( "table_name" ) );
         }
-        preparedStatement.close();
-        return tblList.size();
+        preparedStatement.close ();
+        return tblList.size ();
     }
 
     @Override
     public String makeSqlLine() {
-            return"SELECT t.table_name FROM information_schema.tables t " +
-                    "WHERE t.table_schema = 'public'";
+        return "SELECT t.table_name FROM information_schema.tables t " +
+                "WHERE t.table_schema = 'public'";
     }
 
-    private String makeSqlLine(String tblName){
-        return String.format("SELECT c.column_name FROM information_schema.columns c " +
+    private String makeSqlLine(String tblName) {
+        return String.format ( "SELECT c.column_name FROM information_schema.columns c " +
                 "WHERE c.table_schema = 'public' AND c.table_name = \'%s\' ", tblName );
     }
 
     @Override
     public void chkCmdData(String[] command) {
-        try{
-            if(command.length > 1 && command[1].equals("fields")){
+        try {
+            if (command.length > 1 && command[1].equals ( "fields" )) {
                 isDetails = true;
             }
-        }catch(IndexOutOfBoundsException ex){
-            view.write ("Command string format is wrong. Try again.");
+        } catch (IndexOutOfBoundsException ex) {
+            view.write ( "Command string format is wrong. Try again." );
         }
     }
 
     @Override
     public ActionResult getActionResult() {
-        return ( stmtResult == 0 ) ?  ActionResult.ACTION_RESULT_OK : ActionResult.ACTION_RESULT_WRONG;
+        return (stmtResult == 0) ? ActionResult.ACTION_RESULT_OK : ActionResult.ACTION_RESULT_WRONG;
     }
 
 }

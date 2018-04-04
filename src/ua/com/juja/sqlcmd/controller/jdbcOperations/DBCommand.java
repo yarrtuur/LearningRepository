@@ -7,7 +7,7 @@ import ua.com.juja.sqlcmd.types_enums.CmdLineState;
 import ua.com.juja.sqlcmd.types_enums.DBFeedBack;
 import ua.com.juja.sqlcmd.viewer.View;
 
-abstract public class DBCommand implements DBCommandable{
+abstract public class DBCommand implements DBCommandable {
 
     @Override
     public boolean canProcess(String singleCommand) {
