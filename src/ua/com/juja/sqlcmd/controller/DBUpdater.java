@@ -1,10 +1,10 @@
-package ua.com.juja.sqlcmd.controller.jdbcOperations;
+package ua.com.juja.sqlcmd.controller;
 
 
 import ua.com.juja.sqlcmd.types_enums.ActionResult;
 import ua.com.juja.sqlcmd.types_enums.DBFeedBack;
 
-public class DBUpdater extends DBCommand {
+public class DBUpdater extends  implements CommandProcessable {
     public DBUpdater(String[] command) {
         //TODO
     }
@@ -16,7 +16,7 @@ public class DBUpdater extends DBCommand {
 
     @Override
     public void chkCmdData(String[] command) {
-        super.chkCmdData ( command );
+        super.chkCmdData(command);
     }
 
     @Override

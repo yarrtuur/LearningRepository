@@ -1,0 +1,129 @@
+package ua.com.juja.sqlcmd.controller;
+
+
+import ua.com.juja.sqlcmd.model.JdbcBridge;
+import ua.com.juja.sqlcmd.types_enums.ActionResult;
+import ua.com.juja.sqlcmd.types_enums.CmdLineState;
+import ua.com.juja.sqlcmd.types_enums.DBFeedBack;
+import ua.com.juja.sqlcmd.viewer.View;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+public class DBDataFinder implements CommandProcessable {
+    private DBCommandManager dbManager ;
+
+    private String tblName;
+    private boolean isColumns = false;
+    private ResultSet stmtResultSet;
+    private ResultSetMetaData stmtResultSetMeta;
+    private int stmtResult;
+    private Map<String, String> columnMap;
+
+
+    @Override
+    public boolean canProcess(String singleCommand) {
+        return singleCommand.equals("find");
+    }
+
+    @Override
+    public CmdLineState process(DBCommandManager dbManager, String[] commandLine) {
+        return null;
+    }
+
+
+    public CmdLineState process(String[] commandLine, JdbcBridge jdbcBridge, View view) {
+
+        this.tblName = null;
+        this.isColumns = false;
+        this.stmtResultSet = null;
+        this.stmtResultSetMeta = null;
+        this.stmtResult = -1;
+        chkCmdData(commandLine);
+        System.out.println(this.startSqlAction(this.makeSqlLine()));
+        return CmdLineState.WAIT;
+    }
+
+
+    public void chkCmdData(String[] command) {
+        try {
+            tblName = command[1];
+            if (command.length > 2) {
+                isColumns = true;
+                columnMap = new HashMap<>();
+                for (int i = 2; i < command.length; i = i + 2) {
+                    columnMap.put(command[i], command[i + 1]);
+                }
+            }
+        } catch (IndexOutOfBoundsException ex) {
+            view.write("Command string format is wrong. Try again.");
+        }
+    }
+
+
+    public String makeSqlLine() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("SELECT * from public.%s ", tblName));
+        if (isColumns) {
+            sb.append(" WHERE ");
+            for (Map.Entry<String, String> step : columnMap.entrySet()) {
+                sb.append(String.format(" %s = \'%s\' AND", step.getKey(), step.getValue()));
+            }
+            sb.replace(sb.length() - 3, sb.length(), " ");
+        }
+        return sb.toString();
+    }
+
+
+
+    public DBFeedBack startSqlAction(String sql) {
+
+        try (
+                PreparedStatement preparedStatement = jdbcBridge.getConnection().prepareStatement(sql)
+        ) {
+            view.write("Selecting data from table in given database...");
+            stmtResultSet = preparedStatement.executeQuery();
+            stmtResultSetMeta = stmtResultSet.getMetaData();
+            printFoundData();
+            stmtResult = 0;
+            return DBFeedBack.OK;
+        } catch (SQLException ex) {
+            if (ex.getSQLState().equals("42P01")) {
+                view.write("ERROR: table does not exists");
+            }
+
+            stmtResult = -1;
+            return DBFeedBack.REFUSE;
+        }
+    }
+
+    private void printFoundData() throws SQLException {
+        List<String> columnsList = new LinkedList<>();
+        StringBuilder sb;
+
+        for (int i = 1; i <= stmtResultSetMeta.getColumnCount(); i++) {
+            columnsList.add(stmtResultSetMeta.getColumnName(i));
+        }
+        sb = new StringBuilder();
+        sb.append(" | ");
+        for (String aColumnsList : columnsList) {
+            sb.append(aColumnsList).append(" | ");
+        }
+        System.out.println(sb.toString());
+        while (stmtResultSet.next()) {
+            sb = new StringBuilder();
+            sb.append(" | ");
+            for (String aColumnsList : columnsList) {
+                sb.append(stmtResultSet.getString(aColumnsList)).append(" | ");
+            }
+            view.write(sb.toString());
+        }
+    }
+
+}

@@ -1,8 +1,10 @@
-package ua.com.juja.sqlcmd.controller;
+package ua.com.juja.sqlcmd.model;
 
 import java.sql.Connection;
-
-public class JdbcDbBridge {
+/**
+ * this class hold a connection with DB
+ * */
+public class JdbcBridge {
     private Connection connection;
 
     public Connection getConnection() {

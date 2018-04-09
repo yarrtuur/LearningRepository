@@ -1,7 +1,7 @@
-package ua.com.juja.sqlcmd.controller.jdbcOperations;
+package ua.com.juja.sqlcmd.controller;
 
 
-import ua.com.juja.sqlcmd.controller.JdbcDbBridge;
+import ua.com.juja.sqlcmd.model.JdbcBridge;
 import ua.com.juja.sqlcmd.types_enums.ActionResult;
 import ua.com.juja.sqlcmd.types_enums.CmdLineState;
 import ua.com.juja.sqlcmd.types_enums.DBFeedBack;
@@ -10,51 +10,51 @@ import ua.com.juja.sqlcmd.viewer.View;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class DBTblDroper extends DBCommand {
+public class DBTableCleaner  implements CommandProcessable {
     private int stmtResult;
     private String tblName;
-    private JdbcDbBridge jdbcDbBridge;
+    private JdbcBridge jdbcBridge;
     private View view;
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return singleCommand.equals ( "drop" );
+        return singleCommand.equals("clear");
     }
 
     @Override
-    public CmdLineState process(String[] commandLine, JdbcDbBridge jdbcDbBridge, View view) {
+    public CmdLineState process(String[] commandLine, JdbcBridge jdbcBridge, View view) {
         this.stmtResult = -1;
         this.tblName = null;
-        this.jdbcDbBridge = jdbcDbBridge;
+        this.jdbcBridge = jdbcBridge;
         this.view = view;
-        chkCmdData ( commandLine );
-        view.write ( this.startSqlAction ( this.makeSqlLine () ).toString () );
+        chkCmdData(commandLine);
+        view.write(this.startSqlAction(this.makeSqlLine()).toString());
         return CmdLineState.WAIT;
     }
 
     @Override
     public DBFeedBack startSqlAction(String sql) {
-        if (!jdbcDbBridge.isConnected ()) {
-            view.write ( "Not connected to DB." );
+        if (jdbcBridge.isConnected()) {
+            view.write("Not connected to DB.");
             return DBFeedBack.REFUSE;
         }
         try (
-                PreparedStatement preparedStatement = jdbcDbBridge.getConnection ().prepareStatement ( sql )
+                PreparedStatement preparedStatement = jdbcBridge.getConnection().prepareStatement(sql)
         ) {
-            view.write ( "Droping table from given database..." );
-            stmtResult = preparedStatement.executeUpdate ();
-            view.write ( "table deleted successfully" );
+            view.write("Deleting data from table in given database...");
+            stmtResult = preparedStatement.executeUpdate();
+            view.write("data deleted successfully");
             return DBFeedBack.OK;
         } catch (SQLException ex) {
-            view.write ( "Drop table is lost in given database..." );
-            ex.printStackTrace ();
+            view.write("Create table is lost in given database...");
+            ex.printStackTrace();
             return DBFeedBack.REFUSE;
         }
     }
 
     @Override
     public String makeSqlLine() {
-        return String.format ( "DROP TABLE %s", tblName );
+        return String.format("DELETE FROM %s", tblName);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class DBTblDroper extends DBCommand {
         try {
             tblName = command[1];
         } catch (IndexOutOfBoundsException ex) {
-            view.write ( "Command string format is wrong. Try again." );
+            view.write("Command string format is wrong. Try again.");
         }
     }
 
