@@ -16,7 +16,7 @@ public class DBPostgreConnecter  implements CommandProcessable {
     public CmdLineState process( DBCommandManager dbManager, String[] commandLine ) {
         this.dbManager = dbManager;
         dbManager.getView().write("Starting connect...");
-        dbManager.connect( setSocketData(commandLine), this.login, this.passwd );
+        dbManager.toConnect( setSocketData(commandLine), this.login, this.passwd );
         return CmdLineState.WAIT;
     }
 

@@ -1,26 +1,13 @@
 package ua.com.juja.sqlcmd.controller;
 
-
-import ua.com.juja.sqlcmd.model.JdbcBridge;
+import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.types_enums.ActionResult;
 import ua.com.juja.sqlcmd.types_enums.CmdLineState;
-import ua.com.juja.sqlcmd.types_enums.DBFeedBack;
-import ua.com.juja.sqlcmd.viewer.View;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 public class DBTblCreater  implements CommandProcessable {
-    private JdbcBridge jdbcBridge;
-    private int stmtResult;
-    private List<String> listColumn;
-    private String tblName;
-    private PreparedStatement preparedStatement;
-    private View view;
+    private DBCommandManager dbManager;
+    private String tableName;
+    private DataSet dataSet;
 
     @Override
     public boolean canProcess(String singleCommand) {
@@ -28,90 +15,36 @@ public class DBTblCreater  implements CommandProcessable {
     }
 
     @Override
-    public CmdLineState process(String[] commandLine, JdbcBridge jdbcBridge, View view) {
-        this.jdbcBridge = jdbcBridge;
-        this.stmtResult = -1;
-        this.listColumn = new LinkedList<>();
-        this.tblName = null;
-        this.view = view;
+    public CmdLineState process(DBCommandManager dbManager, String[] commandLine) {
 
-        chkCmdData(commandLine);
-        view.write(this.startSqlAction(this.makeSqlLine()).toString());
+        this.dbManager = dbManager;
+
+        if( prepareCmdData( commandLine ).equals( ActionResult.ACTION_RESULT_OK ) ) {
+            dbManager.toCreate(this.tableName, this.dataSet);
+        }
+
         return CmdLineState.WAIT;
     }
 
     @Override
-    public void chkCmdData(String[] commandLine) {
+    public ActionResult prepareCmdData(String[] commandLine) {
         try {
-            tblName = commandLine[1];
+            tableName = commandLine[1];
         } catch (IndexOutOfBoundsException ex) {
-            view.write("Command string format is wrong. Try again.");
-            return;
+            dbManager.getView().write("There isn`t tablename at string. Try again.");
+            return ActionResult.ACTION_RESULT_WRONG;
         }
-        try {
-            listColumn.addAll(Arrays.asList(commandLine).subList(2, commandLine.length));
-        } catch (IndexOutOfBoundsException ex) {
-            view.write("There is no column to create table. Try again.");
-        }
-    }
 
-    @Override
-    public DBFeedBack startSqlAction(String sql) {
-        if (!jdbcBridge.isConnected()) {
-            view.write("Not connected to DB.");
-            return DBFeedBack.REFUSE;
-        }
-        try {
-            DBFeedBack chkTableAvailable = searchTableByName();
-            if (chkTableAvailable.equals(DBFeedBack.REFUSE)) {
-                view.write(String.format("Table %s already exists.", tblName));
-                return chkTableAvailable;
-            } else {
-                return createTableWithParams(sql);
+        if(commandLine.length % 2 != 0){
+            dbManager.getView().write("String format is wrong. Try again.");
+            return ActionResult.ACTION_RESULT_WRONG;
+        }else{
+            dataSet = new DataSet();
+            for (int i = 2; i < commandLine.length; i +=2 ) {
+                dataSet.add(commandLine[i], commandLine[i+1]);
             }
-        } catch (SQLException ex) {
-            view.write("Create table is interrupted in given database...");
-            ex.printStackTrace();
-            return DBFeedBack.REFUSE;
         }
-    }
-
-    private DBFeedBack createTableWithParams(String sql) throws SQLException {
-        view.write("Creating table in given database...");
-        preparedStatement = jdbcBridge.getConnection().prepareStatement(sql);
-        stmtResult = preparedStatement.executeUpdate();
-        view.write("CREATE TABLE Query returned successfully");
-        preparedStatement.close();
-        return DBFeedBack.OK;
-    }
-
-    private DBFeedBack searchTableByName() throws SQLException {
-        String sqlstr = String.format("SELECT 1 FROM information_schema.tables WHERE table_name =  \'%s\'", tblName);
-        preparedStatement = jdbcBridge.getConnection().prepareStatement(sqlstr);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()) {
-            preparedStatement.close();
-            return DBFeedBack.REFUSE;
-        } else {
-            return DBFeedBack.OK;
-        }
-    }
-
-    @Override
-    public String makeSqlLine() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("CREATE TABLE IF NOT EXISTS ").append(tblName)
-                .append(" ( rid serial CONSTRAINT id_").append(tblName).append("_pk PRIMARY KEY ");
-        for (String aListColumnData : listColumn) {
-            sb.append(",").append(aListColumnData).append(" varchar(200) ");
-        }
-        sb.append(");");
-        return sb.toString();
-    }
-
-    @Override
-    public ActionResult getActionResult() {
-        return (stmtResult == 0) ? ActionResult.ACTION_RESULT_OK : ActionResult.ACTION_RESULT_WRONG;
+        return ActionResult.ACTION_RESULT_OK;
     }
 
 }
