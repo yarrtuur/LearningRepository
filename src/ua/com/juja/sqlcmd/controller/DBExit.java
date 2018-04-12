@@ -1,9 +1,6 @@
 package ua.com.juja.sqlcmd.controller;
 
-
-import ua.com.juja.sqlcmd.model.JdbcBridge;
 import ua.com.juja.sqlcmd.types_enums.CmdLineState;
-import ua.com.juja.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
 
@@ -15,16 +12,17 @@ public class DBExit  implements CommandProcessable {
     }
 
     @Override
-    public CmdLineState process(String[] commandLine, JdbcBridge jdbcBridge, View view) {
+    public CmdLineState process(DBCommandManager dbManager, String[] commandLine) {
+
         try {
-            if (jdbcBridge.isConnected()) {
-                jdbcBridge.getConnection().close();
-                jdbcBridge.setConnection(null);
+            if (dbManager.getJdbcBridge().isConnected()) {
+                dbManager.getJdbcBridge().getConnection().close();
+                dbManager.getJdbcBridge().setConnection(null);
             }
         } catch (SQLException ex) {
             /*NOP*/
         }
-        view.write("You are disconnected now. Bye...");
+        dbManager.getView().write("You are disconnected now. Bye...");
         return CmdLineState.EXIT;
     }
 }

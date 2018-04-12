@@ -11,9 +11,18 @@ import java.sql.SQLException;
 
 
 public class DBCommandManager {
-    JdbcBridge jdbcBridge = new JdbcBridge();
-    View view = new Console();
-    PreparedStatement preparedStatement;
+
+    private JdbcBridge jdbcBridge = new JdbcBridge();
+    private View view = new Console();
+    private PreparedStatement preparedStatement;
+
+    public View getView() {
+        return view;
+    }
+
+    public JdbcBridge getJdbcBridge() {
+        return jdbcBridge;
+    }
 
     // open PreparedStatement
     public PreparedStatement getPrepareStatement(String sql) {
@@ -72,8 +81,6 @@ public class DBCommandManager {
     }
 
     public DBFeedBack finder(){
-
-
 
         return DBFeedBack.REFUSE;
 

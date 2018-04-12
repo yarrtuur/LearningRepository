@@ -15,7 +15,7 @@ public class DBPostgreConnecter  implements CommandProcessable {
     @Override
     public CmdLineState process( DBCommandManager dbManager, String[] commandLine ) {
         this.dbManager = dbManager;
-        dbManager.view.write("Starting connect...");
+        dbManager.getView().write("Starting connect...");
         dbManager.connect( setSocketData(commandLine), this.login, this.passwd );
         return CmdLineState.WAIT;
     }
@@ -27,7 +27,7 @@ public class DBPostgreConnecter  implements CommandProcessable {
             this.passwd = commandLine[2];
             dbSid = commandLine[3];
         } catch (IndexOutOfBoundsException ex) {
-            dbManager.view.write("Command string format is wrong. Try again.");
+            dbManager.getView().write("Command string format is wrong. Try again.");
             throw new RuntimeException("");
         }
         if (commandLine.length > 4) {
