@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 
 public class DBCommandManager {
@@ -85,7 +86,7 @@ public class DBCommandManager {
     }
 
     public DBFeedBack toCreate(String tableName, DataSet dataSet){
-        if( this.chkTableByName().equals(DBFeedBack.OK){
+        if( this.chkTableByName().equals(DBFeedBack.OK)){
 
             return createTableWithParams(sql);
         }
@@ -94,10 +95,11 @@ public class DBCommandManager {
 
     public String makeSqlCreateLine(DataSet dataSet) {
         StringBuilder sb = new StringBuilder();
+        List<DataSet.Data> dataList = dataSet.getData();
         sb.append("CREATE TABLE IF NOT EXISTS ").append(tableName)
                 .append(" ( rid serial CONSTRAINT id_").append(tableName).append("_pk PRIMARY KEY ");
-        for (DataSet step : dataSet) {
-            sb.append(",").append(aListColumnData).append(" varchar(200) ");
+        for (DataSet.Data step : dataList) {
+            sb.append(",").append(step.getName()).append(" ").append(step.getValue()).append(" ");
         }
         sb.append(");");
         return sb.toString();

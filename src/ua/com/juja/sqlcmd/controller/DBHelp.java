@@ -1,5 +1,6 @@
 package ua.com.juja.sqlcmd.controller;
 
+import ua.com.juja.sqlcmd.types_enums.ActionResult;
 import ua.com.juja.sqlcmd.types_enums.CmdLineState;
 import ua.com.juja.sqlcmd.types_enums.EnumCmdsList;
 
@@ -18,4 +19,5 @@ public class DBHelp  implements CommandProcessable {
             dbManager.getView().write(String.format(" %s : %s", enumCmdsList, enumCmdsList.getDescription()));
         return CmdLineState.WAIT;
     }
+
 }

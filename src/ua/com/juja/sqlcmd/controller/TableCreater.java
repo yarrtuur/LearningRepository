@@ -4,7 +4,7 @@ import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.types_enums.ActionResult;
 import ua.com.juja.sqlcmd.types_enums.CmdLineState;
 
-public class DBTblCreater  implements CommandProcessable {
+public class TableCreater implements CommandProcessable ,Preparable{
     private DBCommandManager dbManager;
     private String tableName;
     private DataSet dataSet;

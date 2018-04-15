@@ -9,6 +9,6 @@ public interface CommandProcessable {
 
     CmdLineState process(DBCommandManager dbManager, String[] commandLine);
 
-    ActionResult prepareCmdData(String[] commandLine);
+
 
 }

@@ -1,15 +1,14 @@
 package ua.com.juja.sqlcmd.model;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DataSet implements Iterator {
+public class DataSet  {
 
 
-    class Data{
+    public class Data{
         private String columnName;
-        private Object value;
+        private String value;
 
         public Data(String columnName, String value) {
             this.columnName = columnName;
@@ -27,13 +26,17 @@ public class DataSet implements Iterator {
 
     private List<Data> columnList = new LinkedList<>();
 
-    @Override
-    public boolean hasNext() {
-        return false;
+    public List<Data> getData(){
+        return columnList;
     }
 
-    @Override
-    public Object next() {
+    public String getColumns(){
+        //TODO
+        return null;
+    }
+
+    public String getValues(){
+        //TODO
         return null;
     }
 
