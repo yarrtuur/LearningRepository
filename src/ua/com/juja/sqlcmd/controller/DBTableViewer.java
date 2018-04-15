@@ -1,28 +1,21 @@
 package ua.com.juja.sqlcmd.controller;
 
-
-import ua.com.juja.sqlcmd.model.JdbcBridge;
+import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.types_enums.ActionResult;
 import ua.com.juja.sqlcmd.types_enums.CmdLineState;
 import ua.com.juja.sqlcmd.types_enums.DBFeedBack;
-import ua.com.juja.sqlcmd.viewer.View;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.util.LinkedList;
-import java.util.List;
 
 
-public class DBTableViewer  implements CommandProcessable {
 
-    private boolean isDetails;
-    private List<String> tblList;
-    private int stmtResult;
-    private ResultSet stmtResultSet;
-    private StringBuilder columnString;
-    private JdbcBridge jdbcBridge;
-    private View view;
+public class DBTableViewer  implements CommandProcessable, Preparable {
+    private DBCommandManager dbManager;
+    private String tableName;
+    private DataSet dataSet;
 
     @Override
     public boolean canProcess(String singleCommand) {
@@ -30,29 +23,25 @@ public class DBTableViewer  implements CommandProcessable {
     }
 
     @Override
-    public CmdLineState process(String[] commandLine, JdbcBridge jdbcBridge, View view) {
-        this.isDetails = false;
-        this.tblList = null;
-        this.stmtResult = -1;
-        this.stmtResultSet = null;
-        this.jdbcBridge = jdbcBridge;
-        this.view = view;
-        chkCmdData(commandLine);
-        view.write(this.startSqlAction(this.makeSqlLine()).toString());
+    public CmdLineState process(DBCommandManager dbManager, String[] commandLine) {
+
+        this.dbManager = dbManager;
+
+        if( prepareCmdData( commandLine ).equals( ActionResult.ACTION_RESULT_OK ) ) {
+            dbManager.toCreate(this.tableName, this.dataSet);
+        }
+
         return CmdLineState.WAIT;
     }
 
     @Override
+    public ActionResult prepareCmdData(String[] commandLine) {
+        return null;
+    }
+
+    @Override
     public DBFeedBack startSqlAction(String sql) {
-        try {
-            if (!jdbcBridge.isConnected()) {
-                view.write("Not connected to DB.");
-                return DBFeedBack.REFUSE;
-            }
-        } catch (NullPointerException ex) {
-            view.write("Not connected to DB.");
-            return DBFeedBack.REFUSE;
-        }
+    
         try {
             view.write("Selecting tables from a schema in given database...");
             int countOfTables = getTablesList(sql);
@@ -137,5 +126,6 @@ public class DBTableViewer  implements CommandProcessable {
     public ActionResult getActionResult() {
         return (stmtResult == 0) ? ActionResult.ACTION_RESULT_OK : ActionResult.ACTION_RESULT_WRONG;
     }
+
 
 }

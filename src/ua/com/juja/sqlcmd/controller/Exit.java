@@ -4,7 +4,7 @@ import ua.com.juja.sqlcmd.types_enums.CmdLineState;
 
 import java.sql.SQLException;
 
-public class DBExit  implements CommandProcessable {
+public class Exit implements CommandProcessable {
 
     @Override
     public boolean canProcess(String singleCommand) {

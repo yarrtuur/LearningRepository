@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 
 public class DBCommandManager {
@@ -51,55 +52,66 @@ public class DBCommandManager {
         }
     }
 
-    // connect to DB
-    public DBFeedBack toConnect(String dbSidLine,String login ,String passwd) {
-
-        view.write("-------- PostgreSQL JDBC Connection Testing ------------");
-
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException ex) {
-            view.write("Where is your PostgreSQL JDBC Driver? "
-                    + "Include in your library path!");
-            return DBFeedBack.REFUSE;
-        }
-
-        view.write("PostgreSQL JDBC Driver Registered!");
-
-        try {
-            jdbcBridge.setConnection(DriverManager.getConnection(
-                    dbSidLine, login, passwd));
-        } catch (SQLException e) {
-            view.write("Connection Failed! Check output console");
-            return DBFeedBack.REFUSE;
-        }
-
-        if (jdbcBridge.isConnected()) {
-            view.write("You made it, take control your database now!");
-            return DBFeedBack.OK;
-        } else {
-            view.write("Failed to make connection!");
-        }
-
-        return DBFeedBack.REFUSE;
-    }
-
-    public DBFeedBack toCreate(String tableName, DataSet dataSet){
+    // insert into  table
+    public DBFeedBack toInsert(String tableName, DataSet dataSet){
         if( this.chkTableByName(tableName).equals(DBFeedBack.OK)){
-            return createTableWithParams( makeSqlCreateLine( tableName, dataSet ) );
+            return insertIntoTable( makeSqlInsertData( tableName, dataSet ) );
         }
         return DBFeedBack.REFUSE;
     }
 
-    private String makeSqlCreateLine(String tableName, DataSet dataSet) {
+    private DBFeedBack insertIntoTable(String sql) {
+        view.write("Inserting data into table ...");
+        try {
+            resultSet = getPrepareStatement(sql).executeQuery();
+        } catch (SQLException e) {
+            view.write("INSERT INTO TABLE Query refused.");
+            return DBFeedBack.REFUSE;
+        }
+        view.write("INSERT INTO TABLE Query returned successfully.");
+        closePrepareStatement();
+        return DBFeedBack.OK;
+    }
+
+    private String makeSqlInsertData(String tableName, DataSet dataSet) {
         StringBuilder sb = new StringBuilder();
         List<DataSet.Data> dataList = dataSet.getData();
+        StringBuilder columns = new StringBuilder();
+        StringBuilder values = new StringBuilder();
+
+        sb.append("INSERT INTO ").append(tableName).append(" ( ");
+        for ( DataSet.Data step : dataList ) {
+            columns.append(step.getName()).append(", ");
+            values.append(step.getValue()).append(", ");
+        }
+        columns.replace(columns.length() - 1, columns.length(), ")");
+        values.replace(values.length() - 1, values.length(), ")");
+        sb.append(columns).append(" values ( ").append(values).append(";");
+
+        return sb.toString();
+    }
+
+
+    //create table
+    public DBFeedBack toCreate(String tableName, DataSet dataSet){
+        if( this.chkTableByName(tableName).equals(DBFeedBack.OK)){
+            return createTableWithParams( makeSqlCreateTable( tableName, dataSet ) );
+        }
+        return DBFeedBack.REFUSE;
+    }
+
+    private String makeSqlCreateTable(String tableName, DataSet dataSet) {
+        StringBuilder sb = new StringBuilder();
+        List<DataSet.Data> dataList = dataSet.getData();
+
         sb.append("CREATE TABLE IF NOT EXISTS ").append(tableName)
                 .append(" ( rid serial CONSTRAINT id_").append(tableName).append("_pk PRIMARY KEY ");
-        for (DataSet.Data step : dataList) {
+
+        for ( DataSet.Data step : dataList ) {
             sb.append(",").append(step.getName()).append(" ").append(step.getValue()).append(" ");
         }
         sb.append(");");
+
         return sb.toString();
     }
 
@@ -136,6 +148,36 @@ public class DBCommandManager {
         return DBFeedBack.REFUSE;
     }
 
+    // connect to DB
+    public DBFeedBack toConnect(String dbSidLine,String login ,String passwd) {
 
+        view.write("-------- PostgreSQL JDBC Connection Testing ------------");
 
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException ex) {
+            view.write("Where is your PostgreSQL JDBC Driver? "
+                    + "Include in your library path!");
+            return DBFeedBack.REFUSE;
+        }
+
+        view.write("PostgreSQL JDBC Driver Registered!");
+
+        try {
+            jdbcBridge.setConnection(DriverManager.getConnection(
+                    dbSidLine, login, passwd));
+        } catch (SQLException e) {
+            view.write("Connection Failed! Check output console");
+            return DBFeedBack.REFUSE;
+        }
+
+        if (jdbcBridge.isConnected()) {
+            view.write("You made it, take control your database now!");
+            return DBFeedBack.OK;
+        } else {
+            view.write("Failed to make connection!");
+        }
+
+        return DBFeedBack.REFUSE;
+    }
 }

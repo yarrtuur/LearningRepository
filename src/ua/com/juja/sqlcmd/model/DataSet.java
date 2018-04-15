@@ -41,6 +41,7 @@ public class DataSet  {
     }
 
     public void add(String columnName, String value){
+       //TODO check unique columnName
         columnList.add( new Data( columnName, value ) );
     }
 

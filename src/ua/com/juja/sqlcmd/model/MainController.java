@@ -23,14 +23,14 @@ public class MainController {
      * */
     private void initDBCommandList() {
         commands = new LinkedList<>();
+        commands.add(new Exit());
         commands.add(new PostgreConnecter());
-        commands.add(new DBExit());
+        commands.add(new TableCreater());
+        commands.add(new DataInserter());
         commands.add(new DBDataFinder());
         commands.add(new DBTableViewer());
         commands.add(new DBTableCleaner());
-        commands.add(new TableCreater());
         commands.add(new DBTblDroper());
-        commands.add(new DBDataInserter());
         commands.add(new DBHelp());
         /*...*/
         commands.add(new Unreachable());
