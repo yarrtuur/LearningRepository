@@ -2,7 +2,7 @@ package ua.com.juja.sqlcmd.controller;
 
 import ua.com.juja.sqlcmd.types_enums.CmdLineState;
 
-public class DBPostgreConnecter  implements CommandProcessable {
+public class PostgreConnecter implements CommandProcessable {
 
     private String login, passwd;
     private DBCommandManager dbManager ;

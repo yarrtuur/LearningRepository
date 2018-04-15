@@ -27,7 +27,7 @@ public class IntegrationTest {
         // given
         in.add ( "help" );
         // when
-        MainController.getInstance ().mainDialogueHolder ();
+        new MainController().mainDialogueHolder ();
 
         // then
         Assert.assertEquals("Hello, user!\r\n" +
@@ -52,7 +52,7 @@ public class IntegrationTest {
         // given
         in.add ( "exit" );
         // when
-        MainController.getInstance ().mainDialogueHolder ();
+        new MainController().mainDialogueHolder ();
         // then
         Assert.assertEquals ( "Hello, user!\r\n" +
                 "Please, set the connect string by format: \r\n" +

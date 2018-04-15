@@ -18,7 +18,6 @@ public class DBCommandManager {
     private JdbcBridge jdbcBridge = new JdbcBridge();
     private View view = new Console();
     private PreparedStatement preparedStatement;
-    private String tableName;
     private ResultSet resultSet;
 
     public View getView() {
@@ -42,8 +41,8 @@ public class DBCommandManager {
     }
 
     // close PrepareStatement
-    public void closePrepareStatement(PreparedStatement ps) {
-        if (ps != null) {
+    public void closePrepareStatement() {
+        if (preparedStatement != null) {
             try {
                 preparedStatement.close();
             } catch (SQLException e) {
@@ -86,14 +85,13 @@ public class DBCommandManager {
     }
 
     public DBFeedBack toCreate(String tableName, DataSet dataSet){
-        if( this.chkTableByName().equals(DBFeedBack.OK)){
-
-            return createTableWithParams(sql);
+        if( this.chkTableByName(tableName).equals(DBFeedBack.OK)){
+            return createTableWithParams( makeSqlCreateLine( tableName, dataSet ) );
         }
         return DBFeedBack.REFUSE;
     }
 
-    public String makeSqlCreateLine(DataSet dataSet) {
+    private String makeSqlCreateLine(String tableName, DataSet dataSet) {
         StringBuilder sb = new StringBuilder();
         List<DataSet.Data> dataList = dataSet.getData();
         sb.append("CREATE TABLE IF NOT EXISTS ").append(tableName)
@@ -105,16 +103,20 @@ public class DBCommandManager {
         return sb.toString();
     }
 
-    private DBFeedBack createTableWithParams(String sql) throws SQLException {
+    private DBFeedBack createTableWithParams(String sql)  {
         view.write("Creating table in given database...");
-        preparedStatement = jdbcBridge.getConnection().prepareStatement(sql);
-        stmtResult = preparedStatement.executeUpdate();
-        view.write("CREATE TABLE Query returned successfully");
-        preparedStatement.close();
+        try {
+            resultSet = getPrepareStatement(sql).executeQuery();
+        } catch (SQLException e) {
+            view.write("CREATE TABLE Query refused.");
+            return DBFeedBack.REFUSE;
+        }
+        view.write("CREATE TABLE Query returned successfully.");
+        closePrepareStatement();
         return DBFeedBack.OK;
     }
 
-    private DBFeedBack chkTableByName() {
+    private DBFeedBack chkTableByName(String tableName) {
         String sqlStr = String.format("SELECT 1 FROM information_schema.tables WHERE table_name =  \'%s\'", tableName);
         try {
             resultSet = getPrepareStatement(sqlStr).executeQuery();
@@ -123,7 +125,7 @@ public class DBCommandManager {
         }
         try {
             if (resultSet.next()) {
-                closePrepareStatement(preparedStatement);
+                closePrepareStatement();
                 return DBFeedBack.REFUSE;
             } else {
                 return DBFeedBack.OK;

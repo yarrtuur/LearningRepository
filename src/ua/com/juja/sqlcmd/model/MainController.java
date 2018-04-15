@@ -23,7 +23,7 @@ public class MainController {
      * */
     private void initDBCommandList() {
         commands = new LinkedList<>();
-        commands.add(new DBPostgreConnecter());
+        commands.add(new PostgreConnecter());
         commands.add(new DBExit());
         commands.add(new DBDataFinder());
         commands.add(new DBTableViewer());
