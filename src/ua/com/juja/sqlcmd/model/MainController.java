@@ -26,9 +26,9 @@ public class MainController {
         commands.add(new Exit());
         commands.add(new PostgreConnecter());
         commands.add(new TableCreater());
+        commands.add(new TableViewer());
         commands.add(new DataInserter());
         commands.add(new DBDataFinder());
-        commands.add(new DBTableViewer());
         commands.add(new DBTableCleaner());
         commands.add(new DBTblDroper());
         commands.add(new DBHelp());

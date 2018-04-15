@@ -54,40 +54,82 @@ public class DBCommandManager {
     }
 
     // view table
-    public DBFeedBack toView(boolean isDetails, boolean isOne) {
+    public DBFeedBack toView( boolean isDetails, boolean isOne, String tableName ) {
         if (isDetails && isOne) {
-            printOneTableDetails();
+            return printOneTableDetails( tableName );
         } else if( isDetails && !isOne ){
-            printTablesDetails();
+            return  printTablesDetails();
         } else {
-            printTableList();
+            return printTableList();
         }
-        return null;
     }
 
-    private void printOneTableDetails() throws SQLException {
-        for (String step : tblList) {
-            columnString = new StringBuilder();
-            PreparedStatement preparedStatement = jdbcBridge.getConnection().prepareStatement(makeSqlLine(step));
-            stmtResultSet = preparedStatement.executeQuery();
-            while (stmtResultSet.next()) {
-                columnString.append(" ").append(stmtResultSet.getString("column_name")).append(",");
+    private DBFeedBack printTablesDetails() {
+        List<String> tblList = new LinkedList<>();
+        String sql = "SELECT t.table_name FROM information_schema.tables t " +
+                "WHERE t.table_schema = 'public'";
+        try {
+            tblList = getTablesList(sql);
+        } catch (SQLException e) {
+            view.write("Select data about table interrupted...");
+            return DBFeedBack.REFUSE;
+        }
+
+        for( String step : tblList){
+            printOneTableDetails(step);
+        }
+
+        return DBFeedBack.OK;
+    }
+
+    private DBFeedBack printOneTableDetails( String tableName ) {
+        StringBuilder columnString = new StringBuilder();
+        String sql = String.format("SELECT c.column_name FROM information_schema.columns c " +
+                "WHERE c.table_schema = 'public' AND c.table_name = \'%s\' ", tableName);
+        try {
+            resultSet = getPrepareStatement(sql).executeQuery();
+            while (resultSet.next()) {
+                columnString.append(" ").append(resultSet.getString("column_name")).append(",");
             }
-            preparedStatement.close();
-            view.write(String.format("Table: %s , Columns: %s", step,
-                    columnString.replace(columnString.length() - 1, columnString.length(), " ").toString()));
+        }catch( SQLException ex ){
+            view.write("Select data about table interrupted...");
+            return DBFeedBack.REFUSE;
         }
+        closePrepareStatement();
+        view.write(String.format("Table: %s , Columns: %s",
+                columnString.replace(columnString.length() - 1, columnString.length(), " ").toString()));
+        return DBFeedBack.OK;
     }
 
-    private int getTablesList(String sql) throws SQLException {
-        PreparedStatement preparedStatement = jdbcBridge.getConnection().prepareStatement(sql);
-        stmtResultSet = preparedStatement.executeQuery();
-        tblList = new LinkedList<>();
-        while (stmtResultSet.next()) {
-            tblList.add(stmtResultSet.getString("table_name"));
+    private DBFeedBack printTableList() {
+        List<String> tblList = new LinkedList<>();
+        String sql = "SELECT t.table_name FROM information_schema.tables t " +
+                "WHERE t.table_schema = 'public'";
+        try {
+            tblList = getTablesList(sql);
+        } catch (SQLException e) {
+            view.write("Select data about table interrupted...");
+            return DBFeedBack.REFUSE;
         }
-        preparedStatement.close();
-        return tblList.size();
+        StringBuilder tableString = new StringBuilder();
+        for (String step : tblList) {
+            tableString.append(" ").append(step).append(",");
+        }
+        view.write(String.format("Table: %s ",
+                tableString.replace(tableString.length() - 1, tableString.length(), " ").toString()));
+        return DBFeedBack.OK;
+    }
+
+    private List getTablesList(String sql) throws SQLException {
+        resultSet = getPrepareStatement(sql).executeQuery();
+        List<String> tblList = new LinkedList<>();
+
+        while (resultSet.next()) {
+            tblList.add(resultSet.getString("table_name"));
+        }
+
+        closePrepareStatement();
+        return tblList;
     }
 
     // insert into  table
