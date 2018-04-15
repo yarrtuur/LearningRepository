@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,7 @@ public class DBCommandManager {
     }
 
     // open PreparedStatement
-    public PreparedStatement getPrepareStatement(String sql) {
+    private PreparedStatement getPrepareStatement(String sql) {
         preparedStatement = null;
         try {
             preparedStatement = jdbcBridge.getConnection().prepareStatement(sql);
@@ -42,7 +43,7 @@ public class DBCommandManager {
     }
 
     // close PrepareStatement
-    public void closePrepareStatement() {
+    private void closePrepareStatement() {
         if (preparedStatement != null) {
             try {
                 preparedStatement.close();
@@ -50,6 +51,43 @@ public class DBCommandManager {
                 e.printStackTrace();
             }
         }
+    }
+
+    // view table
+    public DBFeedBack toView(boolean isDetails, boolean isOne) {
+        if (isDetails && isOne) {
+            printOneTableDetails();
+        } else if( isDetails && !isOne ){
+            printTablesDetails();
+        } else {
+            printTableList();
+        }
+        return null;
+    }
+
+    private void printOneTableDetails() throws SQLException {
+        for (String step : tblList) {
+            columnString = new StringBuilder();
+            PreparedStatement preparedStatement = jdbcBridge.getConnection().prepareStatement(makeSqlLine(step));
+            stmtResultSet = preparedStatement.executeQuery();
+            while (stmtResultSet.next()) {
+                columnString.append(" ").append(stmtResultSet.getString("column_name")).append(",");
+            }
+            preparedStatement.close();
+            view.write(String.format("Table: %s , Columns: %s", step,
+                    columnString.replace(columnString.length() - 1, columnString.length(), " ").toString()));
+        }
+    }
+
+    private int getTablesList(String sql) throws SQLException {
+        PreparedStatement preparedStatement = jdbcBridge.getConnection().prepareStatement(sql);
+        stmtResultSet = preparedStatement.executeQuery();
+        tblList = new LinkedList<>();
+        while (stmtResultSet.next()) {
+            tblList.add(stmtResultSet.getString("table_name"));
+        }
+        preparedStatement.close();
+        return tblList.size();
     }
 
     // insert into  table
@@ -90,7 +128,6 @@ public class DBCommandManager {
 
         return sb.toString();
     }
-
 
     //create table
     public DBFeedBack toCreate(String tableName, DataSet dataSet){
@@ -180,4 +217,5 @@ public class DBCommandManager {
 
         return DBFeedBack.REFUSE;
     }
+
 }

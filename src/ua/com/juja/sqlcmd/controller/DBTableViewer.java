@@ -11,11 +11,11 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 
 
-
 public class DBTableViewer  implements CommandProcessable, Preparable {
     private DBCommandManager dbManager;
     private String tableName;
-    private DataSet dataSet;
+    private boolean isDetails;
+    private boolean isOne;
 
     @Override
     public boolean canProcess(String singleCommand) {
@@ -28,7 +28,7 @@ public class DBTableViewer  implements CommandProcessable, Preparable {
         this.dbManager = dbManager;
 
         if( prepareCmdData( commandLine ).equals( ActionResult.ACTION_RESULT_OK ) ) {
-            dbManager.toCreate(this.tableName, this.dataSet);
+            dbManager.toView( isDetails ,isOne);
         }
 
         return CmdLineState.WAIT;
@@ -36,7 +36,17 @@ public class DBTableViewer  implements CommandProcessable, Preparable {
 
     @Override
     public ActionResult prepareCmdData(String[] commandLine) {
-        return null;
+        if (commandLine.length > 1 && commandLine[1].equals("fields")) {
+            isDetails = true;
+            isOne = false;
+        } else if(commandLine.length > 1 && commandLine[1].equals("tablename")){
+            isDetails = true;
+            isOne = true;
+        } else {
+            dbManager.getView().write("Command string format is wrong. Try again.");
+        }
+
+        return ActionResult.ACTION_RESULT_OK;
     }
 
     @Override
@@ -113,13 +123,7 @@ public class DBTableViewer  implements CommandProcessable, Preparable {
 
     @Override
     public void chkCmdData(String[] command) {
-        try {
-            if (command.length > 1 && command[1].equals("fields")) {
-                isDetails = true;
-            }
-        } catch (IndexOutOfBoundsException ex) {
-            view.write("Command string format is wrong. Try again.");
-        }
+
     }
 
     @Override

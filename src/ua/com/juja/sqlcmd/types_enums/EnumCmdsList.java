@@ -4,7 +4,7 @@ public enum EnumCmdsList {
     exit("exit"),
     help("help"),
     connect("connect | username | password | database_sid | <IP-addr> | <port> "),
-    tables("tables OR tables | fields "),
+    tables("tables OR tables | fields  OR tables | tableName "),
     clear("clear | tableName "),
     drop("drop | tableName "),
     create("create | tableName | column1 | column2 | ... | columnN"),
