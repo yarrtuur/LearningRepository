@@ -41,7 +41,7 @@ public class DBTableViewer  implements CommandProcessable, Preparable {
 
     @Override
     public DBFeedBack startSqlAction(String sql) {
-    
+
         try {
             view.write("Selecting tables from a schema in given database...");
             int countOfTables = getTablesList(sql);
