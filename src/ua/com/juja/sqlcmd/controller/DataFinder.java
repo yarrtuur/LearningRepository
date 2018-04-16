@@ -4,14 +4,16 @@ import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.types_enums.ActionResult;
 import ua.com.juja.sqlcmd.types_enums.CmdLineState;
 
-public class DataInserter implements CommandProcessable , Preparable{
+public class DataFinder implements CommandProcessable, Preparable {
     private DBCommandManager dbManager;
     private String tableName;
     private DataSet dataSet;
+    private boolean isDetails;
+
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return singleCommand.equals("insert");
+        return singleCommand.equals("find");
     }
 
     @Override
@@ -19,7 +21,7 @@ public class DataInserter implements CommandProcessable , Preparable{
         this.dbManager = dbManager;
 
         if( prepareCmdData( commandLine ).equals( ActionResult.ACTION_RESULT_OK ) ) {
-            dbManager.toInsert(this.tableName, this.dataSet);
+            dbManager.toFind(this.tableName, this.isDetails, this.dataSet);
         }
 
         return CmdLineState.WAIT;
@@ -34,10 +36,11 @@ public class DataInserter implements CommandProcessable , Preparable{
             return ActionResult.ACTION_RESULT_WRONG;
         }
 
-        if(commandLine.length % 2 != 0){
+        if(commandLine.length % 2 != 0 && commandLine.length > 2 ){
             dbManager.getView().write("String format is wrong. Must be even count of data. Try again.");
             return ActionResult.ACTION_RESULT_WRONG;
         }else{
+            isDetails = true;
             dataSet = new DataSet();
             for (int i = 2; i < commandLine.length; i +=2 ) {
                 dataSet.add(commandLine[i], commandLine[i+1]);
@@ -45,5 +48,4 @@ public class DataInserter implements CommandProcessable , Preparable{
         }
         return ActionResult.ACTION_RESULT_OK;
     }
-
 }

@@ -28,7 +28,7 @@ public class MainController {
         commands.add(new TableCreater());
         commands.add(new TableViewer());
         commands.add(new DataInserter());
-        commands.add(new DBDataFinder());
+        commands.add(new DataFinder());
         commands.add(new DBTableCleaner());
         commands.add(new DBTblDroper());
         commands.add(new DBHelp());
