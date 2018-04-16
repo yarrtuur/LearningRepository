@@ -7,11 +7,8 @@ import ua.com.juja.sqlcmd.viewer.Console;
 import ua.com.juja.sqlcmd.viewer.View;
 
 import java.sql.*;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-
 
 public class DBCommandManager {
 
@@ -50,6 +47,30 @@ public class DBCommandManager {
                 e.printStackTrace();
             }
         }
+    }
+
+    // clean table
+    public DBFeedBack toClean(String tableName) {
+        if( this.chkTableByName(tableName).equals(DBFeedBack.OK)) {
+            return getClearData(makeSqlClearTable( tableName ));
+        }
+        return DBFeedBack.REFUSE;
+    }
+
+    private DBFeedBack getClearData( String sql ){
+            view.write("Deleting data from table...");
+        try {
+            resultSet = getPrepareStatement(sql).executeQuery();
+            view.write("Data deleted successfully");
+            return DBFeedBack.OK;
+        } catch (SQLException ex) {
+            view.write("Clear table is interrupted...");
+            return DBFeedBack.REFUSE;
+        }
+    }
+
+    private String makeSqlClearTable( String tableName ){
+        return String.format("DELETE FROM %s", tableName);
     }
 
     // find data
@@ -118,8 +139,6 @@ public class DBCommandManager {
         }
         return sb.toString();
     }
-
-
 
     // view table
     public DBFeedBack toView( boolean isDetails, boolean isOne, String tableName ) {
@@ -327,6 +346,5 @@ public class DBCommandManager {
 
         return DBFeedBack.REFUSE;
     }
-
 
 }
