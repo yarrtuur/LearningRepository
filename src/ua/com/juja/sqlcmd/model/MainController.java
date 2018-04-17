@@ -33,8 +33,7 @@ public class MainController {
         commands.add(new TableCleaner());
         commands.add(new TableDroper ());
         commands.add(new DataDeleter ());
-        commands.add(new DBUpdater ());
-        /*...*/
+        commands.add(new DataUpdater ());
         commands.add(new Unreachable());
 
         setCmdState(CmdLineState.WAIT);

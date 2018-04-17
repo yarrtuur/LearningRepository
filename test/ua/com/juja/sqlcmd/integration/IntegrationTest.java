@@ -12,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 public class IntegrationTest {
     private static ConfigurableInputStream in;
     private static ByteArrayOutputStream out;
+    private final String CARET = System.getProperty ( "line.separator" );
 
     @Before
     public void setup(){
@@ -30,20 +31,20 @@ public class IntegrationTest {
         new MainController().mainDialogueHolder ();
 
         // then
-        Assert.assertEquals("Hello, user!\r\n" +
-                "Please, set the connect string by format: \r\n" +
-                "connect | login | password | database \r\n" +
-                " or type `help` for list available commands. \r\n" +
-                "List of commands:\r\n" +
-                " exit : exit\r\n" +
-                " help : help\r\n" +
-                " connect : connect | username | password | database_sid | <IP-addr> | <port> \r\n" +
-                " tables : tables OR tables | fields \r\n" +
-                " clear : clear | tableName \r\n" +
-                " drop : drop | tableName \r\n" +
-                " create : create | tableName | column1 | column2 | ... | columnN\r\n" +
-                " find : find | tableName OR  find | tableName | column | value\r\n" +
-                " insert : insert | tableName | column1 | value1 | column2 | value2 | ... | columnN | valueN\r\n"
+        Assert.assertEquals("Hello, user!" +CARET+
+                "Please, type `help` for list available commands. " +CARET+
+                "List of commands:" +CARET+
+                " exit : exit" +CARET+
+                " help : help" +CARET+
+                " connect : connect | username | password | database_sid | <IP-addr> | <port> " +CARET+
+                " create : create | tableName | column1 | column2 | ... | columnN " +CARET+
+                " tables : tables OR tables | fields  OR tables | tableName " +CARET+
+                " insert : insert | tableName | column1 | value1 | column2 | value2 | ... | columnN | valueN " +CARET +
+                " find : find | tableName OR  find | tableName | column | value " +CARET+
+                " clear : clear | tableName " +CARET+
+                " drop : drop | tableName " +CARET+
+                " delete : delete | tableName | column | value " +CARET+
+                " update : update | tableName | column1 | value1 | column2 | value2 "+CARET
                 , getData());
     }
 
@@ -54,11 +55,10 @@ public class IntegrationTest {
         // when
         new MainController().mainDialogueHolder ();
         // then
-        Assert.assertEquals ( "Hello, user!\r\n" +
-                "Please, set the connect string by format: \r\n" +
-                "connect | login | password | database \r\n" +
-                " or type `help` for list available commands. \r\n" +
-                "You are disconnected now. Bye...\r\n", getData () );
+        Assert.assertEquals ( "Hello, user!" + CARET +
+                "Please, type `help` for list available commands. " + CARET +
+                "Closing connection..." + CARET +
+                "Connection closed." + CARET, getData () );
     }
 
     public String getData() {

@@ -77,7 +77,7 @@ public class DBCommandManager {
         sb.append(String.format("UPDATE public.%s ", tableName));
         sb.append ( " SET " );
         for(DataSet.Data step : dataSet.getData () ){
-            sb.append ( String.format ( " %s = %s , ", step.getName(), step.getValue() ) )
+            sb.append ( String.format ( " %s = %s , ", step.getName(), step.getValue() ) );
         }
         sb.replace(sb.length() - 3, sb.length(), " ");
         return sb.toString();
@@ -117,7 +117,6 @@ public class DBCommandManager {
         return sb.toString();
     }
 
-
     //help
     public DBFeedBack toHelp() {
         view.write ( "List of commands:" );
@@ -132,14 +131,19 @@ public class DBCommandManager {
         view.write ( "Closing connection..." );
         if( jdbcBridge.isConnected () ){
             try {
-                jdbcBridge.getConnection ().close ();
-                view.write ( "Connection closed." );
+                if( jdbcBridge.getConnection () != null) {
+                    jdbcBridge.getConnection ().close ();
+                }
+                view.write ( "Connection closed." ); //TODO
             } catch (SQLException e) {
                 view.write ( "Close connection interrupted.." );
                 return DBFeedBack.REFUSE;
             }
             jdbcBridge.setConnection ( null );
+        }else{
+            view.write ( "Connection closed." );
         }
+
         return DBFeedBack.OK;
     }
 
