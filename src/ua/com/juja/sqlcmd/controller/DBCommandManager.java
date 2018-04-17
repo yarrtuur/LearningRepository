@@ -31,7 +31,7 @@ public class DBCommandManager {
     private PreparedStatement getPrepareStatement(String sql) {
         preparedStatement = null;
         try {
-            preparedStatement = jdbcBridge.getConnection().prepareStatement(sql);
+            preparedStatement = getJdbcBridge ().getConnection().prepareStatement(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -49,6 +49,74 @@ public class DBCommandManager {
             }
         }
     }
+
+    // update table
+    public DBFeedBack toUpdate(String tableName, DataSet dataSet) {
+        if( this.chkTableByName(tableName).equals(DBFeedBack.OK)) {
+            return getUpdateData(makeSqlUpdateData(tableName, dataSet));
+        }
+        return DBFeedBack.REFUSE;
+    }
+
+    private DBFeedBack getUpdateData(String sql) {
+        view.write("Updating data in database...");
+        try {
+            resultSet = getPrepareStatement(sql).executeQuery();
+            view.write("Update data successfully");
+            closePrepareStatement();
+            return DBFeedBack.OK;
+        } catch (SQLException ex) {
+            view.write("Update data is interrupted...");
+            closePrepareStatement();
+            return DBFeedBack.REFUSE;
+        }
+    }
+
+    private String makeSqlUpdateData(String tableName, DataSet dataSet) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("UPDATE public.%s ", tableName));
+        sb.append ( " SET " );
+        for(DataSet.Data step : dataSet.getData () ){
+            sb.append ( String.format ( " %s = %s , ", step.getName(), step.getValue() ) )
+        }
+        sb.replace(sb.length() - 3, sb.length(), " ");
+        return sb.toString();
+    }
+
+    // delete data
+    public DBFeedBack toDelete(String tableName, DataSet dataSet) {
+        if( this.chkTableByName(tableName).equals(DBFeedBack.OK)) {
+            return getDeleteData(makeSqlDeleteData(tableName, dataSet));
+        }
+        return DBFeedBack.REFUSE;
+    }
+
+    private DBFeedBack getDeleteData(String sql) {
+        try {
+            resultSet = getPrepareStatement(sql).executeQuery();
+            view.write("Operation successfull.");
+            closePrepareStatement();
+            return DBFeedBack.OK;
+        } catch (SQLException e) {
+            view.write("Delete data interrupted.");
+            closePrepareStatement();
+            return DBFeedBack.REFUSE;
+        }
+    }
+
+    private String makeSqlDeleteData(String tableName, DataSet dataSet) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("DELETE from public.%s ", tableName));
+
+        sb.append(" WHERE ");
+        for( DataSet.Data step : dataSet.getData() ){
+            sb.append(String.format(" %s = \'%s\' AND", step.getName(), step.getValue() ) );
+        }
+        sb.replace(sb.length() - 3, sb.length(), " ");
+
+        return sb.toString();
+    }
+
 
     //help
     public DBFeedBack toHelp() {
@@ -190,7 +258,7 @@ public class DBCommandManager {
         if( isDetails ){
             sb.append(" WHERE ");
             for( DataSet.Data step : dataSet.getData() ){
-                sb.append(String.format(" %s = \'%s\' AND", step.getName(), step.getValue() ) );
+                sb.append(String.format(" %s = %s AND", step.getName(), step.getValue() ) );
             }
             sb.replace(sb.length() - 3, sb.length(), " ");
         }

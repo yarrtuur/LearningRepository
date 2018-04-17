@@ -9,9 +9,9 @@ public enum EnumCmdsList {
     insert("insert | tableName | column1 | value1 | column2 | value2 | ... | columnN | valueN"),
     find("find | tableName OR  find | tableName | column | value"),
     clear("clear | tableName "),
-    drop("drop | tableName ")//,
-    //update ("update | tableName | column1 | value1 | column2 | value2"),
-    //delete ("delete | tableName | column | value")
+    drop("drop | tableName "),
+    delete ("delete | tableName | column | value"),
+    update ("update | tableName | column1 | value1 | column2 | value2")
     ;
 
     private String description;

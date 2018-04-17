@@ -32,6 +32,8 @@ public class MainController {
         commands.add(new DataFinder());
         commands.add(new TableCleaner());
         commands.add(new TableDroper ());
+        commands.add(new DataDeleter ());
+        commands.add(new DBUpdater ());
         /*...*/
         commands.add(new Unreachable());
 
