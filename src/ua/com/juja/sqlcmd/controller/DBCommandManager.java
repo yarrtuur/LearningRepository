@@ -3,6 +3,7 @@ package ua.com.juja.sqlcmd.controller;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.JdbcBridge;
 import ua.com.juja.sqlcmd.types_enums.DBFeedBack;
+import ua.com.juja.sqlcmd.types_enums.EnumCmdsList;
 import ua.com.juja.sqlcmd.viewer.Console;
 import ua.com.juja.sqlcmd.viewer.View;
 
@@ -49,6 +50,57 @@ public class DBCommandManager {
         }
     }
 
+    //help
+    public DBFeedBack toHelp() {
+        view.write ( "List of commands:" );
+        for (EnumCmdsList enumCmdsList : EnumCmdsList.values()) {
+            view.write ( String.format ( " %s : %s", enumCmdsList, enumCmdsList.getDescription () ) );
+        }
+        return DBFeedBack.OK;
+    }
+
+    // exit
+    public DBFeedBack toExit() {
+        view.write ( "Closing connection..." );
+        if( jdbcBridge.isConnected () ){
+            try {
+                jdbcBridge.getConnection ().close ();
+                view.write ( "Connection closed." );
+            } catch (SQLException e) {
+                view.write ( "Close connection interrupted.." );
+                return DBFeedBack.REFUSE;
+            }
+            jdbcBridge.setConnection ( null );
+        }
+        return DBFeedBack.OK;
+    }
+
+    // drop table
+    public DBFeedBack toDrop(String tableName) {
+        if( this.chkTableByName(tableName).equals(DBFeedBack.OK)) {
+            return getDropTable(makeSqlDropTable( tableName ));
+        }
+        return DBFeedBack.REFUSE;
+    }
+
+    private DBFeedBack getDropTable( String sql ){
+        view.write("Droping table from database...");
+        try {
+            resultSet = getPrepareStatement(sql).executeQuery();
+            view.write("Drop table successfully");
+            closePrepareStatement();
+            return DBFeedBack.OK;
+        } catch (SQLException ex) {
+            view.write("Drop table is interrupted...");
+            closePrepareStatement();
+            return DBFeedBack.REFUSE;
+        }
+    }
+
+    private String makeSqlDropTable( String tableName ){
+        return String.format("DROP TABLE %s", tableName);
+    }
+
     // clean table
     public DBFeedBack toClean(String tableName) {
         if( this.chkTableByName(tableName).equals(DBFeedBack.OK)) {
@@ -62,9 +114,11 @@ public class DBCommandManager {
         try {
             resultSet = getPrepareStatement(sql).executeQuery();
             view.write("Data deleted successfully");
+            closePrepareStatement();
             return DBFeedBack.OK;
         } catch (SQLException ex) {
             view.write("Clear table is interrupted...");
+            closePrepareStatement();
             return DBFeedBack.REFUSE;
         }
     }
@@ -87,6 +141,7 @@ public class DBCommandManager {
             resultSetMeta = resultSet.getMetaData();
         } catch (SQLException ex) {
             view.write("No meta data in the result of query.");
+            closePrepareStatement();
             return DBFeedBack.REFUSE;
         }
 
@@ -94,7 +149,9 @@ public class DBCommandManager {
             return printFoundData();
         } catch (SQLException e) {
             e.printStackTrace();
+            closePrepareStatement();
         }
+        closePrepareStatement();
         return DBFeedBack.REFUSE;
     }
 
@@ -159,6 +216,7 @@ public class DBCommandManager {
             tblList = getTablesList(sql);
         } catch (SQLException e) {
             view.write("Select data about table interrupted...");
+            closePrepareStatement();
             return DBFeedBack.REFUSE;
         }
 
@@ -180,11 +238,13 @@ public class DBCommandManager {
             }
         }catch( SQLException ex ){
             view.write("Select data about table interrupted...");
+            closePrepareStatement();
             return DBFeedBack.REFUSE;
         }
         closePrepareStatement();
         view.write(String.format("Table: %s , Columns: %s",
                 columnString.replace(columnString.length() - 1, columnString.length(), " ").toString()));
+        closePrepareStatement();
         return DBFeedBack.OK;
     }
 
@@ -196,6 +256,7 @@ public class DBCommandManager {
             tblList = getTablesList(sql);
         } catch (SQLException e) {
             view.write("Select data about table interrupted...");
+            closePrepareStatement();
             return DBFeedBack.REFUSE;
         }
         StringBuilder tableString = new StringBuilder();
@@ -204,6 +265,7 @@ public class DBCommandManager {
         }
         view.write(String.format("Table: %s ",
                 tableString.replace(tableString.length() - 1, tableString.length(), " ").toString()));
+        closePrepareStatement();
         return DBFeedBack.OK;
     }
 
@@ -346,5 +408,7 @@ public class DBCommandManager {
 
         return DBFeedBack.REFUSE;
     }
+
+
 
 }
