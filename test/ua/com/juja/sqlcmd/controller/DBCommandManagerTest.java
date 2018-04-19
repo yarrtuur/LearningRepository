@@ -24,7 +24,14 @@ public class DBCommandManagerTest {
 
     @Before
     public void initTest(){
+        ipAddr ="127.0.0.1";
+        connPort = "5432";
+        dbSid = "postgres";
+        dbSidLine = String.format("jdbc:postgresql://%s:%s/%s", ipAddr, connPort, dbSid);
+        login = "postgres";
+        passwd = "1";
         dbManager = new DBCommandManager();
+        dbManager.toConnect(dbSidLine, login, passwd );
     }
 
     @After
@@ -44,30 +51,19 @@ public class DBCommandManagerTest {
 
     @Test
     public void toConnect() {
-          ipAddr ="127.0.0.1";
-          connPort = "5432";
-          dbSid = "postgres";
-          dbSidLine = String.format("jdbc:postgresql://%s:%s/%s", ipAddr, connPort, dbSid);
-          login = "postgres";
-          passwd = "1";
-        System.out.println(dbSidLine);
         assertEquals(DBFeedBack.OK, dbManager.toConnect( dbSidLine, login, passwd ) );
     }
 
     @Test
     public void toConnectWithout() {
-          ipAddr ="127.0.0.1";
-          connPort = "5432";
-          dbSid = "postgres";
-          dbSidLine = String.format("jdbc:postgresql://%s:%s/%s", ipAddr, connPort, dbSid);
-          login = "postgres";
-          passwd = "ppp";
+        passwd = "ppp";
         System.out.println( String.format(" %s %s %s ", dbSidLine, login, passwd ) );
         assertEquals(DBFeedBack.REFUSE, dbManager.toConnect( dbSidLine, login, passwd ) );
     }
 
     @Test
     public void toUpdateWithoutConnect() {
+        dbManager.toExit();
         dataSet = new DataSet();
         dataSet.add ( "fld", "flower" );
         assertEquals(DBFeedBack.REFUSE, dbManager.toUpdate(tableName, dataSet) );
@@ -75,13 +71,7 @@ public class DBCommandManagerTest {
 
     @Test
     public void toUpdateWithConnectWithoutTable() {
-        ipAddr ="127.0.0.1";
-        connPort = "5432";
-        dbSid = "postgres";
-        dbSidLine = String.format("jdbc:postgresql://%s:%s/%s", ipAddr, connPort, dbSid);
-        login = "postgres";
-        passwd = "1";
-        dbManager.toConnect( dbSidLine, login, passwd );
+        dbManager.toExit();
         dataSet = new DataSet();
         dataSet.add ( "fld", "flower" );
         assertEquals(DBFeedBack.REFUSE, dbManager.toUpdate(tableName, dataSet) );
@@ -89,6 +79,14 @@ public class DBCommandManagerTest {
 
     @Test
     public void toDeleteWithoutConnect() {
+        dbManager.toExit();
+        dataSet = new DataSet();
+        dataSet.add ( "fld", "flower" );
+        assertEquals(DBFeedBack.REFUSE, dbManager.toDelete(tableName, dataSet) );
+    }
+
+   @Test
+    public void toDeleteWithConnectWithoutTable() {
         dataSet = new DataSet();
         dataSet.add ( "fld", "flower" );
         assertEquals(DBFeedBack.REFUSE, dbManager.toDelete(tableName, dataSet) );
@@ -96,33 +94,45 @@ public class DBCommandManagerTest {
 
     @Test
     public void toDropWithoutConnect() {
+        dbManager.toExit();
+        assertEquals(DBFeedBack.REFUSE, dbManager.toDrop(tableName) );
+    }
+
+    @Test
+    public void toDropWithConnectWithoutTable() {
+        dbManager.toExit();
         assertEquals(DBFeedBack.REFUSE, dbManager.toDrop(tableName) );
     }
 
     @Test
     public void toCleanWithoutConnect() {
+        dbManager.toExit();
         assertEquals(DBFeedBack.REFUSE, dbManager.toClean(tableName) );
     }
 
     @Test
     public void toFindWithoutConnect() {
+        dbManager.toExit();
         assertEquals(DBFeedBack.REFUSE, dbManager.toFind(tableName, false, null) );
     }
 
     @Test
     public void toViewWithoutConnect() {
+        dbManager.toExit();
         assertEquals(DBFeedBack.REFUSE, dbManager.toView(false,false, tableName) );
     }
 
     @Test
     public void toInsertWithoutConnect() {
+        dbManager.toExit();
         dataSet = new DataSet();
         dataSet.add ( "fld", "flower" );
         assertEquals(DBFeedBack.REFUSE, dbManager.toInsert(tableName,dataSet) );
     }
 
     @Test
-    public void toCreate() {
+    public void toCreateWithoutConnect() {
+        dbManager.toExit();
         dataSet = new DataSet();
         dataSet.add ( "fld", "flower" );
         assertEquals(DBFeedBack.REFUSE, dbManager.toCreate(tableName,dataSet) );
