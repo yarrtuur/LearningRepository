@@ -33,7 +33,9 @@ public class DBCommandManager {
         try {
             preparedStatement = getJdbcBridge ().getConnection().prepareStatement(sql);
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+        }catch (NullPointerException ex){
+            view.write("PrepareStatement not resolved...");
         }
 
         return preparedStatement;
@@ -68,6 +70,9 @@ public class DBCommandManager {
         } catch (SQLException ex) {
             view.write("Update data is interrupted...");
             closePrepareStatement();
+            return DBFeedBack.REFUSE;
+        }catch (NullPointerException ex){
+            view.write("PrepareStatement not resolved...");
             return DBFeedBack.REFUSE;
         }
     }
@@ -290,6 +295,9 @@ public class DBCommandManager {
             view.write("Select data about table interrupted...");
             closePrepareStatement();
             return DBFeedBack.REFUSE;
+        } catch (NullPointerException e) {
+            view.write("getTablesList() not resolved...");
+            return DBFeedBack.REFUSE;
         }
 
         for( String step : tblList){
@@ -330,6 +338,9 @@ public class DBCommandManager {
             view.write("Select data about table interrupted...");
             closePrepareStatement();
             return DBFeedBack.REFUSE;
+        } catch (NullPointerException e) {
+            view.write("getTablesList() not resolved...");
+            return DBFeedBack.REFUSE;
         }
         StringBuilder tableString = new StringBuilder();
         for (String step : tblList) {
@@ -341,7 +352,7 @@ public class DBCommandManager {
         return DBFeedBack.OK;
     }
 
-    private List getTablesList(String sql) throws SQLException {
+    private List getTablesList(String sql) throws SQLException, NullPointerException {
         resultSet = getPrepareStatement(sql).executeQuery();
         List<String> tblList = new LinkedList<>();
 
@@ -434,7 +445,11 @@ public class DBCommandManager {
             resultSet = getPrepareStatement(sqlStr).executeQuery();
         } catch (SQLException e) {
             view.write( String.format( "%s",e.getCause( ) ) );
+        }catch (NullPointerException ex){
+            view.write("chkTableByName not resolved...");
+            return DBFeedBack.REFUSE;
         }
+
         try {
             if (resultSet.next()) {
                 closePrepareStatement();
@@ -449,7 +464,7 @@ public class DBCommandManager {
     }
 
     // connect to DB
-    public DBFeedBack toConnect(String dbSidLine,String login ,String passwd) {
+    public DBFeedBack toConnect(String dbSidLine, String login ,String passwd) {
 
         view.write("-------- PostgreSQL JDBC Connection Testing ------------");
 
