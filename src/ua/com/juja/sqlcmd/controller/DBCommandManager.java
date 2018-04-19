@@ -56,8 +56,9 @@ public class DBCommandManager {
     public DBFeedBack toUpdate(String tableName, DataSet dataSet) {
         if( this.chkTableByName(tableName).equals(DBFeedBack.OK)) {
             return getUpdateData(makeSqlUpdateData(tableName, dataSet));
+        }else {
+            return DBFeedBack.REFUSE;
         }
-        return DBFeedBack.REFUSE;
     }
 
     private DBFeedBack getUpdateData(String sql) {
@@ -446,16 +447,17 @@ public class DBCommandManager {
         } catch (SQLException e) {
             view.write( String.format( "%s",e.getCause( ) ) );
         }catch (NullPointerException ex){
-            view.write("chkTableByName not resolved...");
+            view.write("prepareStatement at the chkTableByName() not resolved...");
             return DBFeedBack.REFUSE;
         }
 
         try {
             if (resultSet.next()) {
                 closePrepareStatement();
-                return DBFeedBack.REFUSE;
-            } else {
                 return DBFeedBack.OK;
+            } else {
+                view.write("No table found");
+                return DBFeedBack.REFUSE;
             }
         } catch (SQLException e) {
             view.write( String.format( "%s",e.getCause( ) ) );

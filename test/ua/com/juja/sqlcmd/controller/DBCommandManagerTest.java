@@ -74,6 +74,20 @@ public class DBCommandManagerTest {
     }
 
     @Test
+    public void toUpdateWithConnectWithoutTable() {
+        ipAddr ="127.0.0.1";
+        connPort = "5432";
+        dbSid = "postgres";
+        dbSidLine = String.format("jdbc:postgresql://%s:%s/%s", ipAddr, connPort, dbSid);
+        login = "postgres";
+        passwd = "1";
+        dbManager.toConnect( dbSidLine, login, passwd );
+        dataSet = new DataSet();
+        dataSet.add ( "fld", "flower" );
+        assertEquals(DBFeedBack.REFUSE, dbManager.toUpdate(tableName, dataSet) );
+    }
+
+    @Test
     public void toDeleteWithoutConnect() {
         dataSet = new DataSet();
         dataSet.add ( "fld", "flower" );
