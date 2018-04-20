@@ -4,6 +4,7 @@ import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.JdbcBridge;
 import ua.com.juja.sqlcmd.types_enums.DBFeedBack;
 import ua.com.juja.sqlcmd.types_enums.EnumCmdsList;
+
 import ua.com.juja.sqlcmd.viewer.Console;
 import ua.com.juja.sqlcmd.viewer.View;
 
@@ -54,11 +55,11 @@ public class DBCommandManager {
 
     // update table
     public DBFeedBack toUpdate(String tableName, DataSet dataSet) {
-        if( this.chkTableByName(tableName).equals(DBFeedBack.OK)) {
-            return getUpdateData(makeSqlUpdateData(tableName, dataSet));
-        }else {
-            return DBFeedBack.REFUSE;
-        }
+          if( this.chkTableByName(tableName).equals(DBFeedBack.OK)  && jdbcBridge.isConnected() ){
+              return getUpdateData(makeSqlUpdateData(tableName, dataSet));
+          }else {
+              return DBFeedBack.REFUSE;
+          }
     }
 
     private DBFeedBack getUpdateData(String sql) {
@@ -70,6 +71,7 @@ public class DBCommandManager {
             return DBFeedBack.OK;
         } catch (SQLException ex) {
             view.write("Update data is interrupted...");
+            view.write(ex.getCause().toString());
             closePrepareStatement();
             return DBFeedBack.REFUSE;
         }catch (NullPointerException ex){
@@ -91,9 +93,11 @@ public class DBCommandManager {
 
     // delete data
     public DBFeedBack toDelete(String tableName, DataSet dataSet) {
-        if( this.chkTableByName(tableName).equals(DBFeedBack.OK)) {
+
+        if( this.chkTableByName(tableName).equals(DBFeedBack.OK)  && jdbcBridge.isConnected()) {
             return getDeleteData(makeSqlDeleteData(tableName, dataSet));
         }
+
         return DBFeedBack.REFUSE;
     }
 
@@ -155,10 +159,12 @@ public class DBCommandManager {
 
     // drop table
     public DBFeedBack toDrop(String tableName) {
-        if( this.chkTableByName(tableName).equals(DBFeedBack.OK)) {
+
+        if( this.chkTableByName(tableName).equals(DBFeedBack.OK) && jdbcBridge.isConnected()) {
             return getDropTable(makeSqlDropTable( tableName ));
         }
-        return DBFeedBack.OK;
+
+        return DBFeedBack.REFUSE;
     }
 
     private DBFeedBack getDropTable( String sql ){
@@ -189,9 +195,11 @@ public class DBCommandManager {
 
     // clean table
     public DBFeedBack toClean(String tableName) {
-        if( this.chkTableByName(tableName).equals(DBFeedBack.OK)) {
+
+        if( this.chkTableByName(tableName).equals(DBFeedBack.OK) && jdbcBridge.isConnected()) {
             return getClearData(makeSqlClearTable( tableName ));
         }
+
         return DBFeedBack.REFUSE;
     }
 
@@ -215,9 +223,11 @@ public class DBCommandManager {
 
     // find data
     public DBFeedBack toFind(String tableName, boolean isDetails, DataSet dataSet) {
-        if( this.chkTableByName(tableName).equals(DBFeedBack.OK)) {
+
+        if( this.chkTableByName(tableName).equals(DBFeedBack.OK) && jdbcBridge.isConnected()) {
             return getFoundData(makeSqlFindData(tableName, isDetails, dataSet));
         }
+
         return DBFeedBack.REFUSE;
     }
 
@@ -285,12 +295,16 @@ public class DBCommandManager {
 
     // view table
     public DBFeedBack toView( boolean isDetails, boolean isOne, String tableName ) {
-        if (isDetails && isOne) {
-            return printOneTableDetails( tableName );
-        } else if( isDetails && !isOne ){
-            return  printTablesDetails();
-        } else {
-            return printTableList();
+        if( jdbcBridge.isConnected()) {
+            if (isDetails && isOne) {
+                return printOneTableDetails(tableName);
+            } else if (isDetails && !isOne) {
+                return printTablesDetails();
+            } else {
+                return printTableList();
+            }
+        }else{
+            return DBFeedBack.REFUSE;
         }
     }
 
@@ -375,7 +389,7 @@ public class DBCommandManager {
 
     // insert into  table
     public DBFeedBack toInsert(String tableName, DataSet dataSet){
-        if( this.chkTableByName(tableName).equals(DBFeedBack.OK)){
+        if( this.chkTableByName(tableName).equals(DBFeedBack.OK) && jdbcBridge.isConnected()){
             return insertIntoTable( makeSqlInsertData( tableName, dataSet ) );
         }
         return DBFeedBack.REFUSE;
@@ -414,9 +428,11 @@ public class DBCommandManager {
 
     //create table
     public DBFeedBack toCreate(String tableName, DataSet dataSet){
-        if( this.chkTableByName(tableName).equals(DBFeedBack.REFUSE)){
+
+        if( this.chkTableByName(tableName).equals(DBFeedBack.REFUSE ) && jdbcBridge.isConnected() ){
             return createTableWithParams( makeSqlCreateTable( tableName, dataSet ) );
         }
+
         return DBFeedBack.REFUSE;
     }
 

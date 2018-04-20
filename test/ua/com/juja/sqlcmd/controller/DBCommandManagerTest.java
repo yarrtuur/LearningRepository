@@ -75,10 +75,20 @@ public class DBCommandManagerTest {
 
     @Test
     public void toUpdateWithConnectWithoutTable() {
-        dbManager.toExit();
         dataSet = new DataSet();
         dataSet.add ( "fld", "flower" );
         assertEquals(DBFeedBack.REFUSE, dbManager.toUpdate(tableName, dataSet) );
+    }
+
+    @Test
+    public void toUpdate() {
+        dataSet = new DataSet();
+        dataSet.add ( "fld", "integer" );
+        dbManager.toCreate(tableName,dataSet );
+        dataSet = new DataSet();
+        dataSet.add ( "fld", "flower" );
+        assertEquals(DBFeedBack.OK, dbManager.toUpdate(tableName, dataSet) );
+        dbManager.toDrop(tableName);
     }
 
     // delete
@@ -111,6 +121,9 @@ public class DBCommandManagerTest {
 
     @Test
     public void toDropWithConnect() {
+        dataSet = new DataSet();
+        dataSet.add ( "fld", "integer" );
+        dbManager.toCreate(tableName,dataSet);
         assertEquals(DBFeedBack.OK, dbManager.toDrop(tableName) );
     }
 
@@ -151,6 +164,7 @@ public class DBCommandManagerTest {
         dataSet.add ( "fld", "integer" );
         dbManager.toCreate(tableName, dataSet );
         assertEquals(DBFeedBack.OK, dbManager.toView(true,true, tableName) );
+        dbManager.toDrop(tableName);
     }
 
     @Test
