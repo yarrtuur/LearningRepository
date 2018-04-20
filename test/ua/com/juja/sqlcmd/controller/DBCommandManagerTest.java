@@ -100,13 +100,21 @@ public class DBCommandManagerTest {
 
     @Test
     public void toDropWithConnectWithoutTable() {
-        dbManager.toExit();
         assertEquals(DBFeedBack.REFUSE, dbManager.toDrop(tableName) );
+    }
+
+    @Test
+    public void toDropWithConnect() {
+        assertEquals(DBFeedBack.OK, dbManager.toDrop(tableName) );
     }
 
     @Test
     public void toCleanWithoutConnect() {
         dbManager.toExit();
+        assertEquals(DBFeedBack.REFUSE, dbManager.toClean(tableName) );
+    }
+    @Test
+    public void toCleanWithConnectWithoutTable() {
         assertEquals(DBFeedBack.REFUSE, dbManager.toClean(tableName) );
     }
 
@@ -123,8 +131,33 @@ public class DBCommandManagerTest {
     }
 
     @Test
+    public void toViewWithConnectAllTables() {
+        assertEquals(DBFeedBack.OK, dbManager.toView(false,false, tableName) );
+    }
+
+    @Test
+    public void toViewWithConnectOneTable() {
+        dataSet = new DataSet();
+        dataSet.add ( "fld", "integer" );
+        dbManager.toCreate(tableName, dataSet );
+        assertEquals(DBFeedBack.OK, dbManager.toView(true,true, tableName) );
+    }
+
+    @Test
+    public void toViewWithConnectAllTablesDetails() {
+        assertEquals(DBFeedBack.OK, dbManager.toView(true,false, tableName) );
+    }
+
+    @Test
     public void toInsertWithoutConnect() {
         dbManager.toExit();
+        dataSet = new DataSet();
+        dataSet.add ( "fld", "flower" );
+        assertEquals(DBFeedBack.REFUSE, dbManager.toInsert(tableName,dataSet) );
+    }
+
+    @Test
+    public void toInsertWithConnectWithoutTable() {
         dataSet = new DataSet();
         dataSet.add ( "fld", "flower" );
         assertEquals(DBFeedBack.REFUSE, dbManager.toInsert(tableName,dataSet) );
@@ -134,7 +167,15 @@ public class DBCommandManagerTest {
     public void toCreateWithoutConnect() {
         dbManager.toExit();
         dataSet = new DataSet();
-        dataSet.add ( "fld", "flower" );
+        dataSet.add ( "fld", "integer" );
         assertEquals(DBFeedBack.REFUSE, dbManager.toCreate(tableName,dataSet) );
+    }
+
+    @Test
+    public void toCreateWithConnect() {
+        dataSet = new DataSet();
+        dataSet.add ( "fld", "integer" );
+        assertEquals(DBFeedBack.OK, dbManager.toCreate(tableName,dataSet) );
+        dbManager.toDrop(tableName);
     }
 }

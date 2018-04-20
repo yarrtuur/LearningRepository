@@ -158,25 +158,33 @@ public class DBCommandManager {
         if( this.chkTableByName(tableName).equals(DBFeedBack.OK)) {
             return getDropTable(makeSqlDropTable( tableName ));
         }
-        return DBFeedBack.REFUSE;
+        return DBFeedBack.OK;
     }
 
     private DBFeedBack getDropTable( String sql ){
+        int resultCode = -1;
         view.write("Droping table from database...");
+
         try {
-            resultSet = getPrepareStatement(sql).executeQuery();
+            resultCode = getPrepareStatement(sql).executeUpdate();
+        } catch (SQLException e) {
+            view.write("Drop table is interrupted...");
+            closePrepareStatement();
+        }
+
+        if( resultCode == 0 ) {
             view.write("Drop table successfully");
             closePrepareStatement();
             return DBFeedBack.OK;
-        } catch (SQLException ex) {
-            view.write("Drop table is interrupted...");
+        } else {
+            view.write("Something wrong with drop table...");
             closePrepareStatement();
             return DBFeedBack.REFUSE;
         }
     }
 
     private String makeSqlDropTable( String tableName ){
-        return String.format("DROP TABLE %s", tableName);
+        return String.format("DROP TABLE IF EXISTS %s CASCADE ", tableName);
     }
 
     // clean table
@@ -323,8 +331,8 @@ public class DBCommandManager {
             return DBFeedBack.REFUSE;
         }
         closePrepareStatement();
-        view.write(String.format("Table: %s , Columns: %s",
-                columnString.replace(columnString.length() - 1, columnString.length(), " ").toString()));
+        view.write( String.format( "Table: %s , Columns: %s", tableName,
+                columnString.replace(columnString.length() - 1, columnString.length(), " ").toString() ) );
         closePrepareStatement();
         return DBFeedBack.OK;
     }
@@ -347,7 +355,7 @@ public class DBCommandManager {
         for (String step : tblList) {
             tableString.append(" ").append(step).append(",");
         }
-        view.write(String.format("Table: %s ",
+        view.write(String.format("Tables: %s ",
                 tableString.replace(tableString.length() - 1, tableString.length(), " ").toString()));
         closePrepareStatement();
         return DBFeedBack.OK;
@@ -406,7 +414,7 @@ public class DBCommandManager {
 
     //create table
     public DBFeedBack toCreate(String tableName, DataSet dataSet){
-        if( this.chkTableByName(tableName).equals(DBFeedBack.OK)){
+        if( this.chkTableByName(tableName).equals(DBFeedBack.REFUSE)){
             return createTableWithParams( makeSqlCreateTable( tableName, dataSet ) );
         }
         return DBFeedBack.REFUSE;
@@ -418,9 +426,8 @@ public class DBCommandManager {
 
         sb.append("CREATE TABLE IF NOT EXISTS ").append(tableName)
                 .append(" ( rid serial CONSTRAINT id_").append(tableName).append("_pk PRIMARY KEY ");
-
         for ( DataSet.Data step : dataList ) {
-            sb.append(",").append(step.getName()).append(" ").append(step.getValue()).append(" ");
+            sb.append(" , ").append(step.getName()).append(" ").append(step.getValue()).append(" ");
         }
         sb.append(");");
 
@@ -428,16 +435,23 @@ public class DBCommandManager {
     }
 
     private DBFeedBack createTableWithParams(String sql)  {
+        int resultCode = -1;
         view.write("Creating table in given database...");
         try {
-            resultSet = getPrepareStatement(sql).executeQuery();
+            resultCode = getPrepareStatement(sql).executeUpdate();
         } catch (SQLException e) {
             view.write("CREATE TABLE Query refused.");
+            view.write( e.getCause().toString() );
             return DBFeedBack.REFUSE;
         }
-        view.write("CREATE TABLE Query returned successfully.");
-        closePrepareStatement();
-        return DBFeedBack.OK;
+        if( resultCode == 0) {
+            view.write("CREATE TABLE Query returned successfully.");
+            closePrepareStatement();
+            return DBFeedBack.OK;
+        } else {
+            view.write("Something wrong with Create table");
+            return DBFeedBack.REFUSE;
+        }
     }
 
     private DBFeedBack chkTableByName(String tableName) {
@@ -454,6 +468,7 @@ public class DBCommandManager {
         try {
             if (resultSet.next()) {
                 closePrepareStatement();
+                view.write("A table has already exists");
                 return DBFeedBack.OK;
             } else {
                 view.write("No table found");
