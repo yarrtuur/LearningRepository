@@ -39,16 +39,19 @@ public class DBCommandManagerTest {
         dbManager = null;
     }
 
+    // help has done
     @Test
     public void toHelp() {
         assertEquals(DBFeedBack.OK, dbManager.toHelp());
     }
 
+    // exit has done
     @Test
     public void toExit() {
         assertEquals(DBFeedBack.OK, dbManager.toExit());
     }
 
+    //connect has done
     @Test
     public void toConnect() {
         assertEquals(DBFeedBack.OK, dbManager.toConnect( dbSidLine, login, passwd ) );
@@ -61,6 +64,7 @@ public class DBCommandManagerTest {
         assertEquals(DBFeedBack.REFUSE, dbManager.toConnect( dbSidLine, login, passwd ) );
     }
 
+    //update
     @Test
     public void toUpdateWithoutConnect() {
         dbManager.toExit();
@@ -77,6 +81,7 @@ public class DBCommandManagerTest {
         assertEquals(DBFeedBack.REFUSE, dbManager.toUpdate(tableName, dataSet) );
     }
 
+    // delete
     @Test
     public void toDeleteWithoutConnect() {
         dbManager.toExit();
@@ -92,6 +97,7 @@ public class DBCommandManagerTest {
         assertEquals(DBFeedBack.REFUSE, dbManager.toDelete(tableName, dataSet) );
     }
 
+    //drop has done
     @Test
     public void toDropWithoutConnect() {
         dbManager.toExit();
@@ -108,22 +114,26 @@ public class DBCommandManagerTest {
         assertEquals(DBFeedBack.OK, dbManager.toDrop(tableName) );
     }
 
+    // clean
     @Test
     public void toCleanWithoutConnect() {
         dbManager.toExit();
         assertEquals(DBFeedBack.REFUSE, dbManager.toClean(tableName) );
     }
+
     @Test
     public void toCleanWithConnectWithoutTable() {
         assertEquals(DBFeedBack.REFUSE, dbManager.toClean(tableName) );
     }
 
+    // find
     @Test
     public void toFindWithoutConnect() {
         dbManager.toExit();
         assertEquals(DBFeedBack.REFUSE, dbManager.toFind(tableName, false, null) );
     }
 
+    // view has done
     @Test
     public void toViewWithoutConnect() {
         dbManager.toExit();
@@ -148,6 +158,7 @@ public class DBCommandManagerTest {
         assertEquals(DBFeedBack.OK, dbManager.toView(true,false, tableName) );
     }
 
+    // insert
     @Test
     public void toInsertWithoutConnect() {
         dbManager.toExit();
@@ -163,6 +174,7 @@ public class DBCommandManagerTest {
         assertEquals(DBFeedBack.REFUSE, dbManager.toInsert(tableName,dataSet) );
     }
 
+    // create has done
     @Test
     public void toCreateWithoutConnect() {
         dbManager.toExit();

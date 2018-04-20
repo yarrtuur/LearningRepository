@@ -331,8 +331,8 @@ public class DBCommandManager {
             return DBFeedBack.REFUSE;
         }
         closePrepareStatement();
-        view.write( String.format( "Table: %s , Columns: %s", tableName,
-                columnString.replace(columnString.length() - 1, columnString.length(), " ").toString() ) );
+        String columnView = columnString.replace(columnString.length() - 1, columnString.length(), " ").toString();
+        view.write( String.format( "Table: %s , Columns: %s", tableName, columnView ) );
         closePrepareStatement();
         return DBFeedBack.OK;
     }
