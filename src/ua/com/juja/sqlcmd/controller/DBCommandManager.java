@@ -113,13 +113,19 @@ public class DBCommandManager {
     }
 
     private DBFeedBack getDeleteData(String sql) {
+        int resultCode = -1;
         try {
-            resultSet = getPrepareStatement(sql).executeQuery();
-            view.write("Operation successfull.");
-            closePrepareStatement();
-            return DBFeedBack.OK;
+            resultCode = getPrepareStatement(sql).executeUpdate();
         } catch (SQLException e) {
             view.write("Delete data interrupted.");
+        }
+
+        if( resultCode == 1 ) {
+            view.write("Delete data operation successfull.");
+            closePrepareStatement();
+            return DBFeedBack.OK;
+        } else {
+            view.write("Something wrong with Delete data ...");
             closePrepareStatement();
             return DBFeedBack.REFUSE;
         }
@@ -215,21 +221,27 @@ public class DBCommandManager {
     }
 
     private DBFeedBack getClearData( String sql ){
-            view.write("Deleting data from table...");
+        int resultCode = -1;
+        view.write("Deleting data from table...");
         try {
-            resultSet = getPrepareStatement(sql).executeQuery();
+            resultCode = getPrepareStatement(sql).executeUpdate();
+        } catch (SQLException ex) {
+            view.write("Clear table is interrupted...");
+        }
+
+        if( resultCode == 1) {
             view.write("Data deleted successfully");
             closePrepareStatement();
             return DBFeedBack.OK;
-        } catch (SQLException ex) {
-            view.write("Clear table is interrupted...");
+        } else {
+            view.write("Something wrong with Clear data");
             closePrepareStatement();
             return DBFeedBack.REFUSE;
         }
     }
 
     private String makeSqlClearTable( String tableName ){
-        return String.format("DELETE FROM %s", tableName);
+        return String.format("DELETE FROM %s ", tableName);
     }
 
     // find data

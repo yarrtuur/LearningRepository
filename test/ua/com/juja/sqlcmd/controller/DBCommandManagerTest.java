@@ -100,7 +100,7 @@ public class DBCommandManagerTest {
         dbManager.toDrop(tableName);
     }
 
-    // delete TODO
+    // delete has done
     @Test
     public void toDeleteWithoutConnect() {
         dbManager.toExit();
@@ -114,6 +114,18 @@ public class DBCommandManagerTest {
         dataSet = new DataSet();
         dataSet.add ( "fld", "flower" );
         assertEquals(DBFeedBack.REFUSE, dbManager.toDelete(tableName, dataSet) );
+    }
+
+    @Test
+    public void toDelete(){
+        dataSet = new DataSet();
+        dataSet.add ( "fld", "integer" );
+        dbManager.toCreate(tableName,dataSet );
+        dataSet = new DataSet();
+        dataSet.add ( "fld", "1" );
+        dbManager.toInsert ( tableName, dataSet );
+        assertEquals(DBFeedBack.OK, dbManager.toDelete (tableName, dataSet) );
+        dbManager.toDrop ( tableName );
     }
 
     //drop has done
@@ -136,7 +148,7 @@ public class DBCommandManagerTest {
         assertEquals(DBFeedBack.OK, dbManager.toDrop(tableName) );
     }
 
-    // clean TODO
+    // clean has done
     @Test
     public void toCleanWithoutConnect() {
         dbManager.toExit();
@@ -145,14 +157,46 @@ public class DBCommandManagerTest {
 
     @Test
     public void toCleanWithConnectWithoutTable() {
+        dbManager.toDrop ( tableName );
         assertEquals(DBFeedBack.REFUSE, dbManager.toClean(tableName) );
     }
 
-    // find TODO
+    @Test
+    public void toClean() {
+        dataSet = new DataSet();
+        dataSet.add ( "fld", "integer" );
+        dbManager.toCreate(tableName,dataSet );
+        dataSet = new DataSet();
+        dataSet.add ( "fld", "1" );
+        dbManager.toInsert ( tableName, dataSet );
+        assertEquals(DBFeedBack.OK, dbManager.toClean(tableName) );
+        dbManager.toDrop ( tableName );
+    }
+
+    // find has done
     @Test
     public void toFindWithoutConnect() {
         dbManager.toExit();
         assertEquals(DBFeedBack.REFUSE, dbManager.toFind(tableName, false, null) );
+    }
+
+    @Test
+    public void toFindWitConnectWithoutTable() {
+        dbManager.toDrop ( tableName );
+        assertEquals(DBFeedBack.REFUSE, dbManager.toFind(tableName, false, null) );
+    }
+
+    @Test
+    public void toFind(){
+        dataSet = new DataSet();
+        dataSet.add ( "fld", "integer" );
+        dbManager.toCreate(tableName,dataSet);
+        dataSet = new DataSet();
+        dataSet.add ( "fld", "1" );
+        dbManager.toInsert ( tableName, dataSet );
+
+        assertEquals ( DBFeedBack.OK, dbManager.toFind ( tableName, true, dataSet ) );
+        dbManager.toDrop(tableName);
     }
 
     // view has done
