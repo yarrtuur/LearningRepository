@@ -44,7 +44,7 @@ public class IntegrationTest {
                 " clear : clear | tableName " +CARET+
                 " drop : drop | tableName " +CARET+
                 " delete : delete | tableName | column | value " +CARET+
-                " update : update | tableName | column1 | value1 | column2 | value2 "+CARET
+                " update : update | tableName | SET | column1 | value1 | column2 | value2 | WHERE| columnX | valueX "+CARET
                 , getData());
     }
 

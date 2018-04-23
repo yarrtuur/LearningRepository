@@ -36,6 +36,7 @@ public class DBCommandManagerTest {
 
     @After
     public void afterTest(){
+        dbManager.toExit ();
         dbManager = null;
     }
 
