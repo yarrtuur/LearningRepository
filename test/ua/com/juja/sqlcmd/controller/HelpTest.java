@@ -43,7 +43,6 @@ public class HelpTest {
 
     @Test
     public void process() {
-        CmdLineState state = command.process ( dbManager, commandLine );
-        assertEquals ( CmdLineState.WAIT, state );
+        assertEquals ( CmdLineState.WAIT, command.process ( dbManager, commandLine ) );
     }
 }

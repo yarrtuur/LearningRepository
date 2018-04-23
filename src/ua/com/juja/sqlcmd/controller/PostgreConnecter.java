@@ -23,12 +23,14 @@ public class PostgreConnecter implements CommandProcessable {
     public String setSocketData(String[] commandLine) throws RuntimeException {
         String dbSid = "", ipAddr = "", connPort = "";
         try {
-            this.login = commandLine[1];
-            this.passwd = commandLine[2];
-            dbSid = commandLine[3];
-        } catch (IndexOutOfBoundsException ex) {
-            dbManager.getView().write("Command string format is wrong. Try again.");
-            throw new RuntimeException("");
+            if(commandLine.length > 3) {
+                this.login = commandLine[1];
+                this.passwd = commandLine[2];
+                dbSid = commandLine[3];
+            }
+        } catch (RuntimeException ex) {
+            dbManager.getView ().write ( "Command string format is wrong. Try again." );
+            throw new RuntimeException ( ex.getCause () );
         }
         if (commandLine.length > 4) {
             ipAddr = commandLine[4];
