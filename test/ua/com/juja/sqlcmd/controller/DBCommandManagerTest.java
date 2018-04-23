@@ -10,7 +10,7 @@ public class DBCommandManagerTest {
 
     private DBCommandManager dbManager;
     String tableName = "clone", ipAddr, connPort, dbSid, dbSidLine, login, passwd;
-    DataSet dataSet;
+    DataSet dataSet, dataSetSet, dataSetWhere;
 
     @BeforeClass
     public static void  beforeClass(){
@@ -64,20 +64,24 @@ public class DBCommandManagerTest {
         assertEquals(DBFeedBack.REFUSE, dbManager.toConnect( dbSidLine, login, passwd ) );
     }
 
-    //update
+    //update has done
     @Test
     public void toUpdateWithoutConnect() {
         dbManager.toExit();
-        dataSet = new DataSet();
-        dataSet.add ( "fld", "flower" );
-        assertEquals(DBFeedBack.REFUSE, dbManager.toUpdate(tableName, dataSet) );
+        dataSetSet = new DataSet();
+        dataSetSet.add ( "fld", "1" );
+        dataSetWhere = new DataSet();
+        dataSetWhere.add ( "fld", "1" );
+        assertEquals(DBFeedBack.REFUSE, dbManager.toUpdate(tableName, this.dataSetSet, dataSetWhere) );
     }
 
     @Test
     public void toUpdateWithConnectWithoutTable() {
-        dataSet = new DataSet();
-        dataSet.add ( "fld", "flower" );
-        assertEquals(DBFeedBack.REFUSE, dbManager.toUpdate(tableName, dataSet) );
+        dataSetSet = new DataSet();
+        dataSetSet.add ( "fld", "1" );
+        dataSetWhere = new DataSet();
+        dataSetWhere.add ( "fld", "1" );
+        assertEquals(DBFeedBack.REFUSE, dbManager.toUpdate(tableName, this.dataSetSet, dataSetWhere) );
     }
 
     @Test
@@ -86,17 +90,22 @@ public class DBCommandManagerTest {
         dataSet.add ( "fld", "integer" );
         dbManager.toCreate(tableName,dataSet );
         dataSet = new DataSet();
-        dataSet.add ( "fld", "flower" );
-        assertEquals(DBFeedBack.OK, dbManager.toUpdate(tableName, dataSet) );
+        dataSet.add ( "fld", "1" );
+        dbManager.toInsert ( tableName, dataSet );
+        dataSetSet = new DataSet();
+        dataSetSet.add ( "fld", "2" );
+        dataSetWhere = new DataSet();
+        dataSetWhere.add ( "fld", "1" );
+        assertEquals(DBFeedBack.OK, dbManager.toUpdate(tableName, this.dataSetSet, dataSetWhere) );
         dbManager.toDrop(tableName);
     }
 
-    // delete
+    // delete TODO
     @Test
     public void toDeleteWithoutConnect() {
         dbManager.toExit();
         dataSet = new DataSet();
-        dataSet.add ( "fld", "flower" );
+        dataSet.add ( "fld", "1" );
         assertEquals(DBFeedBack.REFUSE, dbManager.toDelete(tableName, dataSet) );
     }
 
@@ -127,7 +136,7 @@ public class DBCommandManagerTest {
         assertEquals(DBFeedBack.OK, dbManager.toDrop(tableName) );
     }
 
-    // clean
+    // clean TODO
     @Test
     public void toCleanWithoutConnect() {
         dbManager.toExit();
@@ -139,7 +148,7 @@ public class DBCommandManagerTest {
         assertEquals(DBFeedBack.REFUSE, dbManager.toClean(tableName) );
     }
 
-    // find
+    // find TODO
     @Test
     public void toFindWithoutConnect() {
         dbManager.toExit();
@@ -172,20 +181,32 @@ public class DBCommandManagerTest {
         assertEquals(DBFeedBack.OK, dbManager.toView(true,false, tableName) );
     }
 
-    // insert
+    // insert has done
     @Test
     public void toInsertWithoutConnect() {
         dbManager.toExit();
         dataSet = new DataSet();
-        dataSet.add ( "fld", "flower" );
+        dataSet.add ( "fld", "1" );
         assertEquals(DBFeedBack.REFUSE, dbManager.toInsert(tableName,dataSet) );
     }
 
     @Test
     public void toInsertWithConnectWithoutTable() {
+        dbManager.toDrop ( tableName );
         dataSet = new DataSet();
-        dataSet.add ( "fld", "flower" );
+        dataSet.add ( "fld", "1" );
         assertEquals(DBFeedBack.REFUSE, dbManager.toInsert(tableName,dataSet) );
+    }
+
+    @Test
+    public void toInsert() {
+        dataSet = new DataSet();
+        dataSet.add ( "fld", "integer" );
+        dbManager.toCreate(tableName,dataSet);
+        dataSet = new DataSet();
+        dataSet.add ( "fld", "1" );
+        assertEquals(DBFeedBack.OK, dbManager.toInsert(tableName,dataSet) );
+        dbManager.toDrop(tableName);
     }
 
     // create has done

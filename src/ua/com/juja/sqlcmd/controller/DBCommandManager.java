@@ -54,40 +54,51 @@ public class DBCommandManager {
     }
 
     // update table
-    public DBFeedBack toUpdate(String tableName, DataSet dataSet) {
+    public DBFeedBack toUpdate(String tableName, DataSet dataSetSet, DataSet dataSetWhere) {
           if( this.chkTableByName(tableName).equals(DBFeedBack.OK)  && jdbcBridge.isConnected() ){
-              return getUpdateData(makeSqlUpdateData(tableName, dataSet));
+              return getUpdateData(makeSqlUpdateData(tableName, dataSetSet, dataSetWhere));
           }else {
               return DBFeedBack.REFUSE;
           }
     }
 
     private DBFeedBack getUpdateData(String sql) {
+        int resultCode = -1;
         view.write("Updating data in database...");
+
         try {
-            resultSet = getPrepareStatement(sql).executeQuery();
-            view.write("Update data successfully");
-            closePrepareStatement();
-            return DBFeedBack.OK;
+            resultCode = getPrepareStatement(sql).executeUpdate();
         } catch (SQLException ex) {
             view.write("Update data is interrupted...");
             view.write(ex.getCause().toString());
             closePrepareStatement();
-            return DBFeedBack.REFUSE;
-        }catch (NullPointerException ex){
-            view.write("PrepareStatement not resolved...");
+        }
+
+        if( resultCode == 1 ) {
+            view.write("Update data successfully");
+            closePrepareStatement();
+            return DBFeedBack.OK;
+        } else {
+            view.write("Something wrong with Update table...");
+            closePrepareStatement();
             return DBFeedBack.REFUSE;
         }
     }
 
-    private String makeSqlUpdateData(String tableName, DataSet dataSet) {
+    private String makeSqlUpdateData(String tableName, DataSet dataSetSet, DataSet dataSetWhere) {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("UPDATE public.%s ", tableName));
         sb.append ( " SET " );
-        for(DataSet.Data step : dataSet.getData () ){
+        for(DataSet.Data step : dataSetSet.getData () ){
             sb.append ( String.format ( " %s = %s , ", step.getName(), step.getValue() ) );
         }
         sb.replace(sb.length() - 3, sb.length(), " ");
+        sb.append ( " WHERE " );
+        for(DataSet.Data step : dataSetWhere.getData () ){
+            sb.append ( String.format ( " %s = %s AND ", step.getName(), step.getValue() ) );
+        }
+        sb.replace(sb.length() - 4, sb.length(), " ");
+
         return sb.toString();
     }
 
@@ -396,16 +407,25 @@ public class DBCommandManager {
     }
 
     private DBFeedBack insertIntoTable(String sql) {
+        int resultCode = -1;
         view.write("Inserting data into table ...");
         try {
-            resultSet = getPrepareStatement(sql).executeQuery();
+            resultCode = getPrepareStatement(sql).executeUpdate();
         } catch (SQLException e) {
             view.write("INSERT INTO TABLE Query refused.");
             return DBFeedBack.REFUSE;
         }
-        view.write("INSERT INTO TABLE Query returned successfully.");
-        closePrepareStatement();
-        return DBFeedBack.OK;
+
+        if( resultCode == 1) {
+            view.write("INSERT INTO TABLE Query returned successfully.");
+            closePrepareStatement();
+            return DBFeedBack.OK;
+        } else {
+            view.write("Something wrong with insert data");
+            closePrepareStatement();
+            return DBFeedBack.REFUSE;
+        }
+
     }
 
     private String makeSqlInsertData(String tableName, DataSet dataSet) {
@@ -419,8 +439,8 @@ public class DBCommandManager {
             columns.append(step.getName()).append(", ");
             values.append(step.getValue()).append(", ");
         }
-        columns.replace(columns.length() - 1, columns.length(), ")");
-        values.replace(values.length() - 1, values.length(), ")");
+        columns.replace(columns.length() - 2, columns.length(), ")");
+        values.replace(values.length() - 2, values.length(), ")");
         sb.append(columns).append(" values ( ").append(values).append(";");
 
         return sb.toString();
@@ -457,17 +477,18 @@ public class DBCommandManager {
             resultCode = getPrepareStatement(sql).executeUpdate();
         } catch (SQLException e) {
             view.write("CREATE TABLE Query refused.");
-            view.write( e.getCause().toString() );
-            return DBFeedBack.REFUSE;
         }
+
         if( resultCode == 0) {
             view.write("CREATE TABLE Query returned successfully.");
             closePrepareStatement();
             return DBFeedBack.OK;
         } else {
             view.write("Something wrong with Create table");
+            closePrepareStatement();
             return DBFeedBack.REFUSE;
         }
+
     }
 
     private DBFeedBack chkTableByName(String tableName) {
