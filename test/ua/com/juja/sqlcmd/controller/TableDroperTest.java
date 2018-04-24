@@ -30,6 +30,7 @@ public class TableDroperTest {
 
     @After
     public void tearDown() throws Exception {
+        dbManager.toDrop ( "clone" );
         dbManager.toExit ();
         dbManager = null;
         command = null;
