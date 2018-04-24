@@ -16,34 +16,30 @@ public class PostgreConnecter implements CommandProcessable {
     public CmdLineState process( DBCommandManager dbManager, String[] commandLine ) {
         this.dbManager = dbManager;
         dbManager.getView().write("Starting connect...");
-        dbManager.toConnect( setSocketData(commandLine), this.login, this.passwd );
+        dbManager.getView ().write ( String.format ( "%d",commandLine.length ));
+        if( commandLine.length >= 4 ) {
+            dbManager.toConnect ( setSocketData ( commandLine ), this.login, this.passwd );
+        }
         return CmdLineState.WAIT;
     }
 
-    public String setSocketData(String[] commandLine) throws RuntimeException {
+    public String setSocketData(String[] commandLine)  {
         String dbSid = "", ipAddr = "", connPort = "";
-        try {
-            if(commandLine.length > 3) {
-                this.login = commandLine[1];
-                this.passwd = commandLine[2];
-                dbSid = commandLine[3];
-            }
-        } catch (RuntimeException ex) {
-            dbManager.getView ().write ( "Command string format is wrong. Try again." );
-            throw new RuntimeException ( ex.getCause () );
-        }
-        if (commandLine.length > 4) {
+
+        if(commandLine[1] != null) this.login = commandLine[1];
+        if(commandLine[2] != null) this.passwd = commandLine[2];
+        if(commandLine[3] != null) dbSid = commandLine[3];
+
+        if (commandLine.length >= 5) {
             ipAddr = commandLine[4];
         } else {
             ipAddr = "127.0.0.1";
         }
-        if (commandLine.length > 5) {
+        if (commandLine.length >= 6) {
             connPort = commandLine[5];
         } else {
             connPort = "5432";
         }
         return String.format("jdbc:postgresql://%s:%s/%s", ipAddr, connPort, dbSid);
-
     }
-
 }

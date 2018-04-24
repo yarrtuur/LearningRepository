@@ -28,13 +28,14 @@ public class TableCreater implements CommandProcessable ,Preparable{
 
     @Override
     public ActionResult prepareCmdData(String[] commandLine) {
-        try {
-            tableName = commandLine[1];
-        } catch (IndexOutOfBoundsException ex) {
-            dbManager.getView().write("There isn`t tablename at string. Try again.");
+        if( commandLine.length > 1 ){
+            if(commandLine[1] != null) {
+                tableName = commandLine[1];
+            }
+        }else {
+            dbManager.getView ().write ( "There isn`t tablename at string. Try again." );
             return ActionResult.ACTION_RESULT_WRONG;
         }
-
         if(commandLine.length % 2 != 0){
             dbManager.getView().write("String format is wrong. Try again.");
             return ActionResult.ACTION_RESULT_WRONG;
