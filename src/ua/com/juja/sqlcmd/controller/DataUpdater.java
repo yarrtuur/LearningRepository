@@ -46,10 +46,11 @@ public class DataUpdater implements CommandProcessable, Preparable {
             }
 
             dataSetSet = new DataSet ();
-            for (int i = set; i < where; i += 2) {
+            for (int i = set+1; i < where; i += 2) {
                 dataSetSet.add ( commandLine[i], commandLine[i + 1] );
             }
-            for (int i = where; i < commandLine.length; i += 2) {
+            dataSetWhere = new DataSet ();
+            for (int i = where + 1; i < commandLine.length; i += 2) {
                 dataSetWhere.add ( commandLine[i], commandLine[i + 1] );
             }
         }
