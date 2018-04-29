@@ -37,9 +37,6 @@ public class DataDeleter implements CommandProcessable, Preparable {
         if(commandLine.length % 2 != 0 && commandLine.length > 2 ){
             dbManager.getView().write("String format is wrong. Must be even count of data. Try again.");
             return ActionResult.ACTION_RESULT_WRONG;
-        }else if(commandLine.length % 2 == 0 && commandLine.length <= 3 ){
-            dbManager.getView().write("String format is wrong. Must be more data. Try again.");
-            return ActionResult.ACTION_RESULT_WRONG;
         }else{
             dataSet = new DataSet();
             for (int i = 2; i < commandLine.length; i +=2 ) {
