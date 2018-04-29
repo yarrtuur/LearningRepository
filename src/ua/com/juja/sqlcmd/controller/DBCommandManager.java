@@ -161,7 +161,7 @@ public class DBCommandManager {
                 if( jdbcBridge.getConnection () != null) {
                     jdbcBridge.getConnection ().close ();
                 }
-                view.write ( "Connection closed." ); //TODO
+                view.write ( "Connection closed." );
             } catch (SQLException e) {
                 view.write ( "Close connection interrupted.." );
                 return DBFeedBack.REFUSE;

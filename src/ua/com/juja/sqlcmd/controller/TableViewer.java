@@ -31,12 +31,13 @@ public class TableViewer implements CommandProcessable, Preparable {
         if (commandLine.length > 1 && commandLine[1].equals("fields")) {
             isDetails = true;
             isOne = false;
-        } else if(commandLine.length > 1 && commandLine[1].equals("tablename")){
+        } else if(commandLine.length > 1 && !commandLine[1].equals("fields")){
             isDetails = true;
             isOne = true;
             this.tableName = commandLine[1];
-        } else {
-            dbManager.getView().write("Command string format is wrong. Try again.");
+        } else if ( commandLine.length == 1 ) {
+            isDetails = false;
+            isOne = false;
         }
 
         return ActionResult.ACTION_RESULT_OK;
