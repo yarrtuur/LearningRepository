@@ -9,7 +9,7 @@ import ua.com.juja.sqlcmd.types_enums.CmdLineState;
 import static org.junit.Assert.*;
 
 public class TableCreaterTest {
-    private TableCreater command ;
+    private CommandProcessable command ;
     private DBCommandManager dbManager;
     private String singleCommand;
     private String[] commandLine;

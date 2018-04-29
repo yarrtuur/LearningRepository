@@ -9,7 +9,7 @@ import ua.com.juja.sqlcmd.types_enums.CmdLineState;
 import static org.junit.Assert.*;
 
 public class TableDroperTest {
-    private TableDroper command ;
+    private CommandProcessable command ;
     private DBCommandManager dbManager;
     private DataSet dataSet;
     private String singleCommand;
