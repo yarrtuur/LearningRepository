@@ -30,18 +30,7 @@ public class DataSet  {
         return columnList;
     }
 
-    public String getColumns(){
-        //TODO
-        return null;
-    }
-
-    public String getValues(){
-        //TODO
-        return null;
-    }
-
     public void add(String columnName, String value){
-       //TODO check unique columnName
         columnList.add( new Data( columnName, value ) );
     }
 

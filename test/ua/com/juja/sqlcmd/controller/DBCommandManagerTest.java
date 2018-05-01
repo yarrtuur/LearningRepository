@@ -52,6 +52,12 @@ public class DBCommandManagerTest {
         assertEquals(DBFeedBack.OK, dbManager.toExit());
     }
 
+    @Test
+    public void toExitNoClose() {
+        dbManager.getJdbcBridge().setConnection( null );
+        assertEquals(DBFeedBack.REFUSE, dbManager.toExit());
+    }
+
     //connect has done
     @Test
     public void toConnect() {

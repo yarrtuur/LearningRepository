@@ -156,20 +156,18 @@ public class DBCommandManager {
     // exit
     public DBFeedBack toExit() {
         view.write ( "Closing connection..." );
-        if( jdbcBridge.isConnected () ){
+       // if( jdbcBridge.isConnected () ){
             try {
-                if( jdbcBridge.getConnection () != null) {
-                    jdbcBridge.getConnection ().close ();
-                }
+                jdbcBridge.getConnection ().close ();
                 view.write ( "Connection closed." );
             } catch (SQLException e) {
                 view.write ( "Close connection interrupted.." );
                 return DBFeedBack.REFUSE;
             }
             jdbcBridge.setConnection ( null );
-        }else{
+      //  }else{
             view.write ( "Connection closed." );
-        }
+      //  }
 
         return DBFeedBack.OK;
     }
