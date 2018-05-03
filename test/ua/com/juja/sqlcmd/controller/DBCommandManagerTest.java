@@ -53,7 +53,7 @@ public class DBCommandManagerTest {
     public void toExit() {
         assertEquals(DBFeedBack.OK, dbManager.toExit());
     }
-    
+
     //connect has done
     @Test
     public void toConnect() {
