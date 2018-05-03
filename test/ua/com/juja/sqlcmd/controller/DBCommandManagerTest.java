@@ -2,7 +2,9 @@ package ua.com.juja.sqlcmd.controller;
 
 import org.junit.*;
 import ua.com.juja.sqlcmd.model.DataSet;
-import ua.com.juja.sqlcmd.types_enums.DBFeedBack;
+import ua.com.juja.sqlcmd.types_enums_except.DBFeedBack;
+
+import java.sql.SQLException;
 
 import static org.junit.Assert.*;
 
@@ -51,13 +53,7 @@ public class DBCommandManagerTest {
     public void toExit() {
         assertEquals(DBFeedBack.OK, dbManager.toExit());
     }
-
-    @Test
-    public void toExitNoClose() {
-        dbManager.getJdbcBridge().setConnection( null );
-        assertEquals(DBFeedBack.REFUSE, dbManager.toExit());
-    }
-
+    
     //connect has done
     @Test
     public void toConnect() {

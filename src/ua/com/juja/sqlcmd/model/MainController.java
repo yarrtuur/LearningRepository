@@ -1,7 +1,7 @@
 package ua.com.juja.sqlcmd.model;
 
 import ua.com.juja.sqlcmd.controller.*;
-import ua.com.juja.sqlcmd.types_enums.CmdLineState;
+import ua.com.juja.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.sqlcmd.viewer.Console;
 import ua.com.juja.sqlcmd.viewer.View;
 

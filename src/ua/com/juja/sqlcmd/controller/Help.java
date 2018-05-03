@@ -1,6 +1,6 @@
 package ua.com.juja.sqlcmd.controller;
 
-import ua.com.juja.sqlcmd.types_enums.CmdLineState;
+import ua.com.juja.sqlcmd.types_enums_except.CmdLineState;
 
 public class Help implements CommandProcessable {
 

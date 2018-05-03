@@ -1,6 +1,6 @@
 package ua.com.juja.sqlcmd.controller;
 
-import ua.com.juja.sqlcmd.types_enums.ActionResult;
+import ua.com.juja.sqlcmd.types_enums_except.ActionResult;
 
 public interface Preparable {
 

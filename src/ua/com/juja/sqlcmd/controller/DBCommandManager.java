@@ -2,8 +2,8 @@ package ua.com.juja.sqlcmd.controller;
 
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.JdbcBridge;
-import ua.com.juja.sqlcmd.types_enums.DBFeedBack;
-import ua.com.juja.sqlcmd.types_enums.EnumCmdsList;
+import ua.com.juja.sqlcmd.types_enums_except.DBFeedBack;
+import ua.com.juja.sqlcmd.types_enums_except.EnumCmdsList;
 
 import ua.com.juja.sqlcmd.viewer.Console;
 import ua.com.juja.sqlcmd.viewer.View;
@@ -156,7 +156,7 @@ public class DBCommandManager {
     // exit
     public DBFeedBack toExit() {
         view.write ( "Closing connection..." );
-       // if( jdbcBridge.isConnected () ){
+        if( jdbcBridge.isConnected () ){
             try {
                 jdbcBridge.getConnection ().close ();
                 view.write ( "Connection closed." );
@@ -165,9 +165,9 @@ public class DBCommandManager {
                 return DBFeedBack.REFUSE;
             }
             jdbcBridge.setConnection ( null );
-      //  }else{
+        }else{
             view.write ( "Connection closed." );
-      //  }
+        }
 
         return DBFeedBack.OK;
     }
