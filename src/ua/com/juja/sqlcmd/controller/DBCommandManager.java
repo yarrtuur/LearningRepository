@@ -317,10 +317,12 @@ public class DBCommandManager {
     // view table
     public DBFeedBack toView( boolean isDetails, boolean isOne, String tableName ) {
         if( jdbcBridge.isConnected()) {
-            if (isDetails && isOne) {
-                return printOneTableDetails(tableName);
-            } else if (isDetails && !isOne) {
-                return printTablesDetails();
+            if (isDetails) {
+                if( isOne ) {
+                    return printOneTableDetails(tableName);
+                } else {
+                    return printTablesDetails();
+                }
             } else {
                 return printTableList();
             }
@@ -329,8 +331,9 @@ public class DBCommandManager {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private DBFeedBack printTablesDetails() {
-        List<String> tblList = new LinkedList<>();
+        List<String> tblList /*= new LinkedList<>()*/;
         String sql = "SELECT t.table_name FROM information_schema.tables t " +
                 "WHERE t.table_schema = 'public'";
         try {
@@ -372,8 +375,9 @@ public class DBCommandManager {
         return DBFeedBack.OK;
     }
 
+    @SuppressWarnings("unchecked")
     private DBFeedBack printTableList() {
-        List<String> tblList = new LinkedList<>();
+        List<String> tblList /*= new LinkedList<>()*/;
         String sql = "SELECT t.table_name FROM information_schema.tables t " +
                 "WHERE t.table_schema = 'public'";
         try {
@@ -417,7 +421,7 @@ public class DBCommandManager {
     }
 
     private DBFeedBack insertIntoTable(String sql) {
-        int resultCode = -1;
+        int resultCode/* = -1*/;
         view.write("Inserting data into table ...");
         try {
             resultCode = getPrepareStatement(sql).executeUpdate();

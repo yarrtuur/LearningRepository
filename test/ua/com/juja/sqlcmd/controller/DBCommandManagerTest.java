@@ -4,8 +4,6 @@ import org.junit.*;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.types_enums_except.DBFeedBack;
 
-import java.sql.SQLException;
-
 import static org.junit.Assert.*;
 
 public class DBCommandManagerTest {

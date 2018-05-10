@@ -20,7 +20,7 @@ public class DataFinder implements CommandProcessable, Preparable {
     public CmdLineState process(DBCommandManager dbManager, String[] commandLine) {
         this.dbManager = dbManager;
 
-        if( prepareCmdData( commandLine ).equals( ActionResult.ACTION_RESULT_OK ) ) {
+        if (prepareCmdData(commandLine).equals(ActionResult.ACTION_RESULT_OK)) {
             dbManager.toFind(this.tableName, this.isDetails, this.dataSet);
         }
 
@@ -36,14 +36,14 @@ public class DataFinder implements CommandProcessable, Preparable {
             return ActionResult.ACTION_RESULT_WRONG;
         }
 
-        if(commandLine.length % 2 != 0 && commandLine.length > 2 ){
+        if (commandLine.length % 2 != 0 && commandLine.length > 2) {
             dbManager.getView().write("String format is wrong. Must be even count of data. Try again.");
             return ActionResult.ACTION_RESULT_WRONG;
-        }else{
+        } else {
             isDetails = true;
             dataSet = new DataSet();
-            for (int i = 2; i < commandLine.length; i +=2 ) {
-                dataSet.add(commandLine[i], commandLine[i+1]);
+            for (int i = 2; i < commandLine.length; i += 2) {
+                dataSet.add(commandLine[i], commandLine[i + 1]);
             }
         }
         return ActionResult.ACTION_RESULT_OK;

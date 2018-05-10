@@ -13,16 +13,15 @@ public class TableViewerTest {
     private DBCommandManager dbManager;
     private String singleCommand;
     private String[] commandLine;
-    private DataSet dataSet;
 
     @Before
     public void setUp() throws Exception {
         command = new TableViewer ();
         dbManager = new DBCommandManager ();
         dbManager.toConnect ( "jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "1" );
-        dataSet = new DataSet();
+        DataSet dataSet = new DataSet();
         dataSet.add ( "fld", "integer" );
-        dbManager.toCreate ( "clone", dataSet );
+        dbManager.toCreate ( "clone", dataSet);
         System.out.println ("Start of TableViewerTest");
     }
 

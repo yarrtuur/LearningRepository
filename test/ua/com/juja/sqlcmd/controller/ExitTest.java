@@ -10,14 +10,13 @@ import static org.junit.Assert.*;
 public class ExitTest {
     private CommandProcessable command;
     private DBCommandManager dbManager;
-    private String singleCommand;
     private String[] commandLine;
 
     @Before
     public void setUp() throws Exception {
         command = new Exit ();
         dbManager = new DBCommandManager ();
-        singleCommand = "exit";
+        String singleCommand = "exit";
         commandLine = singleCommand.replaceAll("\\s", "").toLowerCase().split("\\|");
         System.out.println ("Start of ExitTest");
     }

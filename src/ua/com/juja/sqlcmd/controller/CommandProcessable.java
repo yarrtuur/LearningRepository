@@ -9,5 +9,4 @@ public interface CommandProcessable {
     CmdLineState process(DBCommandManager dbManager, String[] commandLine);
 
 
-
 }

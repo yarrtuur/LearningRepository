@@ -11,7 +11,6 @@ import static org.junit.Assert.*;
 public class TableCleanerTest {
     private CommandProcessable command ;
     private DBCommandManager dbManager;
-    private DataSet dataSet;
     private String singleCommand;
     private String[] commandLine;
 
@@ -20,12 +19,12 @@ public class TableCleanerTest {
         command = new TableCleaner ();
         dbManager = new DBCommandManager ();
         dbManager.toConnect ( "jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "1" );
-        dataSet = new DataSet ();
+        DataSet dataSet = new DataSet();
         dataSet.add ( "fld", "integer" );
-        dbManager.toCreate ( "clone", dataSet );
+        dbManager.toCreate ( "clone", dataSet);
         dataSet = new DataSet ();
         dataSet.add ( "fld", "1" );
-        dbManager.toInsert ( "clone", dataSet );
+        dbManager.toInsert ( "clone", dataSet);
         singleCommand = "clear | clone ";
         commandLine = singleCommand.replaceAll("\\s", "").toLowerCase().split("\\|");
         System.out.println ("Start of TableCleanerTest");

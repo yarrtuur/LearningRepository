@@ -11,7 +11,6 @@ import static org.junit.Assert.*;
 public class DataDeleterTest {
     private CommandProcessable command ;
     private DBCommandManager dbManager;
-    private DataSet dataSet;
     private String singleCommand;
     private String[] commandLine;
 
@@ -20,12 +19,12 @@ public class DataDeleterTest {
         command = new DataDeleter ();
         dbManager = new DBCommandManager ();
         dbManager.toConnect ( "jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "1" );
-        dataSet = new DataSet();
+        DataSet dataSet = new DataSet();
         dataSet.add ( "fld", "integer" );
-        dbManager.toCreate ( "clone", dataSet );
+        dbManager.toCreate ( "clone", dataSet);
         dataSet = new DataSet ();
         dataSet.add ( "fld", "1" );
-        dbManager.toInsert ( "clone", dataSet );
+        dbManager.toInsert ( "clone", dataSet);
         System.out.println ("Start of DataDeleterTest");
     }
 

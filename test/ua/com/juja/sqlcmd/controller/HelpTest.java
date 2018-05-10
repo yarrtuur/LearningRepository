@@ -10,14 +10,13 @@ import static org.junit.Assert.*;
 public class HelpTest {
     private CommandProcessable command;
     private DBCommandManager dbManager;
-    private String singleCommand;
     private String[] commandLine;
 
     @Before
     public void beforeTest(){
         dbManager = new DBCommandManager ();
         command = new Help ();
-        singleCommand = "help";
+        String singleCommand = "help";
         commandLine = singleCommand.replaceAll("\\s", "").toLowerCase().split("\\|");
         System.out.println ("Start of HelpTest");
     }

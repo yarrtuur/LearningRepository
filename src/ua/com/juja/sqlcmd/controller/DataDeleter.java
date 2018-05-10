@@ -11,14 +11,14 @@ public class DataDeleter implements CommandProcessable, Preparable {
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return singleCommand.equals ( "delete" );
+        return singleCommand.equals("delete");
     }
 
     @Override
     public CmdLineState process(DBCommandManager dbManager, String[] commandLine) {
         this.dbManager = dbManager;
 
-        if( prepareCmdData( commandLine ).equals( ActionResult.ACTION_RESULT_OK ) ) {
+        if (prepareCmdData(commandLine).equals(ActionResult.ACTION_RESULT_OK)) {
             this.dbManager.toDelete(this.tableName, this.dataSet);
         }
 
@@ -34,13 +34,13 @@ public class DataDeleter implements CommandProcessable, Preparable {
             return ActionResult.ACTION_RESULT_WRONG;
         }
 
-        if(commandLine.length % 2 != 0 && commandLine.length > 2 ){
+        if (commandLine.length % 2 != 0 && commandLine.length > 2) {
             dbManager.getView().write("String format is wrong. Must be even count of data. Try again.");
             return ActionResult.ACTION_RESULT_WRONG;
-        }else{
+        } else {
             dataSet = new DataSet();
-            for (int i = 2; i < commandLine.length; i +=2 ) {
-                dataSet.add(commandLine[i], commandLine[i+1]);
+            for (int i = 2; i < commandLine.length; i += 2) {
+                dataSet.add(commandLine[i], commandLine[i + 1]);
             }
         }
         return ActionResult.ACTION_RESULT_OK;
