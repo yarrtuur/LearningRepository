@@ -13,7 +13,7 @@ public class ExitTest {
     private String[] commandLine;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() /*throws Exception */{
         command = new Exit ();
         dbManager = new DBCommandManager ();
         String singleCommand = "exit";
@@ -22,7 +22,7 @@ public class ExitTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() /*throws Exception */{
         command = null;
         dbManager = null;
         System.out.println ("End of ExitTest");

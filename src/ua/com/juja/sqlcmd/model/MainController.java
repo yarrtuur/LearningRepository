@@ -20,20 +20,20 @@ public class MainController {
 
     /**
      * void initDBCommandList() makes and holds list of commands which do some DB operations
-     * */
+     */
     private void initDBCommandList() {
         commands = new LinkedList<>();
         commands.add(new Exit());
-        commands.add(new Help ());
+        commands.add(new Help());
         commands.add(new PostgreConnecter());
         commands.add(new TableCreater());
         commands.add(new TableViewer());
         commands.add(new DataInserter());
         commands.add(new DataFinder());
         commands.add(new TableCleaner());
-        commands.add(new TableDroper ());
-        commands.add(new DataDeleter ());
-        commands.add(new DataUpdater ());
+        commands.add(new TableDroper());
+        commands.add(new DataDeleter());
+        commands.add(new DataUpdater());
         commands.add(new Unreachable());
 
         setCmdState(CmdLineState.WAIT);
@@ -41,16 +41,16 @@ public class MainController {
 
     /**
      * takeUpCmd(String args) gets and parse line from cmd and check and order the database command
-     * */
+     */
     private void takeUpCmd(String args) {
         if (args == null) {
             setCmdState(CmdLineState.EXIT);
         } else {
             String[] commandLine = args.replaceAll("\\s", "")
                     .toLowerCase().split("\\|");
-            for ( CommandProcessable dbCommand : commands ) {
+            for (CommandProcessable dbCommand : commands) {
                 if (dbCommand.canProcess(commandLine[0])) {
-                    setCmdState(dbCommand.process( this.dbManager, commandLine ) );
+                    setCmdState(dbCommand.process(this.dbManager, commandLine));
                     break;
                 }
             }
@@ -58,22 +58,22 @@ public class MainController {
     }
 
     /**
-     *  getCMDState() gets state of cmd line
-     * */
+     * getCMDState() gets state of cmd line
+     */
     private CmdLineState getCMDState() {
         return cmdState;
     }
 
     /**
-     *  setCMDState(CmdLineState cmdState) sets state of cmd line
-     * */
+     * setCMDState(CmdLineState cmdState) sets state of cmd line
+     */
     private void setCmdState(CmdLineState cmdState) {
         this.cmdState = cmdState;
     }
 
     /**
      * mainDialogueHolder() hold a control of speaking with user by command line
-     * */
+     */
     public void mainDialogueHolder() {
         initDBCommandList();
         view.write("Hello, user!");

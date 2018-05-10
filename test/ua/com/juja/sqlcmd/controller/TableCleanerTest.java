@@ -6,7 +6,8 @@ import org.junit.Test;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.types_enums_except.CmdLineState;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TableCleanerTest {
     private CommandProcessable command ;

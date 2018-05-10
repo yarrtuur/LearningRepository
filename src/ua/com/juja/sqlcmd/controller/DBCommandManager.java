@@ -4,7 +4,6 @@ import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.JdbcBridge;
 import ua.com.juja.sqlcmd.types_enums_except.DBFeedBack;
 import ua.com.juja.sqlcmd.types_enums_except.EnumCmdsList;
-
 import ua.com.juja.sqlcmd.viewer.Console;
 import ua.com.juja.sqlcmd.viewer.View;
 

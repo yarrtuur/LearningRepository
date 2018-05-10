@@ -4,13 +4,13 @@ import org.junit.*;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.types_enums_except.DBFeedBack;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class DBCommandManagerTest {
 
     private DBCommandManager dbManager;
-    String tableName = "clone", ipAddr, connPort, dbSid, dbSidLine, login, passwd;
-    DataSet dataSet, dataSetSet, dataSetWhere;
+    private String tableName = "clone", ipAddr, connPort, dbSid, dbSidLine, login, passwd;
+    private DataSet dataSet, dataSetSet, dataSetWhere;
 
     @BeforeClass
     public static void  beforeClass(){

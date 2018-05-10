@@ -10,8 +10,8 @@ public enum EnumCmdsList {
     find("find | tableName OR  find | tableName | column | value "),
     clear("clear | tableName "),
     drop("drop | tableName "),
-    delete ("delete | tableName | column | value "),
-    update ("update | tableName | SET | column1 | value1 | column2 | value2 | WHERE| columnX | valueX ");
+    delete("delete | tableName | column | value "),
+    update("update | tableName | SET | column1 | value1 | column2 | value2 | WHERE| columnX | valueX ");
 
     private String description;
 

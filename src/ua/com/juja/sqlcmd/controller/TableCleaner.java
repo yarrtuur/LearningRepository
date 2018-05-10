@@ -3,7 +3,7 @@ package ua.com.juja.sqlcmd.controller;
 import ua.com.juja.sqlcmd.types_enums_except.ActionResult;
 import ua.com.juja.sqlcmd.types_enums_except.CmdLineState;
 
-public class TableCleaner implements CommandProcessable,Preparable {
+public class TableCleaner implements CommandProcessable, Preparable {
     private DBCommandManager dbManager;
     private String tableName;
 
@@ -17,8 +17,8 @@ public class TableCleaner implements CommandProcessable,Preparable {
 
         this.dbManager = dbManager;
 
-        if( prepareCmdData( commandLine ).equals( ActionResult.ACTION_RESULT_OK ) ) {
-            dbManager.toClean( tableName);
+        if (prepareCmdData(commandLine).equals(ActionResult.ACTION_RESULT_OK)) {
+            dbManager.toClean(tableName);
         }
 
         return CmdLineState.WAIT;

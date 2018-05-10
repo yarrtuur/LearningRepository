@@ -2,7 +2,7 @@ package ua.com.juja.sqlcmd.controller;
 
 import ua.com.juja.sqlcmd.types_enums_except.CmdLineState;
 
-public class Unreachable  implements CommandProcessable {
+public class Unreachable implements CommandProcessable {
     @Override
     public boolean canProcess(String singleCommand) {
         return true;

@@ -17,8 +17,8 @@ public class TableDroper implements CommandProcessable, Preparable {
 
         this.dbManager = dbManager;
 
-        if( prepareCmdData( commandLine ).equals( ActionResult.ACTION_RESULT_OK ) ) {
-            dbManager.toDrop( tableName);
+        if (prepareCmdData(commandLine).equals(ActionResult.ACTION_RESULT_OK)) {
+            dbManager.toDrop(tableName);
         }
 
         return CmdLineState.WAIT;

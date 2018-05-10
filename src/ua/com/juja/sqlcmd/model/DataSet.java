@@ -3,10 +3,20 @@ package ua.com.juja.sqlcmd.model;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DataSet  {
+public class DataSet {
 
 
-    public class Data{
+    private List<Data> columnList = new LinkedList<>();
+
+    public List<Data> getData() {
+        return columnList;
+    }
+
+    public void add(String columnName, String value) {
+        columnList.add(new Data(columnName, value));
+    }
+
+    public class Data {
         private String columnName;
         private String value;
 
@@ -22,16 +32,6 @@ public class DataSet  {
         public Object getValue() {
             return value;
         }
-    }
-
-    private List<Data> columnList = new LinkedList<>();
-
-    public List<Data> getData(){
-        return columnList;
-    }
-
-    public void add(String columnName, String value){
-        columnList.add( new Data( columnName, value ) );
     }
 
 
