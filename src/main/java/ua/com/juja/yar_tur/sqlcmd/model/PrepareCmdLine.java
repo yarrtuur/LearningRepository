@@ -1,4 +1,4 @@
-package ua.com.juja.yar_tur.sqlcmd.controller;
+package ua.com.juja.yar_tur.sqlcmd.model;
 
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.PrepareResult;
 

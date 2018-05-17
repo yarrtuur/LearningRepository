@@ -3,7 +3,7 @@ package ua.com.juja.yar_tur.sqlcmd.integration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import ua.com.juja.yar_tur.sqlcmd.model.Main;
+import ua.com.juja.yar_tur.sqlcmd.Main;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

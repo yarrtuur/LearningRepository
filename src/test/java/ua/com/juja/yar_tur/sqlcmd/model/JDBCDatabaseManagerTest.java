@@ -1,11 +1,10 @@
-package ua.com.juja.yar_tur.sqlcmd.controller;
+package ua.com.juja.yar_tur.sqlcmd.model;
 
 import org.junit.*;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
-import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
 

@@ -1,8 +1,7 @@
-package ua.com.juja.yar_tur.sqlcmd.controller;
+package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
@@ -15,25 +14,36 @@ import java.sql.SQLException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class DataInserterTest {
+public class DataFinderTest {
     private CommandProcess command ;
     private DBCommandManager dbManager;
     private View view;
     private String singleCommand;
     private String[] commandLine;
 
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+        System.out.println("Start DataFinderTest");
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+        System.out.println("Finish DataFinderTest");
+    }
+
     @Before
     public void setUp() throws SQLException {
         dbManager = new JDBCDatabaseManager();
         view = new Console();
-        command = new DataInserter (dbManager, view);
+        command = new DataFinder(dbManager, view);
         dbManager.toConnect ( "jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "1" );
         DataSet dataSet = new DataSet();
         dataSet.add ( "fld", "integer" );
         dbManager.toCreate ( "clone", dataSet);
-        singleCommand = "insert | clone | fld | 1 ";
-        commandLine = singleCommand.replaceAll("\\s", "").toLowerCase().split("\\|");
-        System.out.println ("Start of DataInserterTest");
+        dataSet = new DataSet ();
+        dataSet.add ( "fld", "1" );
+        dbManager.toInsert ( "clone", dataSet);
+        System.out.println ("Start of DataFinderTest");
     }
 
     @After
@@ -42,32 +52,41 @@ public class DataInserterTest {
         dbManager.toExit ();
         dbManager = null;
         command = null;
-        System.out.println ("End of DataInserterTest");
+        System.out.println ("End of DataFinderTest");
     }
 
     @Test
     public void canProcess() {
-        boolean canProcess = command.canProcess ( "insert" );
+        boolean canProcess = command.canProcess ( "find" );
         assertTrue ( canProcess );
     }
 
     @Test
     public void process() {
-        assertEquals ( CmdLineState.WAIT, command.process (  commandLine ) );
-
-    }
-
-    @Test
-    public void processWrongTableName() {
-        singleCommand = "insert |  ";
+        singleCommand = "find | clone ";
         commandLine = singleCommand.replaceAll("\\s", "").toLowerCase().split("\\|");
         assertEquals ( CmdLineState.WAIT, command.process ( commandLine ) );
     }
 
     @Test
-    public void processWrongDataCount() {
-        singleCommand = "insert | clone | fld ";
+    public void processDetail() {
+        singleCommand = "find | clone | fld | 1";
         commandLine = singleCommand.replaceAll("\\s", "").toLowerCase().split("\\|");
         assertEquals ( CmdLineState.WAIT, command.process ( commandLine ) );
     }
+
+    @Test
+    public void processWrongData() {
+        singleCommand = "find | clone | fld";
+        commandLine = singleCommand.replaceAll("\\s", "").toLowerCase().split("\\|");
+        assertEquals ( CmdLineState.WAIT, command.process ( commandLine ) );
+    }
+
+    @Test
+    public void processWrongTable() {
+        singleCommand = "find |";
+        commandLine = singleCommand.replaceAll("\\s", "").toLowerCase().split("\\|");
+        assertEquals ( CmdLineState.WAIT, command.process ( commandLine ) );
+    }
+
 }

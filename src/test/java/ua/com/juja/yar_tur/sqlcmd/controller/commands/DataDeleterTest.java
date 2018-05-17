@@ -1,8 +1,8 @@
-package ua.com.juja.yar_tur.sqlcmd.controller;
+package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import ua.com.juja.yar_tur.sqlcmd.controller.commands.DataDeleter;
+import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
@@ -22,11 +22,21 @@ public class DataDeleterTest {
     private String singleCommand;
     private String[] commandLine;
 
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+        System.out.println("Start DataDeleterTest");
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+        System.out.println("Finish DataDeleterTest");
+    }
+
     @Before
     public void setUp() throws SQLException {
         dbManager = new JDBCDatabaseManager();
         view = new Console();
-        command = new DataDeleter ( dbManager, view);
+        command = new DataDeleter( dbManager, view);
         dbManager.toConnect ( "jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "1" );
         DataSet dataSet = new DataSet();
         dataSet.add ( "fld", "integer" );

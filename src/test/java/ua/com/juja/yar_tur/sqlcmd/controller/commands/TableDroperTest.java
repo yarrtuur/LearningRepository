@@ -1,9 +1,9 @@
-package ua.com.juja.yar_tur.sqlcmd.controller;
+package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
+import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
@@ -14,35 +14,49 @@ import java.sql.SQLException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class TableCreaterTest {
+public class TableDroperTest {
     private CommandProcess command;
     private DBCommandManager dbManager;
     private View view;
     private String singleCommand;
     private String[] commandLine;
 
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+        System.out.println("Start TableDroperTest");
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+        System.out.println("Finish TableDroperTest");
+    }
+
     @Before
     public void setUp() throws SQLException {
         dbManager = new JDBCDatabaseManager();
         view = new Console();
-        command = new TableCreater(dbManager, view);
+        command = new TableDroper(dbManager, view);
         dbManager.toConnect("jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "1");
-        singleCommand = "create | clone | fld | integer ";
+        DataSet dataSet = new DataSet();
+        dataSet.add("fld", "integer");
+        dbManager.toCreate("clone", dataSet);
+        singleCommand = "drop | clone ";
         commandLine = singleCommand.replaceAll("\\s", "").toLowerCase().split("\\|");
-        System.out.println("Start of TableCreaterTest");
+        System.out.println("Start of TableDroperTest");
     }
 
     @After
     public void tearDown() throws SQLException {
+        dbManager.toDrop("clone");
         dbManager.toExit();
         dbManager = null;
         command = null;
-        System.out.println("End of TableCreaterTest");
+        System.out.println("End of TableDroperTest");
     }
 
     @Test
     public void canProcess() {
-        boolean canProcess = command.canProcess("create");
+        boolean canProcess = command.canProcess("drop");
         assertTrue(canProcess);
     }
 
@@ -52,16 +66,10 @@ public class TableCreaterTest {
     }
 
     @Test
-    public void processWrongTable() {
-        singleCommand = "create |  ";
+    public void processWrongTableName() {
+        singleCommand = "drop |  ";
         commandLine = singleCommand.replaceAll("\\s", "").toLowerCase().split("\\|");
         assertEquals(CmdLineState.WAIT, command.process(commandLine));
     }
 
-    @Test
-    public void processWrongCountArguments() {
-        singleCommand = "create | clone | fld ";
-        commandLine = singleCommand.replaceAll("\\s", "").toLowerCase().split("\\|");
-        assertEquals(CmdLineState.WAIT, command.process(commandLine));
-    }
 }

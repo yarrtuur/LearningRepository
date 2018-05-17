@@ -1,8 +1,7 @@
-package ua.com.juja.yar_tur.sqlcmd.controller;
+package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
@@ -15,6 +14,16 @@ public class UnreachableTest {
     private CommandProcess command;
     private String singleCommand;
     private String[] commandLine;
+
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+        System.out.println("Start UnreachableTest");
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+        System.out.println("Finish UnreachableTest");
+    }
 
     @Before
     public void setUp() {

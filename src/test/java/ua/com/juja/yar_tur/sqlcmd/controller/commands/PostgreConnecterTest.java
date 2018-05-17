@@ -1,8 +1,6 @@
-package ua.com.juja.yar_tur.sqlcmd.controller;
+package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
@@ -12,17 +10,27 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 import static org.junit.Assert.*;
 
 public class PostgreConnecterTest {
-    private PostgreConnecter command;
+    private MakePostgreConnectLine command;
     private DBCommandManager dbManager;
     private View view;
     private String singleCommand;
     private String[] commandLine;
 
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+        System.out.println("Start PostgreConnecterTest");
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+        System.out.println("Finish PostgreConnecterTest");
+    }
+
     @Before
     public void setUp() {
         dbManager = new JDBCDatabaseManager();
         view = new Console();
-        command = new PostgreConnecter (dbManager, view);
+        command = new MakePostgreConnectLine(dbManager, view);
         singleCommand = "connect | postgres | 1 | postgres | 127.0.0.1 | 5432";
         commandLine = singleCommand.replaceAll("\\s", "").toLowerCase().split("\\|");
 

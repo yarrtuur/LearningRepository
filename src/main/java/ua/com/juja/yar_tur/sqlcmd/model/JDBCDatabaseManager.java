@@ -12,19 +12,14 @@ public class JDBCDatabaseManager implements DBCommandManager {
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
 
-    public ConnectionKeeper getConnectionKeeper() {
-        return connectionKeeper;
-    }
-
     // open PreparedStatement TODO
     public PreparedStatement getPrepareStatement(String sql) {
         preparedStatement = null;
         try {
-            preparedStatement = getConnectionKeeper().getConnection().prepareStatement(sql);
+            preparedStatement = connectionKeeper.getConnection().prepareStatement(sql);
         } catch (SQLException | NullPointerException e) {
             //e.printStackTrace();
         }
-
         return preparedStatement;
     }
 
@@ -43,7 +38,7 @@ public class JDBCDatabaseManager implements DBCommandManager {
     @Override
     public FeedBack toExit() throws SQLException{
         if( connectionKeeper.isConnected () ){
-            connectionKeeper.getConnection ().close ();
+            connectionKeeper.close ();
             connectionKeeper.setConnection ( null );
         }else{
             connectionKeeper.setConnection ( null );

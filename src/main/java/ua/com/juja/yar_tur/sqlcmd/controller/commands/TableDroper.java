@@ -1,6 +1,8 @@
-package ua.com.juja.yar_tur.sqlcmd.controller;
+package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
+import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
+import ua.com.juja.yar_tur.sqlcmd.model.PrepareCmdLine;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.PrepareResult;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
@@ -8,19 +10,19 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
 
-public class TableCleaner implements CommandProcess, PrepareCmdLine {
+public class TableDroper implements CommandProcess, PrepareCmdLine {
     private DBCommandManager dbManager;
     private View view;
     private String tableName;
 
-    public TableCleaner(DBCommandManager dbManager, View view) {
+    public TableDroper(DBCommandManager dbManager, View view) {
         this.dbManager = dbManager;
         this.view = view;
     }
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return singleCommand.equals("clear");
+        return singleCommand.equals("drop");
     }
 
     @Override
@@ -28,18 +30,18 @@ public class TableCleaner implements CommandProcess, PrepareCmdLine {
         FeedBack resultCode = FeedBack.REFUSE;
         if (prepareCmdData(commandLine).equals(PrepareResult.PREPARE_RESULT_OK)) {
             try {
-                view.write("Deleting data from table.");
-                dbManager.toClean(tableName);
+                resultCode = dbManager.toDrop(tableName);
+                view.write("Droping table.");
             } catch (SQLException ex) {
-                view.write("Clear table is interrupted.");
+                view.write("Drop table is interrupted.");
                 view.write(ex.getCause().toString());
             }
         }
-        if( resultCode.equals(FeedBack.OK)) {
-            view.write("Data deleted successfull");
+        if( resultCode.equals(FeedBack.OK) ) {
+            view.write("Drop table successfull");
             dbManager.closePrepareStatement();
         } else {
-            view.write("Something wrong with Clear data");
+            view.write("Something wrong with drop table...");
             dbManager.closePrepareStatement();
         }
         return CmdLineState.WAIT;
@@ -47,12 +49,13 @@ public class TableCleaner implements CommandProcess, PrepareCmdLine {
 
     @Override
     public PrepareResult prepareCmdData(String[] commandLine) {
-        try {
+        if(commandLine.length == 2) {
             tableName = commandLine[1];
-        } catch (IndexOutOfBoundsException ex) {
+        }else {
             view.write("There isn`t tablename at string. Try again.");
             return PrepareResult.PREPARE_RESULT_WRONG;
         }
         return PrepareResult.PREPARE_RESULT_OK;
     }
+
 }

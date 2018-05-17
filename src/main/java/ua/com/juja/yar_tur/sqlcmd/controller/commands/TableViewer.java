@@ -1,6 +1,8 @@
-package ua.com.juja.yar_tur.sqlcmd.controller;
+package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
+import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
+import ua.com.juja.yar_tur.sqlcmd.model.PrepareCmdLine;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.PrepareResult;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
@@ -32,21 +34,19 @@ public class TableViewer implements CommandProcess, PrepareCmdLine {
     public CmdLineState process(String[] commandLine) {
         if (prepareCmdData(commandLine).equals(PrepareResult.PREPARE_RESULT_OK)) {
             try {
-                if(resultSet != null) {
-                    if (isDetails) {
-                        if (isOne) {
-                            resultSet = dbManager.toView(tableName);
-                            printOneTableDetails(resultSet);
-                        } else {
-                            resultSet = dbManager.toView();
-                            dbManager.closePrepareStatement();
-                            printSomeTablesDetails(resultSet);
-                        }
+                if (isDetails) {
+                    if (isOne) {
+                        resultSet = dbManager.toView(tableName);
+                        printOneTableDetails(resultSet);
                     } else {
                         resultSet = dbManager.toView();
-                        printTablesList(resultSet);
+                        printSomeTablesDetails(resultSet);
                     }
+                } else {
+                    resultSet = dbManager.toView();
+                    printTablesList(resultSet);
                 }
+
             } catch (SQLException ex) {
                 view.write("Select data about table interrupted.");
                 view.write(ex.getCause().toString());
@@ -106,6 +106,8 @@ public class TableViewer implements CommandProcess, PrepareCmdLine {
         } else if (commandLine.length == 1) {
             isDetails = false;
             isOne = false;
+        }else{
+            return PrepareResult.PREPARE_RESULT_OK;
         }
 
         return PrepareResult.PREPARE_RESULT_OK;
