@@ -41,6 +41,7 @@ public class MakePostgreConnectLine implements CommandProcess, MakeDBConnectLine
 			return CmdLineState.WAIT;
 		}
 		view.write("PostgreSQL JDBC Driver Registered!");
+
 		if (commandLine.length >= 4) {
 			connectLine = setSocketData(commandLine);
 		} else if (commandLine.length == 2 && commandLine[1].equals("properties")) {
