@@ -16,6 +16,8 @@ public class PgSQLPreparator implements SQLPreparator {
 		sb.append(" SET ");
 		for (DataSet.Data step : dataSetSet.getData()) {
 			sb.append(String.format(" %s = %s , ", step.getName(), step.getValue()));
+			//todo
+			/* check columns data type for make right sql query */
 		}
 		sb.replace(sb.length() - 3, sb.length(), " ");
 		sb.append(" WHERE ");
@@ -34,6 +36,8 @@ public class PgSQLPreparator implements SQLPreparator {
 		sb.append(" WHERE ");
 		for (DataSet.Data step : dataSet.getData()) {
 			sb.append(String.format(" %s = \'%s\' AND", step.getName(), step.getValue()));
+			//todo
+			/* check columns data type for make right sql query */
 		}
 		sb.replace(sb.length() - 3, sb.length(), " ");
 		return sb.toString();
@@ -57,6 +61,8 @@ public class PgSQLPreparator implements SQLPreparator {
 			sb.append(" WHERE ");
 			for (DataSet.Data step : dataSet.getData()) {
 				sb.append(String.format(" %s = %s AND", step.getName(), step.getValue()));
+				//todo
+				/* check columns data type for make right sql query */
 			}
 			sb.replace(sb.length() - 3, sb.length(), " ");
 		}

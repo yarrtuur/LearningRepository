@@ -86,7 +86,8 @@ public class TableViewer implements CommandProcess, PrepareCmdLine {
         StringBuilder columnString = new StringBuilder();
         if(resultSet != null){
             while (resultSet.next()) {
-                columnString.append(" ").append(resultSet.getString("column_name")).append(",");
+                columnString.append(" ").append(resultSet.getString("column_name")).append(":")
+                        .append(resultSet.getString("data_type")).append(",");
             }
         }
         dbManager.closePrepareStatement();
