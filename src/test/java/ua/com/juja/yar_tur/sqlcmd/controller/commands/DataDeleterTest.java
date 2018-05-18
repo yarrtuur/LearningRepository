@@ -1,7 +1,6 @@
 package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
 import org.junit.*;
-import ua.com.juja.yar_tur.sqlcmd.controller.commands.DataDeleter;
 import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
