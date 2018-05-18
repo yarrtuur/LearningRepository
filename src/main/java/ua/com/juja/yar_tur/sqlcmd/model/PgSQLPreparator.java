@@ -1,6 +1,8 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
+import java.sql.ResultSet;
 import java.util.List;
+import java.util.Map;
 
 public class PgSQLPreparator implements SQLPreparator {
 
@@ -60,7 +62,7 @@ public class PgSQLPreparator implements SQLPreparator {
 
 	@Override
 	public String makeSqlGetOneTableDetails(String tableName) {
-		return String.format("SELECT c.column_name FROM information_schema.columns c " +
+		return String.format("SELECT c.column_name ,c.data_type FROM information_schema.columns c " +
 				"WHERE c.table_schema = 'public' AND c.table_name = \'%s\' ", tableName);
 	}
 
@@ -103,7 +105,7 @@ public class PgSQLPreparator implements SQLPreparator {
 	}
 
 	@Override
-	public String makeSqlChkTableByName(String tableName) {
-		return String.format("SELECT * FROM information_schema.tables WHERE table_name =  \'%s\'", tableName);
+	public Map<String, String> chkColumnsDataType(ResultSet resultSet) {
+		return null;//TODO check columns data types for insert, update, select with params
 	}
 }

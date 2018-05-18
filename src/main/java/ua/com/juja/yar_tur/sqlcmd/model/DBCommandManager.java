@@ -9,10 +9,10 @@ import java.sql.SQLException;
 public interface DBCommandManager {
 
     // open PreparedStatement
-    PreparedStatement getPrepareStatement(String sql);
+    PreparedStatement getPrepareStatement(String sql) throws SQLException;
 
     // close PrepareStatement
-    void closePrepareStatement();
+    void closePrepareStatement() throws SQLException;
 
     /**
      * close connection and exit from programm

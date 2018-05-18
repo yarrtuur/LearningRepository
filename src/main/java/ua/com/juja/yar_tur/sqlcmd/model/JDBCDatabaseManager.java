@@ -14,24 +14,15 @@ public class JDBCDatabaseManager implements DBCommandManager {
 	private PreparedStatement preparedStatement;
 	private ResultSet resultSet;
 
-	// open PreparedStatement TODO
-	public PreparedStatement getPrepareStatement(String sql) {
+	public PreparedStatement getPrepareStatement(String sql) throws SQLException {
 		preparedStatement = null;
-		try {
-			preparedStatement = connectionKeeper.getConnection().prepareStatement(sql);
-		} catch (SQLException | NullPointerException e) {
-			//e.printStackTrace();
-		}
+		preparedStatement = connectionKeeper.getConnection().prepareStatement(sql);
 		return preparedStatement;
 	}
 
-	public void closePrepareStatement() {
+	public void closePrepareStatement() throws SQLException {
 		if (preparedStatement != null) {
-			try {
-				preparedStatement.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			preparedStatement.close();
 		}
 	}
 
@@ -48,7 +39,7 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
 	@Override
 	public FeedBack toUpdate(String tableName, DataSet dataSetSet, DataSet dataSetWhere) throws SQLException {
-		if (this.chkTableByName(tableName).equals(FeedBack.OK) && connectionKeeper.isConnected()) {
+		if (chkTableByName(tableName) != null && connectionKeeper.isConnected()) {
 			return (getExecuteUpdate(query.makeSqlUpdateData(tableName, dataSetSet, dataSetWhere)) == 1)
 					? FeedBack.OK : FeedBack.REFUSE;
 		} else {
@@ -58,7 +49,7 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
 	@Override
 	public FeedBack toDelete(String tableName, DataSet dataSet) throws SQLException {
-		if (this.chkTableByName(tableName).equals(FeedBack.OK) && connectionKeeper.isConnected()) {
+		if (chkTableByName(tableName) != null && connectionKeeper.isConnected()) {
 			return (getExecuteUpdate(query.makeSqlDeleteData(tableName, dataSet)) == 1) ? FeedBack.OK : FeedBack.REFUSE;
 		} else {
 			return FeedBack.REFUSE;
@@ -67,7 +58,7 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
 	@Override
 	public FeedBack toDrop(String tableName) throws SQLException {
-		if (this.chkTableByName(tableName).equals(FeedBack.OK) && connectionKeeper.isConnected()) {
+		if (chkTableByName(tableName) != null && connectionKeeper.isConnected()) {
 			return (getExecuteUpdate(query.makeSqlDropTable(tableName)) == 1) ? FeedBack.OK : FeedBack.REFUSE;
 		} else {
 			return FeedBack.REFUSE;
@@ -76,7 +67,7 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
 	@Override
 	public FeedBack toClean(String tableName) throws SQLException {
-		if (this.chkTableByName(tableName).equals(FeedBack.OK) && connectionKeeper.isConnected()) {
+		if (chkTableByName(tableName) != null && connectionKeeper.isConnected()) {
 			return (getExecuteUpdate(query.makeSqlClearTable(tableName)) == 1) ? FeedBack.OK : FeedBack.REFUSE;
 		} else {
 			return FeedBack.REFUSE;
@@ -85,7 +76,7 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
 	@Override
 	public ResultSet toFind(String tableName, boolean isDetails, DataSet dataSet) throws SQLException {
-		if (this.chkTableByName(tableName).equals(FeedBack.OK) && connectionKeeper.isConnected()) {
+		if (chkTableByName(tableName) != null && connectionKeeper.isConnected()) {
 			return getExecuteQuery(query.makeSqlFindData(tableName, isDetails, dataSet));
 		} else {
 			throw new ExitException("Something wrong with found table");
@@ -119,40 +110,32 @@ public class JDBCDatabaseManager implements DBCommandManager {
 	}
 
 	@Override
-	public FeedBack toInsert(String tableName, DataSet dataSet) throws SQLException {
-		if (this.chkTableByName(tableName).equals(FeedBack.OK) && connectionKeeper.isConnected()) {
-			return (getExecuteUpdate(query.makeSqlInsertData(tableName, dataSet)) == 1) ? FeedBack.OK : FeedBack.REFUSE;
-		} else {
-			return FeedBack.REFUSE;
-		}
-	}
-
-	@Override
 	public FeedBack toCreate(String tableName, DataSet dataSet) throws SQLException {
-		if (this.chkTableByName(tableName).equals(FeedBack.REFUSE) && connectionKeeper.isConnected()) {
+		if (chkTableByName(tableName) == null && connectionKeeper.isConnected()) {
 			return (getExecuteUpdate(query.makeSqlCreateTable(tableName, dataSet)) == 1) ? FeedBack.OK : FeedBack.REFUSE;
 		} else {
 			return FeedBack.REFUSE;
 		}
 	}
 
-	private FeedBack chkTableByName(String tableName) throws SQLException {
-		resultSet = getExecuteQuery(query.makeSqlChkTableByName(tableName));
-		if (resultSet.next()) {
-			closePrepareStatement();
-			return FeedBack.OK;
-		} else {
-			closePrepareStatement();
-			return FeedBack.REFUSE;
-		}
-	}/*todo
-    remake for prepare sql`s : to update, to insert
-    */
-
 	@Override
 	public FeedBack toConnect(String dbSidLine, String login, String passwd) throws SQLException {
 		connectionKeeper.setConnection(DriverManager.getConnection(dbSidLine, login, passwd));
 		return (connectionKeeper.isConnected()) ? FeedBack.OK : FeedBack.REFUSE;
+	}
+
+	@Override
+	public FeedBack toInsert(String tableName, DataSet dataSet) throws SQLException {
+		if (chkTableByName(tableName) != null && connectionKeeper.isConnected()) {
+
+			return (getExecuteUpdate(query.makeSqlInsertData(tableName, dataSet)) == 1) ? FeedBack.OK : FeedBack.REFUSE;
+		} else {
+			return FeedBack.REFUSE;
+		}
+	}
+
+	private ResultSet chkTableByName(String tableName) throws SQLException {
+		return getExecuteQuery(query.makeSqlGetOneTableDetails(tableName));
 	}
 
 	/**

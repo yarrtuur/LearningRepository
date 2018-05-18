@@ -1,5 +1,8 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
+import java.sql.ResultSet;
+import java.util.Map;
+
 public interface SQLPreparator {
 
 	String makeSqlUpdateData(String tableName, DataSet dataSetSet, DataSet dataSetWhere);
@@ -20,6 +23,6 @@ public interface SQLPreparator {
 
 	String makeSqlCreateTable(String tableName, DataSet dataSet);
 
-	String makeSqlChkTableByName(String tableName);
+	Map<String, String> chkColumnsDataType(ResultSet resultSet);
 
 }
