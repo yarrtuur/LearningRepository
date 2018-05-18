@@ -1,6 +1,5 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.ExitException;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
 
 import java.sql.DriverManager;
@@ -119,22 +118,16 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
 	@Override
 	public ResultSet toFind(String tableName, boolean isDetails, DataSet dataSet) throws SQLException {
-		if (chkTableByName(tableName) != null) {
-			return getExecuteQuery(query.makeSqlFindData(tableName, isDetails, dataSet));
-		} else {
-			throw new ExitException("Something wrong with found table");
-		}
+		resultSet = chkTableByName(tableName);
+		return getExecuteQuery(query.makeSqlFindData(tableName, isDetails, dataSet,
+				query.getColumnsWithDataType(resultSet)));
 	}
 
 	@Override
 	public FeedBack toInsert(String tableName, DataSet dataSet) throws SQLException {
 		resultSet = chkTableByName(tableName);
-		if(resultSet != null ){
-		return (getExecuteUpdate(query.makeSqlInsertData(tableName, dataSet, query.chkColumnsDataType(resultSet))) == 1)
-				? FeedBack.OK : FeedBack.REFUSE;
-		} else {
-			return FeedBack.REFUSE;
-		}
+		return (getExecuteUpdate(query.makeSqlInsertData(tableName, dataSet,
+				query.getColumnsWithDataType(resultSet))) == 1) ? FeedBack.OK : FeedBack.REFUSE;
 	}
 
 	private ResultSet chkTableByName(String tableName) throws SQLException {

@@ -1,7 +1,6 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -54,24 +53,31 @@ public class PgSQLPreparator implements SQLPreparator {
 	}
 
 	@Override
-	public String makeSqlFindData(String tableName, boolean isDetails, DataSet dataSet) {
+	public String makeSqlFindData(String tableName, boolean isDetails, DataSet dataSet, Map tableFields) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format("SELECT * from public.%s ", tableName));
 		if (isDetails) {
 			sb.append(" WHERE ");
 			for (DataSet.Data step : dataSet.getData()) {
-				sb.append(String.format(" %s = %s AND", step.getName(), step.getValue()));
-				//todo
-				/* check columns data type for make right sql query */
+				String columnName = step.getName();
+				String columnValue = step.getValue().toString();
+				sb.append(columnName).append(" = ");
+				if (tableFields.get(columnName).toString().startsWith("char") ||
+						tableFields.get(columnName).toString().startsWith("varchar") ||
+						tableFields.get(columnName).toString().startsWith("text")) {
+					sb.append("'").append(columnValue).append("'").append(" AND ");
+				} else {
+					sb.append(columnValue).append(", ");
+				}
 			}
-			sb.replace(sb.length() - 3, sb.length(), " ");
+			sb.replace(sb.length() - 4, sb.length(), " ");
 		}
 		return sb.toString();
 	}
 
 	@Override
 	public String makeSqlGetOneTableDetails(String tableName) {
-		return String.format("SELECT c.column_name ,c.data_type FROM information_schema.columns c " +
+		return String.format("SELECT c.column_name,c.data_type FROM information_schema.columns c " +
 				"WHERE c.table_schema = 'public' AND c.table_name = \'%s\' ", tableName);
 	}
 
@@ -90,15 +96,19 @@ public class PgSQLPreparator implements SQLPreparator {
 
 		sb.append("INSERT INTO ").append(tableName).append(" ( ");
 		for (DataSet.Data step : dataList) {
-			columns.append(step.getName()).append(", ");
-			//todo
-			/* check columns data type for make right sql query */
-			values.append(step.getValue()).append(", ");
+			String columnName = step.getName();
+			columns.append(columnName).append(", ");
+			if (tableFields.get(columnName).toString().startsWith("char") ||
+					tableFields.get(columnName).toString().startsWith("varchar") ||
+					tableFields.get(columnName).toString().startsWith("text")) {
+				values.append("'").append(step.getValue()).append("'").append(", ");
+			} else {
+				values.append(step.getValue()).append(", ");
+			}
 		}
 		columns.replace(columns.length() - 2, columns.length(), ")");
 		values.replace(values.length() - 2, values.length(), ")");
 		sb.append(columns).append(" values ( ").append(values).append(";");
-
 		return sb.toString();
 	}
 
@@ -116,12 +126,11 @@ public class PgSQLPreparator implements SQLPreparator {
 	}
 
 	@Override
-	public Map<String, String> chkColumnsDataType(ResultSet resultSet) throws SQLException {
-		ResultSetMetaData resultSetMeta = resultSet.getMetaData();
+	public Map<String, String> getColumnsWithDataType(ResultSet resultSet) throws SQLException {
 		Map<String, String> columnsMap = new LinkedHashMap<>();
-		for (int i = 1; i <= resultSetMeta.getColumnCount(); i++) {
-			columnsMap.put(resultSetMeta.getColumnName(i), resultSetMeta.getColumnTypeName(i));
+		while (resultSet.next()) {
+			columnsMap.put(resultSet.getString("column_name"), resultSet.getString("data_type"));
 		}
-		return columnsMap;//TODO check columns data types for insert, update, select with params
+		return columnsMap;
 	}
 }

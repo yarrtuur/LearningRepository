@@ -44,7 +44,7 @@ public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
 
 		if (commandLine.length >= 4) {
 			connectLine = setSocketData(commandLine);
-		} else if (commandLine.length == 2 && commandLine[1].equals("properties")) {
+		} else if (commandLine.length == 1) {
 			connectLine = setSocketProperties();
 		} else {
 			view.write("Command line is not correct Please type 'help' command.");

@@ -14,7 +14,7 @@ public interface SQLPreparator {
 
 	String makeSqlClearTable( String tableName );
 
-	String makeSqlFindData( String tableName, boolean isDetails, DataSet dataSet );
+	String makeSqlFindData( String tableName, boolean isDetails, DataSet dataSet, Map tableFields);
 
 	String makeSqlGetOneTableDetails(String tableName);
 
@@ -24,6 +24,6 @@ public interface SQLPreparator {
 
 	String makeSqlCreateTable(String tableName, DataSet dataSet);
 
-	Map<String, String> chkColumnsDataType(ResultSet resultSet) throws SQLException;
+	Map<String, String> getColumnsWithDataType(ResultSet resultSet) throws SQLException;
 
 }
