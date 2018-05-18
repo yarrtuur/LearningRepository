@@ -3,8 +3,8 @@ package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.PrepareCmdLine;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.PrepareResult;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
+import ua.com.juja.yar_tur.sqlcmd.types_enums_except.PrepareResult;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.ResultSet;
@@ -27,7 +27,7 @@ public class TableViewer implements CommandProcess, PrepareCmdLine {
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return singleCommand.equals("tables");
+        return (singleCommand.equals("tables") && dbManager.getConnection().isConnected());
     }
 
     @Override

@@ -7,10 +7,11 @@ import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PostgreConnecterTest {
-    private MakePostgreConnectLine command;
+    private PostgreConnect command;
     private DBCommandManager dbManager;
     private View view;
     private String singleCommand;
@@ -30,7 +31,7 @@ public class PostgreConnecterTest {
     public void setUp() {
         dbManager = new JDBCDatabaseManager();
         view = new Console();
-        command = new MakePostgreConnectLine(dbManager, view);
+        command = new PostgreConnect(dbManager, view);
         singleCommand = "connect | postgres | 1 | postgres | 127.0.0.1 | 5432";
         commandLine = singleCommand.replaceAll("\\s", "").toLowerCase().split("\\|");
 

@@ -1,6 +1,7 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Map;
 
 public interface SQLPreparator {
@@ -19,10 +20,10 @@ public interface SQLPreparator {
 
 	String makeSqlGetTablesList();
 
-	String makeSqlInsertData(String tableName, DataSet dataSet);
+	String makeSqlInsertData(String tableName, DataSet dataSet, Map tableFields);
 
 	String makeSqlCreateTable(String tableName, DataSet dataSet);
 
-	Map<String, String> chkColumnsDataType(ResultSet resultSet);
+	Map<String, String> chkColumnsDataType(ResultSet resultSet) throws SQLException;
 
 }

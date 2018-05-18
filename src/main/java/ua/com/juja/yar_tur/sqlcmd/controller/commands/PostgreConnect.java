@@ -11,12 +11,12 @@ import java.sql.SQLException;
 
 import static ua.com.juja.yar_tur.sqlcmd.model.ConnectionProperties.*;
 
-public class MakePostgreConnectLine implements CommandProcess, MakeDBConnectLine {
+public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
 	private DBCommandManager dbManager;
 	private View view;
 	private String login, passwd;
 
-	public MakePostgreConnectLine(DBCommandManager dbManager, View view) {
+	public PostgreConnect(DBCommandManager dbManager, View view) {
 		this.dbManager = dbManager;
 		this.view = view;
 	}

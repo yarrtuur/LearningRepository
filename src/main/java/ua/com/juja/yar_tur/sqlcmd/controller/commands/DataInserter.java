@@ -4,9 +4,9 @@ import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.model.PrepareCmdLine;
+import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.PrepareResult;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
@@ -24,7 +24,7 @@ public class DataInserter implements CommandProcess, PrepareCmdLine {
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return singleCommand.equals("insert");
+        return (singleCommand.equals("insert") && dbManager.getConnection().isConnected());
     }
 
     @Override
@@ -41,10 +41,13 @@ public class DataInserter implements CommandProcess, PrepareCmdLine {
         }
         if( resultCode.equals(FeedBack.OK) ) {
             view.write("Insert data into table successfull");
-            dbManager.closePrepareStatement();
         } else {
             view.write("Something wrong with insert data into table.");
+        }
+        try {
             dbManager.closePrepareStatement();
+        } catch (SQLException ex) {
+            view.write(ex.getCause().toString());
         }
         return CmdLineState.WAIT;
     }
@@ -57,7 +60,6 @@ public class DataInserter implements CommandProcess, PrepareCmdLine {
             view.write("There isn`t tablename at string. Try again.");
             return PrepareResult.PREPARE_RESULT_WRONG;
         }
-
         if (commandLine.length % 2 != 0) {
             view.write("String format is wrong. Must be even count of data. Try again.");
             return PrepareResult.PREPARE_RESULT_WRONG;
@@ -69,5 +71,4 @@ public class DataInserter implements CommandProcess, PrepareCmdLine {
         }
         return PrepareResult.PREPARE_RESULT_OK;
     }
-
 }

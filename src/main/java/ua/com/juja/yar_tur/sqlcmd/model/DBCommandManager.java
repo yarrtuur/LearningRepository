@@ -8,6 +8,9 @@ import java.sql.SQLException;
 
 public interface DBCommandManager {
 
+	//get connection
+	ConnectionKeeper getConnection();
+
     // open PreparedStatement
     PreparedStatement getPrepareStatement(String sql) throws SQLException;
 

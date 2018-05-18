@@ -5,7 +5,8 @@ import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
-import ua.com.juja.yar_tur.sqlcmd.viewer.*;
+import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
+import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class MainController {
         commands = new LinkedList<>();
         commands.add(new Exit(dbManager, view));
         commands.add(new Help(view));
-        commands.add(new MakePostgreConnectLine(dbManager, view));
+        commands.add(new PostgreConnect(dbManager, view));
         commands.add(new TableCreater(dbManager, view));
         commands.add(new TableViewer(dbManager, view));
         commands.add(new DataInserter(dbManager, view));

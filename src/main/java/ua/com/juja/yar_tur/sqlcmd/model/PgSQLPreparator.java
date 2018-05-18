@@ -1,6 +1,9 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -73,7 +76,7 @@ public class PgSQLPreparator implements SQLPreparator {
 	}
 
 	@Override
-	public String makeSqlInsertData(String tableName, DataSet dataSet) {
+	public String makeSqlInsertData(String tableName, DataSet dataSet, Map tableFields) {
 		StringBuilder sb = new StringBuilder();
 		List<DataSet.Data> dataList = dataSet.getData();
 		StringBuilder columns = new StringBuilder();
@@ -82,6 +85,8 @@ public class PgSQLPreparator implements SQLPreparator {
 		sb.append("INSERT INTO ").append(tableName).append(" ( ");
 		for (DataSet.Data step : dataList) {
 			columns.append(step.getName()).append(", ");
+			//todo
+			/* check columns data type for make right sql query */
 			values.append(step.getValue()).append(", ");
 		}
 		columns.replace(columns.length() - 2, columns.length(), ")");
@@ -105,7 +110,12 @@ public class PgSQLPreparator implements SQLPreparator {
 	}
 
 	@Override
-	public Map<String, String> chkColumnsDataType(ResultSet resultSet) {
-		return null;//TODO check columns data types for insert, update, select with params
+	public Map<String, String> chkColumnsDataType(ResultSet resultSet) throws SQLException {
+		ResultSetMetaData resultSetMeta = resultSet.getMetaData();
+		Map<String, String> columnsMap = new LinkedHashMap<>();
+		for (int i = 1; i <= resultSetMeta.getColumnCount(); i++) {
+			columnsMap.put(resultSetMeta.getColumnName(i), resultSetMeta.getColumnTypeName(i));
+		}
+		return columnsMap;//TODO check columns data types for insert, update, select with params
 	}
 }

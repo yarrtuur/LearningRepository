@@ -4,9 +4,9 @@ import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.model.PrepareCmdLine;
+import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.PrepareResult;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
@@ -24,7 +24,7 @@ public class TableCreater implements CommandProcess, PrepareCmdLine {
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return singleCommand.equals("create");
+        return (singleCommand.equals("create") && dbManager.getConnection().isConnected());
     }
 
     @Override
@@ -32,7 +32,8 @@ public class TableCreater implements CommandProcess, PrepareCmdLine {
         FeedBack resultCode = FeedBack.REFUSE;
         if (prepareCmdData(commandLine).equals(PrepareResult.PREPARE_RESULT_OK)) {
             try {
-                dbManager.toCreate(tableName, dataSet);
+                resultCode = dbManager.toCreate(tableName, dataSet);
+                dbManager.closePrepareStatement();
             } catch (SQLException ex) {
                 view.write("Create table is interrupted.");
                 view.write(ex.getCause().toString());
@@ -40,10 +41,8 @@ public class TableCreater implements CommandProcess, PrepareCmdLine {
         }
         if( resultCode.equals(FeedBack.OK)) {
             view.write("CREATE TABLE Query returned successfully.");
-            dbManager.closePrepareStatement();
         } else {
             view.write("Something wrong with Create table");
-            dbManager.closePrepareStatement();
         }
         return CmdLineState.WAIT;
     }
