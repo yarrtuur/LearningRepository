@@ -97,24 +97,18 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
 	@Override
 	public FeedBack toUpdate(String tableName, DataSet dataSetSet, DataSet dataSetWhere) throws SQLException {
-		if (chkTableByName(tableName) != null) {
-			return (getExecuteUpdate(query.makeSqlUpdateData(tableName, dataSetSet, dataSetWhere)) == 1)
+		resultSet = chkTableByName(tableName);
+			return (getExecuteUpdate(query.makeSqlUpdateData(tableName, dataSetSet, dataSetWhere,
+					query.getColumnsWithDataType(resultSet))) == 1)
 					? FeedBack.OK : FeedBack.REFUSE;
-		} else {
-			return FeedBack.REFUSE;
-		}
 	}
-
 
 	@Override
 	public FeedBack toDelete(String tableName, DataSet dataSet) throws SQLException {
-		if (chkTableByName(tableName) != null) {
-			return (getExecuteUpdate(query.makeSqlDeleteData(tableName, dataSet)) == 1) ? FeedBack.OK : FeedBack.REFUSE;
-		} else {
-			return FeedBack.REFUSE;
-		}
+		resultSet = chkTableByName(tableName);
+		return (getExecuteUpdate(query.makeSqlDeleteData(tableName, dataSet,
+				query.getColumnsWithDataType(resultSet))) == 1) ? FeedBack.OK : FeedBack.REFUSE;
 	}
-
 
 	@Override
 	public ResultSet toFind(String tableName, boolean isDetails, DataSet dataSet) throws SQLException {

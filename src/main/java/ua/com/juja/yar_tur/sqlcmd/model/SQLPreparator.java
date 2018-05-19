@@ -6,9 +6,9 @@ import java.util.Map;
 
 public interface SQLPreparator {
 
-	String makeSqlUpdateData(String tableName, DataSet dataSetSet, DataSet dataSetWhere);
+	String makeSqlUpdateData(String tableName, DataSet dataSetSet, DataSet dataSetWhere, Map tableFields);
 
-	String makeSqlDeleteData(String tableName, DataSet dataSet);
+	String makeSqlDeleteData(String tableName, DataSet dataSet, Map tableFields);
 
 	String makeSqlDropTable( String tableName );
 

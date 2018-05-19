@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import ua.com.juja.yar_tur.sqlcmd.Main;
+import ua.com.juja.yar_tur.sqlcmd.controller.MainController;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -22,19 +23,22 @@ public class IntegrationTest {
 		System.setOut(new PrintStream(out));
 	}
 
+
+
 	@Test
 	public void testHelp() {
 		// given
 		in.add("help");
 		// when
-		new Main();
+		MainController dialogue = new MainController();
+		dialogue.mainDialogueHolder();
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
 						"List of commands:" + CARET +
 						" exit : exit" + CARET +
 						" help : help" + CARET +
-						" connect : connect | username | password | database_sid | <IP-addr> | <port> " + CARET +
+						" connect : connect OR connect | username | password | database_sid | <IP-addr> | <port> " + CARET +
 						" create : create | tableName | column1 | type1 | ... | columnN " + CARET +
 						" tables : tables OR tables | fields  OR tables | tableName " + CARET +
 						" insert : insert | tableName | column1 | value1 | column2 | value2 | ... | columnN | valueN " + CARET +
@@ -51,12 +55,14 @@ public class IntegrationTest {
 		// given
 		in.add("exit");
 		// when
-		new Main();
+		MainController dialogue = new MainController();
+		dialogue.mainDialogueHolder();
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 				"Please, type `help` for list available commands. " + CARET +
 				"Closing connection..." + CARET +
-				"Connection closed." + CARET, getData());
+				"Connection closed." + CARET
+				, getData());
 	}
 
 	public String getData() {

@@ -38,18 +38,11 @@ public class DataFinder implements CommandProcess, PrepareCmdLine {
         if (prepareCmdData(commandLine).equals(PrepareResult.PREPARE_RESULT_OK)) {
             try {
                 resultSet = dbManager.toFind(tableName, isDetails, dataSet);
-            } catch (SQLException e) {
-                view.write(e.getCause().toString());
-            }
-        }
-        if(resultSet != null) {
-            try {
                 resultSetMeta = resultSet.getMetaData();
                 printFoundData();
-                dbManager.closePrepareStatement();
-            } catch (SQLException ex) {
-                view.write("No meta data in the result of query.");
-                view.write(ex.getCause().toString());
+            } catch (SQLException e) {
+                view.write("No data in the result of query.");
+                view.write(e.getCause().toString());
             }
         }
         return CmdLineState.WAIT;
