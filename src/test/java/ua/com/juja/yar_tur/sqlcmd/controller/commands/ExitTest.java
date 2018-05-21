@@ -41,7 +41,7 @@ public class ExitTest {
 
 	@Test
 	public void processNoConnectTest() throws Exception {
-		//when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
+		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.toExit()).thenThrow(new SQLException());
 		assertEquals(CmdLineState.WAIT, commandMock.process(commandLine));
 	}
