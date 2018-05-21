@@ -1,7 +1,6 @@
 package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
 import org.junit.*;
-import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.ConnectionKeeper;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
@@ -23,7 +22,7 @@ public class PostgreConnectTest {
 	private DBCommandManager dbManagerMock = mock(JDBCDatabaseManager.class);
 	private ConnectionKeeper connectionKeeperMock = mock(ConnectionKeeper.class);
 	private View viewMock = mock(Console.class);
-	private CommandProcess command;
+	private PostgreConnect command;
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -31,7 +30,7 @@ public class PostgreConnectTest {
 	}
 
 	@AfterClass
-	public  static void afterClass() {
+	public static void afterClass() {
 		System.out.println("After PostgreConnectTest.class");
 	}
 
@@ -39,7 +38,6 @@ public class PostgreConnectTest {
 	@Before
 	public void setUp() throws Exception {
 		command = new PostgreConnect(dbManagerMock, viewMock);
-		commandLine = new String[]{"connect"};
 		singleCommand = "connect";
 	}
 
@@ -52,28 +50,43 @@ public class PostgreConnectTest {
 
 	@Test
 	public void canProcess() throws SQLException {
-		when(dbManagerMock.toConnect(anyString(),anyString(),anyString())).thenReturn(FeedBack.OK);
+		when(dbManagerMock.toConnect(anyString(), anyString(), anyString())).thenReturn(FeedBack.OK);
 		assertEquals(true, command.canProcess(singleCommand));
 	}
 
 	@Test
 	public void processNoConnectTest() throws SQLException {
+		commandLine = new String[]{"connect"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
-		when(dbManagerMock.toConnect(anyString(),anyString(),anyString())).thenThrow(new SQLException());
+		when(dbManagerMock.toConnect(anyString(), anyString(), anyString())).thenThrow(new SQLException());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
 	@Test
-	public void process() throws SQLException {
-		when(dbManagerMock.toConnect(anyString(),anyString(),anyString())).thenReturn(FeedBack.OK);
+	public void processNoConnectFullLineTest() throws SQLException {
+		commandLine = new String[]{"connect","postgres","1","postgres","localhost","5432"};
+		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
+		when(dbManagerMock.toConnect(anyString(), anyString(), anyString())).thenThrow(new SQLException());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
-/*	@Test
-	public void setSocketProperties() throws SQLException {
+	@Test
+	public void processConnectProperties() throws SQLException {
+		commandLine = new String[]{"connect","postgres","1","postgres"};
+		when(dbManagerMock.toConnect(anyString(), anyString(), anyString())).thenReturn(FeedBack.OK);
+		assertEquals(CmdLineState.WAIT, command.process(commandLine));
+	}
+
+	@Test
+	public void processConnectSocket() throws SQLException {
+		commandLine = new String[]{"connect"};
+		when(dbManagerMock.toConnect(anyString(), anyString(), anyString())).thenReturn(FeedBack.OK);
+		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
 	@Test
 	public void setSocketData() {
-	}*/
+
+	}
+
 }
