@@ -13,34 +13,34 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ExitTest {
-
-	private String[] commandLine;
+public class PostgreConnectTest {
 	private String singleCommand;
+	private String[] commandLine;
 	private DBCommandManager dbManagerMock = mock(JDBCDatabaseManager.class);
 	private ConnectionKeeper connectionKeeperMock = mock(ConnectionKeeper.class);
 	private View viewMock = mock(Console.class);
 	private CommandProcess command;
 
-
 	@BeforeClass
 	public static void beforeClass() {
-		System.out.println("Before ExitTest.class");
+		System.out.println("Before PostgreConnectTest.class");
 	}
 
 	@AfterClass
-	public static void afterClass() {
-		System.out.println("After ExitTest.class");
+	public  static void afterClass() {
+		System.out.println("After PostgreConnectTest.class");
 	}
+
 
 	@Before
 	public void setUp() throws Exception {
-		command = new Exit(dbManagerMock, viewMock);
-		commandLine = new String[]{"exit"};
-		singleCommand = "exit";
+		command = new PostgreConnect(dbManagerMock, viewMock);
+		commandLine = new String[]{"connect"};
+		singleCommand = "connect";
 	}
 
 	@After
@@ -51,21 +51,29 @@ public class ExitTest {
 	}
 
 	@Test
-	public void processNoConnectTest() throws Exception {
+	public void canProcess() throws SQLException {
+		when(dbManagerMock.toConnect(anyString(),anyString(),anyString())).thenReturn(FeedBack.OK);
+		assertEquals(true, command.canProcess(singleCommand));
+	}
+
+	@Test
+	public void processNoConnectTest() throws SQLException {
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
-		when(dbManagerMock.toExit()).thenThrow(new SQLException());
+		when(dbManagerMock.toConnect(anyString(),anyString(),anyString())).thenThrow(new SQLException());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
 	@Test
-	public void processTest() throws Exception {
-		when(dbManagerMock.toExit()).thenReturn(FeedBack.OK);
-		assertEquals(CmdLineState.EXIT, command.process(commandLine));
+	public void process() throws SQLException {
+		when(dbManagerMock.toConnect(anyString(),anyString(),anyString())).thenReturn(FeedBack.OK);
+		assertEquals(CmdLineState.WAIT, command.process(commandLine));
+	}
+
+/*	@Test
+	public void setSocketProperties() throws SQLException {
 	}
 
 	@Test
-	public void canProcessTest() {
-		assertEquals(true, command.canProcess(singleCommand));
-	}
-
+	public void setSocketData() {
+	}*/
 }

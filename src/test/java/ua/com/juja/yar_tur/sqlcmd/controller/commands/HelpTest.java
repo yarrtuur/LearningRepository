@@ -1,6 +1,7 @@
 package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
 import org.junit.*;
+import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
@@ -12,7 +13,7 @@ public class HelpTest {
 	private String singleCommand;
 	private String[] commandLine;
 	private View view;
-	private Help command;
+	private CommandProcess command;
 
 	@BeforeClass
 	public static void beforeClass() {

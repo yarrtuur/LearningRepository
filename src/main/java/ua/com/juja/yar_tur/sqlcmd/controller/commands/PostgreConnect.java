@@ -55,7 +55,7 @@ public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
 			resultCode = dbManager.toConnect(connectLine, this.login, this.passwd);
 		} catch (SQLException ex) {
 			view.write("Connection Failed! Check output console");
-			view.write(ex.getCause().toString());
+			view.write(ex.getMessage());
 			return CmdLineState.WAIT;
 		}
 		if (resultCode.equals(FeedBack.OK)) {
