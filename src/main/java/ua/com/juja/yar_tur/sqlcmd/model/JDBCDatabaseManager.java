@@ -36,9 +36,6 @@ public class JDBCDatabaseManager implements DBCommandManager {
 	public FeedBack toExit() throws SQLException {
 		if (connectionKeeper.isConnected()) {
 			connectionKeeper.close();
-			connectionKeeper.setConnection(null);
-		} else {
-			connectionKeeper.setConnection(null);
 		}
 		return FeedBack.OK;
 	}

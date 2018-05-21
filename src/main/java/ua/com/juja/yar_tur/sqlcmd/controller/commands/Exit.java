@@ -29,9 +29,9 @@ public class Exit implements CommandProcess {
         try {
             lineState = dbManager.toExit();
             view.write("Connection closed.");
-        } catch (SQLException e) {
+        } catch (SQLException ex) {
             view.write("Close connection interrupted.");
-            e.printStackTrace();
+            view.write(ex.getCause().toString());
             lineState = FeedBack.REFUSE;
         }
         return lineState.equals(FeedBack.OK) ? CmdLineState.EXIT : CmdLineState.WAIT;
