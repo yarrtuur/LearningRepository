@@ -23,6 +23,7 @@ public class ExitTest {
 	private View viewMock = mock(Console.class);
 	private Exit commandMock = new Exit(dbManagerMock, viewMock);
 
+
 	@BeforeClass
 	public static void beforeClass() {
 		System.out.println("Before ExitTest.class");
