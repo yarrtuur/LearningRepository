@@ -30,8 +30,9 @@ public class TableDroper implements CommandProcess, PrepareCmdLine {
         FeedBack resultCode = FeedBack.REFUSE;
         if (prepareCmdData(commandLine).equals(PrepareResult.PREPARE_RESULT_OK)) {
             try {
-                resultCode = dbManager.toDrop(tableName);
                 view.write("Droping table.");
+                resultCode = dbManager.toDrop(tableName);
+                dbManager.closePrepareStatement();
             } catch (SQLException ex) {
                 view.write("Drop table is interrupted.");
                 view.write(ex.getMessage());
@@ -41,11 +42,6 @@ public class TableDroper implements CommandProcess, PrepareCmdLine {
             view.write("Drop table successfull");
         } else {
             view.write("Something wrong with drop table...");
-        }
-        try {
-            dbManager.closePrepareStatement();
-        } catch (SQLException ex) {
-            view.write(ex.getMessage() );
         }
         return CmdLineState.WAIT;
     }
