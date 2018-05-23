@@ -33,10 +33,12 @@ public class DataUpdater implements CommandProcess, PrepareCmdLine {
         FeedBack resultCode = FeedBack.REFUSE;
         if (prepareCmdData(commandLine).equals(PrepareResult.PREPARE_RESULT_OK)) {
             try {
+                view.write("Updating data.");
                 resultCode = this.dbManager.toUpdate(this.tableName, this.dataSetSet, this.dataSetWhere);
+                dbManager.closePrepareStatement();
             } catch (SQLException ex) {
                 view.write("Update data is interrupted...");
-                view.write(ex.getCause().toString());
+                view.write(ex.getMessage());
             }
         }
         if( resultCode.equals(FeedBack.OK) ) {
@@ -44,33 +46,27 @@ public class DataUpdater implements CommandProcess, PrepareCmdLine {
         } else {
             view.write("Something wrong with update data...");
         }
-        try {
-            dbManager.closePrepareStatement();
-        } catch (SQLException ex) {
-            view.write(ex.getCause().toString());
-        }
         return CmdLineState.WAIT;
     }
 
     @Override
     public PrepareResult prepareCmdData(String[] commandLine) {
-        try {
+        if(commandLine.length > 1){
             tableName = commandLine[1];
-        } catch (IndexOutOfBoundsException ex) {
+        } else {
             view.write("There isn`t tablename at string. Try again.");
             return PrepareResult.PREPARE_RESULT_WRONG;
         }
-
         if (commandLine.length % 2 != 0 && commandLine.length > 2) {
             view.write("String format is wrong. Must be even count of data. Try again.");
             return PrepareResult.PREPARE_RESULT_WRONG;
         } else {
             int where = 0, set = 0;
             for (int i = 0; i < commandLine.length; i++) {
-                if (commandLine[i].equals("set")) {
+                if (commandLine[i].toLowerCase().equals("set")) {
                     set = i;
                 }
-                if (commandLine[i].equals("where")) {
+                if (commandLine[i].toLowerCase().equals("where")) {
                     where = i;
                     break;
                 }
