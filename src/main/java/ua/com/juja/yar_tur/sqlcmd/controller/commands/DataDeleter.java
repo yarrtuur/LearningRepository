@@ -34,9 +34,10 @@ public class DataDeleter implements CommandProcess, PrepareCmdLine {
             try {
                 view.write("Deleting data from table.");
                 resultCode = dbManager.toDelete(this.tableName, this.dataSet);
+                dbManager.closePrepareStatement();
             } catch (SQLException ex) {
                 view.write("Delete data interrupted.");
-                view.write(ex.getCause().toString());
+                view.write(ex.getMessage());
             }
         }
         if( resultCode.equals(FeedBack.OK) ) {
@@ -44,19 +45,14 @@ public class DataDeleter implements CommandProcess, PrepareCmdLine {
         } else {
             view.write("Something wrong with Delete data ...");
         }
-        try {
-            dbManager.closePrepareStatement();
-        } catch (SQLException ex) {
-            view.write(ex.getCause().toString());
-        }
         return CmdLineState.WAIT;
     }
 
     @Override
     public PrepareResult prepareCmdData(String[] commandLine) {
-        try {
+        if(commandLine.length > 1){
             tableName = commandLine[1];
-        } catch (IndexOutOfBoundsException ex) {
+        } else {
             view.write("There isn`t tablename at string. Try again.");
             return PrepareResult.PREPARE_RESULT_WRONG;
         }
