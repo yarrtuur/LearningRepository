@@ -5,6 +5,7 @@ import ua.com.juja.yar_tur.sqlcmd.model.ConnectionKeeper;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
+import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
@@ -12,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -56,12 +58,29 @@ public class TableViewerTest {
 	}
 
 	@Test
-	public void processTablesList() throws SQLException {
+	public void processTablesListPrint() throws SQLException {
 		commandLine = new String[]{"tables"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toView()).thenReturn(resultSetMock);
+		when(dbManagerMock.toView()).thenReturn(FeedBack.OK);
+		assertEquals(CmdLineState.WAIT, command.process(commandLine));
+	}
 
+	@Test
+	public void processOneTablePrint() throws SQLException {
+		commandLine = new String[]{"tables","tbl"};
+		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
+		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
+		when(dbManagerMock.toView(anyString())).thenReturn(FeedBack.OK);
+		assertEquals(CmdLineState.WAIT, command.process(commandLine));
+	}
+
+	@Test
+	public void processSQLE() throws SQLException {
+		commandLine = new String[]{"tables"};
+		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
+		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
+		when(dbManagerMock.toView()).thenThrow(new SQLException());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 

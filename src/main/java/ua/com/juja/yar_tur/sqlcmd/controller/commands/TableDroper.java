@@ -34,7 +34,7 @@ public class TableDroper implements CommandProcess, PrepareCmdLine {
                 view.write("Droping table.");
             } catch (SQLException ex) {
                 view.write("Drop table is interrupted.");
-                view.write(ex.getCause().toString());
+                view.write(ex.getMessage());
             }
         }
         if( resultCode.equals(FeedBack.OK) ) {
@@ -45,7 +45,7 @@ public class TableDroper implements CommandProcess, PrepareCmdLine {
         try {
             dbManager.closePrepareStatement();
         } catch (SQLException ex) {
-            view.write(ex.getCause().toString());
+            view.write(ex.getMessage() );
         }
         return CmdLineState.WAIT;
     }

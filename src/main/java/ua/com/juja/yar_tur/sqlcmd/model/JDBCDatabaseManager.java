@@ -1,6 +1,7 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
+import ua.com.juja.yar_tur.sqlcmd.viewer.Printable;
 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,6 +13,11 @@ public class JDBCDatabaseManager implements DBCommandManager {
 	private ConnectionKeeper connectionKeeper = new ConnectionKeeper();
 	private PreparedStatement preparedStatement;
 	private ResultSet resultSet;
+	private Printable printer;
+
+	public JDBCDatabaseManager(Printable printer) {
+		this.printer = printer;
+	}
 
 	@Override
 	public ConnectionKeeper getConnection(){
@@ -59,13 +65,29 @@ public class JDBCDatabaseManager implements DBCommandManager {
 	}
 
 	@Override
-	public ResultSet toView(String tableName) throws SQLException {
-		return getOneTableDetails(tableName);
+	public FeedBack toView(String tableName) throws SQLException {
+		resultSet = getOneTableDetails(tableName);
+		if(resultSet != null){
+			printer.printOneTableDetails(resultSet, tableName);
+			closePrepareStatement();
+			return FeedBack.OK;
+		}else {
+			closePrepareStatement();
+			return FeedBack.REFUSE;
+		}
 	}
 
 	@Override
-	public ResultSet toView() throws SQLException {
-		return getTablesList();
+	public FeedBack toView() throws SQLException {
+		resultSet = getTablesList();
+		if(resultSet != null){
+			printer.printTablesList(resultSet);
+			closePrepareStatement();
+			return FeedBack.OK;
+		}else {
+			closePrepareStatement();
+			return FeedBack.REFUSE;
+		}
 	}
 
 	private ResultSet getOneTableDetails(String tableName) throws SQLException {

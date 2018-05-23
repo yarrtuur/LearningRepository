@@ -41,12 +41,12 @@ public interface DBCommandManager {
     /**
      * to view list of all tables
      * */
-    ResultSet toView() throws SQLException;
+    FeedBack toView() throws SQLException;
 
     /**
      * to view one table with details
      * */
-    ResultSet toView(String tableName) throws SQLException;
+    FeedBack toView(String tableName) throws SQLException;
 
     // insert into  table
     FeedBack toInsert(String tableName, DataSet dataSet)throws SQLException;

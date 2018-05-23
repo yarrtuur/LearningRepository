@@ -6,6 +6,8 @@ import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
+import ua.com.juja.yar_tur.sqlcmd.viewer.Printable;
+import ua.com.juja.yar_tur.sqlcmd.viewer.PrinterData;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.util.LinkedList;
@@ -13,7 +15,8 @@ import java.util.List;
 
 public class MainController {
     private View view = new Console();
-    private DBCommandManager dbManager = new JDBCDatabaseManager();
+    private Printable printer = new PrinterData(view);
+    private DBCommandManager dbManager = new JDBCDatabaseManager(printer);
     private List<CommandProcess> commands;
     private CmdLineState cmdState;
 
