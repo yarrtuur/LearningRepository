@@ -36,7 +36,7 @@ public class TableCreater implements CommandProcess, PrepareCmdLine {
                 dbManager.closePrepareStatement();
             } catch (SQLException ex) {
                 view.write("Create table is interrupted.");
-                view.write(ex.getCause().toString());
+                view.write(ex.getMessage());
             }
         }
         if( resultCode.equals(FeedBack.OK)) {
