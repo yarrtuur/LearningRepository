@@ -8,4 +8,6 @@ public interface Printable {
 	void printTablesList(ResultSet resultSet) throws SQLException;
 
 	void printOneTableDetails(ResultSet resultSet, String tableName) throws SQLException;
+
+	void printFoundData(ResultSet resultSet) throws SQLException;
 }

@@ -3,7 +3,6 @@ package ua.com.juja.yar_tur.sqlcmd.model;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public interface DBCommandManager {
@@ -35,7 +34,7 @@ public interface DBCommandManager {
     FeedBack toClean(String tableName)throws SQLException;
 
     // find data
-    ResultSet toFind(String tableName, boolean isDetails, DataSet dataSet)throws SQLException;
+    FeedBack toFind(String tableName, boolean isDetails, DataSet dataSet)throws SQLException;
 
     // view table
     /**

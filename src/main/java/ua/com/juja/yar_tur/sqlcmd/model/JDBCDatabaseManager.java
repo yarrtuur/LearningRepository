@@ -3,16 +3,14 @@ package ua.com.juja.yar_tur.sqlcmd.model;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Printable;
 
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class JDBCDatabaseManager implements DBCommandManager {
 	private SQLPreparator query = new PgSQLPreparator();
 	private ConnectionKeeper connectionKeeper = new ConnectionKeeper();
 	private PreparedStatement preparedStatement;
 	private ResultSet resultSet;
+	private ResultSetMetaData resultSetMeta;
 	private Printable printer;
 
 	public JDBCDatabaseManager(Printable printer) {
@@ -130,10 +128,17 @@ public class JDBCDatabaseManager implements DBCommandManager {
 	}
 
 	@Override
-	public ResultSet toFind(String tableName, boolean isDetails, DataSet dataSet) throws SQLException {
+	public FeedBack toFind(String tableName, boolean isDetails, DataSet dataSet) throws SQLException {
 		resultSet = chkTableByName(tableName);
-		return getExecuteQuery(query.makeSqlFindData(tableName, isDetails, dataSet,
-				query.getColumnsWithDataType(resultSet)));
+		if(resultSet != null) {
+			resultSet = getExecuteQuery(query.makeSqlFindData(tableName, isDetails, dataSet,
+					query.getColumnsWithDataType(resultSet)));
+			if(resultSet != null){
+				printer.printFoundData(resultSet);
+				return FeedBack.OK;
+			}
+		}
+		return FeedBack.REFUSE;
 	}
 
 	@Override

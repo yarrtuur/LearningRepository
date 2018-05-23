@@ -1,6 +1,7 @@
 package ua.com.juja.yar_tur.sqlcmd.viewer;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +11,30 @@ public class PrinterData implements Printable {
 
 	public PrinterData(View view) {
 		this.view = view;
+	}
+
+	@Override
+	public void printFoundData(ResultSet resultSet) throws SQLException {
+		ResultSetMetaData resultSetMeta = resultSet.getMetaData();
+		List<String> columnsList = new LinkedList<>();
+		StringBuilder sb;
+		for (int i = 1; i <= resultSetMeta.getColumnCount(); i++) {
+			columnsList.add(resultSetMeta.getColumnName(i));
+		}
+		sb = new StringBuilder();
+		sb.append(" | ");
+		for (String aColumnsList : columnsList) {
+			sb.append(aColumnsList).append(" | ");
+		}
+		view.write( sb.toString() );
+		while (resultSet.next()) {
+			sb = new StringBuilder();
+			sb.append(" | ");
+			for (String aColumnsList : columnsList) {
+				sb.append(resultSet.getString(aColumnsList)).append(" | ");
+			}
+			view.write(sb.toString());
+		}
 	}
 
 	@Override

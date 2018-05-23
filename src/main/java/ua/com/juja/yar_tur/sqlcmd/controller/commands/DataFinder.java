@@ -5,23 +5,19 @@ import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.model.PrepareCmdLine;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
+import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.PrepareResult;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
 
 public class DataFinder implements CommandProcess, PrepareCmdLine {
     private DBCommandManager dbManager;
     private View view;
     private String tableName;
     private DataSet dataSet;
-    private boolean isDetails;
-    private ResultSet resultSet;
-    private ResultSetMetaData resultSetMeta;
+    private boolean isDetail;
+
 
     public DataFinder(DBCommandManager dbManager, View view) {
         this.dbManager = dbManager;
@@ -35,46 +31,30 @@ public class DataFinder implements CommandProcess, PrepareCmdLine {
 
     @Override
     public CmdLineState process(String[] commandLine) {
+        FeedBack resultCode = FeedBack.REFUSE;
         if (prepareCmdData(commandLine).equals(PrepareResult.PREPARE_RESULT_OK)) {
             try {
-                resultSet = dbManager.toFind(tableName, isDetails, dataSet);
-                resultSetMeta = resultSet.getMetaData();
-                printFoundData();
+                resultCode = dbManager.toFind(tableName, isDetail, dataSet);
+                dbManager.closePrepareStatement();
             } catch (SQLException e) {
                 view.write("No data in the result of query.");
-                view.write(e.getCause().toString());
+                view.write(e.getMessage());
             }
+        }
+        if( resultCode.equals(FeedBack.OK)) {
+            view.write("Find data successfully.");
+        } else {
+            view.write("Something wrong with find data");
         }
         return CmdLineState.WAIT;
     }
 
-    private void printFoundData() throws SQLException {
-        List<String> columnsList = new LinkedList<>();
-        StringBuilder sb;
-        for (int i = 1; i <= resultSetMeta.getColumnCount(); i++) {
-            columnsList.add(resultSetMeta.getColumnName(i));
-        }
-        sb = new StringBuilder();
-        sb.append(" | ");
-        for (String aColumnsList : columnsList) {
-            sb.append(aColumnsList).append(" | ");
-        }
-        view.write( sb.toString() );
-        while (resultSet.next()) {
-            sb = new StringBuilder();
-            sb.append(" | ");
-            for (String aColumnsList : columnsList) {
-                sb.append(resultSet.getString(aColumnsList)).append(" | ");
-            }
-            view.write(sb.toString());
-        }
-    }
 
     @Override
     public PrepareResult prepareCmdData(String[] commandLine) {
-        try {
+        if(commandLine.length > 1){
             tableName = commandLine[1];
-        } catch (IndexOutOfBoundsException ex) {
+        } else {
             view.write("There isn`t tablename at string. Try again.");
             return PrepareResult.PREPARE_RESULT_WRONG;
         }
@@ -82,7 +62,7 @@ public class DataFinder implements CommandProcess, PrepareCmdLine {
             view.write("String format is wrong. Must be even count of data. Try again.");
             return PrepareResult.PREPARE_RESULT_WRONG;
         } else {
-            isDetails = true;
+            isDetail = true;
             dataSet = new DataSet();
             for (int i = 2; i < commandLine.length; i += 2) {
                 dataSet.add(commandLine[i], commandLine[i + 1]);
