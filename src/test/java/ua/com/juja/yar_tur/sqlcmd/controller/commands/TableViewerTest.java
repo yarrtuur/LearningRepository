@@ -76,7 +76,7 @@ public class TableViewerTest {
 	}
 
 	@Test
-	public void processSQLE() throws SQLException {
+	public void processWithSQLE() throws SQLException {
 		commandLine = new String[]{"tables"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);

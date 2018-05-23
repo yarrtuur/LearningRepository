@@ -3,7 +3,6 @@ package ua.com.juja.yar_tur.sqlcmd.integration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import ua.com.juja.yar_tur.sqlcmd.Main;
 import ua.com.juja.yar_tur.sqlcmd.controller.MainController;
 
 import java.io.ByteArrayOutputStream;
@@ -40,7 +39,7 @@ public class IntegrationTest {
 						" help : help" + CARET +
 						" connect : connect OR connect | username | password | database_sid | <IP-addr> | <port> " + CARET +
 						" create : create | tableName | column1 | type1 | ... | columnN " + CARET +
-						" tables : tables OR tables | fields  OR tables | tableName " + CARET +
+						" tables : tables OR tables | tableName " + CARET +
 						" insert : insert | tableName | column1 | value1 | column2 | value2 | ... | columnN | valueN " + CARET +
 						" find : find | tableName OR  find | tableName | column | value " + CARET +
 						" clear : clear | tableName " + CARET +
