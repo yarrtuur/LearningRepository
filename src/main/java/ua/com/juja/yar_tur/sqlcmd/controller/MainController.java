@@ -80,13 +80,8 @@ public class MainController {
         initDBCommandList();
         view.write("Hello, user!");
         view.write("Please, type `help` for list available commands. ");
-        try {
-            while (this.getCMDState().equals(CmdLineState.WAIT)) {
-                this.takeUpCmd(view.read());
-            }
-        } catch (NullPointerException ex) {
-            ex.printStackTrace();
+        while (this.getCMDState().equals(CmdLineState.WAIT)) {
+            this.takeUpCmd(view.read());
         }
     }
-
 }
