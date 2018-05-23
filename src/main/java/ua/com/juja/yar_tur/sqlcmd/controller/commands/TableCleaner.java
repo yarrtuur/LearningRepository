@@ -31,10 +31,11 @@ public class TableCleaner implements CommandProcess, PrepareCmdLine {
         if (prepareCmdData(commandLine).equals(PrepareResult.PREPARE_RESULT_OK)) {
             try {
                 view.write("Deleting data from table.");
-                dbManager.toClean(tableName);
+                resultCode = dbManager.toClean(tableName);
+                dbManager.closePrepareStatement();
             } catch (SQLException ex) {
                 view.write("Clear table is interrupted.");
-                view.write(ex.getCause().toString());
+                view.write(ex.getMessage());
             }
         }
         if( resultCode.equals(FeedBack.OK)) {
@@ -42,19 +43,14 @@ public class TableCleaner implements CommandProcess, PrepareCmdLine {
         } else {
             view.write("Something wrong with Clear data");
         }
-        try {
-            dbManager.closePrepareStatement();
-        } catch (SQLException ex) {
-            view.write(ex.getCause().toString());
-        }
         return CmdLineState.WAIT;
     }
 
     @Override
     public PrepareResult prepareCmdData(String[] commandLine) {
-        try {
+        if(commandLine.length > 1){
             tableName = commandLine[1];
-        } catch (IndexOutOfBoundsException ex) {
+        } else {
             view.write("There isn`t tablename at string. Try again.");
             return PrepareResult.PREPARE_RESULT_WRONG;
         }
