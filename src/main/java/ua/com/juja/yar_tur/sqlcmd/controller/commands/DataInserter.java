@@ -34,9 +34,10 @@ public class DataInserter implements CommandProcess, PrepareCmdLine {
             try {
                 view.write("Inserting data.");
                 resultCode = dbManager.toInsert(tableName, dataSet);
+                dbManager.closePrepareStatement();
             } catch (SQLException ex) {
                 view.write("Insert data into table interrupted.");
-                view.write(ex.getCause().toString());
+                view.write(ex.getMessage());
             }
         }
         if( resultCode.equals(FeedBack.OK) ) {
@@ -44,23 +45,18 @@ public class DataInserter implements CommandProcess, PrepareCmdLine {
         } else {
             view.write("Something wrong with insert data into table.");
         }
-        try {
-            dbManager.closePrepareStatement();
-        } catch (SQLException ex) {
-            view.write(ex.getCause().toString());
-        }
         return CmdLineState.WAIT;
     }
 
     @Override
     public PrepareResult prepareCmdData(String[] commandLine) {
-        if(commandLine.length > 3){
+        if(commandLine.length > 1){
             tableName = commandLine[1];
         }else{
             view.write("There isn`t tablename at string. Try again.");
             return PrepareResult.PREPARE_RESULT_WRONG;
         }
-        if (commandLine.length % 2 != 0) {
+        if (commandLine.length % 2 != 0 && commandLine.length > 2 ) {
             view.write("String format is wrong. Must be even count of data. Try again.");
             return PrepareResult.PREPARE_RESULT_WRONG;
         } else {
