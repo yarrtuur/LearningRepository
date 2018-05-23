@@ -60,8 +60,6 @@ public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
 		}
 		if (resultCode.equals(FeedBack.OK)) {
 			view.write("You made it, take control your database now!");
-		} else {
-			view.write("Failed to make connection!");
 		}
 
 		return CmdLineState.WAIT;

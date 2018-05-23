@@ -66,7 +66,8 @@ public class PostgreConnectTest {
 	public void processNoConnectFullLineTest() throws SQLException {
 		commandLine = new String[]{"connect","postgres","1","postgres","localhost","5432"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
-		when(dbManagerMock.toConnect(anyString(), anyString(), anyString())).thenThrow(new SQLException());
+		when(dbManagerMock.toConnect(anyString(), anyString(), anyString())).
+				thenThrow(new SQLException());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
@@ -85,8 +86,10 @@ public class PostgreConnectTest {
 	}
 
 	@Test
-	public void setSocketData() {
-
+	public void processNotCorrectCMDLine() throws SQLException{
+		commandLine = new String[]{"connect","postgres"};
+		when(dbManagerMock.toConnect(anyString(), anyString(), anyString())).thenReturn(FeedBack.OK);
+		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
 }
