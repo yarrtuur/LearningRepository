@@ -81,6 +81,7 @@ public class MainController {
         view.write("Hello, user!");
         view.write("Please, type `help` for list available commands. ");
         while (this.getCMDState().equals(CmdLineState.WAIT)) {
+            //TODO change description for commands that depends with connect
             this.takeUpCmd(view.read());
         }
     }
