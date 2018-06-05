@@ -4,86 +4,77 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>ua.com.juja.yar_tur</groupId>
+    <groupId>ua.com.juja.yar_tur.sqlcmd</groupId>
     <artifactId>JujaSqlCmd</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <name>Maven SQLcmd</name>
+    <!--<packaging>jar</packaging>-->
+    <name>JujaProject SQLcmd</name>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <jdk.version>1.9</jdk.version>
+        <junit.version>4.12</junit.version>
+        <mockito.version>2.18.3</mockito.version>
+        <postgre.version>42.2.1</postgre.version>
     </properties>
-
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>2.18.3</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
-       <!-- &lt;!&ndash; https://mvnrepository.com/artifact/org.mockito/mockito-all &ndash;&gt;
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.10.19</version>
-            <scope>test</scope>
-        </dependency>-->
-        <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.2.1</version>
+            <version>${postgre.version}</version>
         </dependency>
 
     </dependencies>
-
     <build>
-        <sourceDirectory>src\main\java</sourceDirectory>
-        <scriptSourceDirectory>src\main\scripts</scriptSourceDirectory>
-        <testSourceDirectory>src\test\java</testSourceDirectory>
-
-        <outputDirectory>out\classes</outputDirectory>
-        <testOutputDirectory>out\test-classes</testOutputDirectory>
-
-        <resources>
-            <resource>
-                <directory>src\main</directory>
-            </resource>
-        </resources>
-
-        <testResources>
-            <testResource>
-                <directory>src\test</directory>
-            </testResource>
-        </testResources>
 
         <plugins>
+            <!-- Set a compiler level -->
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>ua.com.juja.yar_tur.sqlcmd.Main</mainClass>
-                        </manifest>
-                    </archive>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Assembly Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <!-- get all project dependencies -->
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <!-- MainClass in mainfest make a executable jar -->
+                    <archive>
+                        <manifest>
+                            <mainClass>${project.groupId}.Main</mainClass>
+                        </manifest>
+                    </archive>
+
                 </configuration>
                 <executions>
                     <execution>
-                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <id>make-assembly</id>
+                        <!-- bind to the packaging phase -->
+                        <phase>package</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>
@@ -91,9 +82,6 @@
                 </executions>
             </plugin>
         </plugins>
-
-        <finalName>JujaSqlCmd-1.0-SNAPSHOT</finalName>
-
     </build>
 
 </project>
