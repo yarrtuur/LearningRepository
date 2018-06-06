@@ -55,7 +55,8 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
 	@Override
 	public FeedBack toClean(String tableName) throws SQLException {
-		if (chkTableByName(tableName) != null) {
+		resultSet = chkTableByName(tableName);
+		if ( resultSet != null) {
 			return (getExecuteUpdate(query.makeSqlClearTable(tableName)) == 1) ? FeedBack.OK : FeedBack.REFUSE;
 		} else {
 			return FeedBack.REFUSE;
@@ -98,7 +99,9 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
 	@Override
 	public FeedBack toCreate(String tableName, DataSet dataSet) throws SQLException {
-		if (chkTableByName(tableName) == null) {
+		resultSet = chkTableByName(tableName);
+
+		if ( resultSet.findColumn("column_name") > 0) {
 			return (getExecuteUpdate(query.makeSqlCreateTable(tableName, dataSet)) == 1) ? FeedBack.OK : FeedBack.REFUSE;
 		} else {
 			return FeedBack.REFUSE;
@@ -115,7 +118,7 @@ public class JDBCDatabaseManager implements DBCommandManager {
 	@Override
 	public FeedBack toUpdate(String tableName, DataSet dataSetSet, DataSet dataSetWhere) throws SQLException {
 		resultSet = chkTableByName(tableName);
-			return (getExecuteUpdate(query.makeSqlUpdateData(tableName, dataSetSet, dataSetWhere,
+		return (getExecuteUpdate(query.makeSqlUpdateData(tableName, dataSetSet, dataSetWhere,
 					query.getColumnsWithDataType(resultSet))) == 1)
 					? FeedBack.OK : FeedBack.REFUSE;
 	}
