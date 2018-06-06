@@ -36,6 +36,7 @@ public class MainController {
         commands.add(new TableDroper(dbManager, view));
         commands.add(new DataDeleter(dbManager, view));
         commands.add(new DataUpdater(dbManager, view));
+        commands.add(new ChkConnection(dbManager, view));
         commands.add(new Unreachable(view));
 
         setCmdState(CmdLineState.WAIT);

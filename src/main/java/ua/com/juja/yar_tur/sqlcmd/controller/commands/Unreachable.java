@@ -18,7 +18,7 @@ public class Unreachable implements CommandProcess {
 
     @Override
     public CmdLineState process(String[] commandLine) {
-        view.write("Not available command. Please type `help` to list all commands ");
+        view.write("Not available command. Maybe your connection hasn`t done yet. Please type `help` to list all commands ");
         return CmdLineState.WAIT;
     }
 }

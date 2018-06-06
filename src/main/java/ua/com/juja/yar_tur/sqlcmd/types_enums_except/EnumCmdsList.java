@@ -11,7 +11,8 @@ public enum EnumCmdsList {
     clear("clear | tableName "),
     drop("drop | tableName "),
     delete("delete | tableName | column | value "),
-    update("update | tableName | SET | column1 | value1 | column2 | value2 | WHERE| columnX | valueX ");
+    update("update | tableName | SET | column1 | value1 | column2 | value2 | WHERE| columnX | valueX "),
+    chkconn("chkconn ");
 
     private String description;
 
