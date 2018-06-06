@@ -13,6 +13,7 @@ public class IntegrationTest {
 	private static ConfigurableInputStream in;
 	private static ByteArrayOutputStream out;
 	private final String CARET = System.getProperty("line.separator");
+	private MainController dialogue;
 
 	@Before
 	public void setup() {
@@ -20,6 +21,7 @@ public class IntegrationTest {
 		in = new ConfigurableInputStream();
 		System.setIn(in);
 		System.setOut(new PrintStream(out));
+		dialogue = new MainController();
 	}
 
 
@@ -29,7 +31,7 @@ public class IntegrationTest {
 		// given
 		in.add("help");
 		// when
-		MainController dialogue = new MainController();
+		//MainController dialogue = new MainController();
 		dialogue.mainDialogueHolder();
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
@@ -55,7 +57,7 @@ public class IntegrationTest {
 		// given
 		in.add("exit");
 		// when
-		MainController dialogue = new MainController();
+		//MainController dialogue = new MainController();
 		dialogue.mainDialogueHolder();
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
@@ -64,6 +66,42 @@ public class IntegrationTest {
 				"Connection closed." + CARET
 				, getData());
 	}
+
+	@Test
+	public void testChkConnectionOn() {
+
+		in.add("connect");
+		dialogue.mainDialogueHolder();
+		in.add("chkconn");
+		dialogue.mainDialogueHolder();
+
+		// then
+		Assert.assertEquals("Hello, user!" + CARET +
+						"Please, type `help` for list available commands. " + CARET +
+						"Starting connect..." + CARET +
+						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
+						"PostgreSQL JDBC Driver Registered!" + CARET +
+						"You made it, take control your database now!" + CARET +
+						"Hello, user!" + CARET +
+						"Please, type `help` for list available commands. " + CARET +
+						"Not available command. Maybe your connection hasn`t done yet. Please type `help` to list all commands " + CARET +
+						"Connection has already done" + CARET
+				, getData());
+	}
+
+	@Test
+	public void testChkConnectionOff() {
+		// given
+		in.add("chkconn");
+		// when
+		dialogue.mainDialogueHolder();
+		// then
+		Assert.assertEquals("Hello, user!" + CARET +
+						"Please, type `help` for list available commands. " + CARET +
+						"Connection hasnn`t done yet" + CARET
+				, getData());
+	}
+
 
 	public String getData() {
 		try {
