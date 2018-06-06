@@ -3,7 +3,9 @@ package ua.com.juja.yar_tur.sqlcmd.integration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import ua.com.juja.yar_tur.sqlcmd.Main;
 import ua.com.juja.yar_tur.sqlcmd.controller.MainController;
+import ua.com.juja.yar_tur.sqlcmd.controller.commands.ChkConnection;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -13,7 +15,6 @@ public class IntegrationTest {
 	private static ConfigurableInputStream in;
 	private static ByteArrayOutputStream out;
 	private final String CARET = System.getProperty("line.separator");
-	private MainController dialogue;
 
 	@Before
 	public void setup() {
@@ -21,18 +22,14 @@ public class IntegrationTest {
 		in = new ConfigurableInputStream();
 		System.setIn(in);
 		System.setOut(new PrintStream(out));
-		dialogue = new MainController();
 	}
-
-
 
 	@Test
 	public void testHelp() {
 		// given
 		in.add("help");
 		// when
-		//MainController dialogue = new MainController();
-		dialogue.mainDialogueHolder();
+        Main.main(new String[1]);
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
@@ -57,8 +54,7 @@ public class IntegrationTest {
 		// given
 		in.add("exit");
 		// when
-		//MainController dialogue = new MainController();
-		dialogue.mainDialogueHolder();
+        Main.main(new String[1]);
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 				"Please, type `help` for list available commands. " + CARET +
@@ -69,22 +65,18 @@ public class IntegrationTest {
 
 	@Test
 	public void testChkConnectionOn() {
-
-		in.add("connect");
-		dialogue.mainDialogueHolder();
-		in.add("chkconn");
-		dialogue.mainDialogueHolder();
-
-		// then
+        // given
+        in.add("connect");
+        in.add("chkconn");
+        // when
+        Main.main(new String[1]);
+        // then
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
 						"Starting connect..." + CARET +
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
-						"Hello, user!" + CARET +
-						"Please, type `help` for list available commands. " + CARET +
-						"Not available command. Maybe your connection hasn`t done yet. Please type `help` to list all commands " + CARET +
 						"Connection has already done" + CARET
 				, getData());
 	}
@@ -94,13 +86,30 @@ public class IntegrationTest {
 		// given
 		in.add("chkconn");
 		// when
-		dialogue.mainDialogueHolder();
+        Main.main(new String[1]);
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
 						"Connection hasnn`t done yet" + CARET
 				, getData());
 	}
+
+	@Test
+    public void testPostgreConnectOn() {
+        // given
+        in.add("connect");
+        // when
+        Main.main(new String[1]);
+        // then
+        Assert.assertEquals("Hello, user!" + CARET +
+                        "Please, type `help` for list available commands. " + CARET +
+                        "Starting connect..." + CARET +
+                        "-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
+                        "PostgreSQL JDBC Driver Registered!" + CARET +
+                        "You made it, take control your database now!" + CARET
+                , getData());
+    }
+
 
 
 	public String getData() {
