@@ -18,6 +18,8 @@ public interface SQLPreparator {
 
 	String makeSqlGetOneTableDetails(String tableName);
 
+	String makeSqlChkTableAvailable(String tableName);
+
 	String makeSqlGetTablesList();
 
 	String makeSqlInsertData(String tableName, DataSet dataSet, Map tableFields);
