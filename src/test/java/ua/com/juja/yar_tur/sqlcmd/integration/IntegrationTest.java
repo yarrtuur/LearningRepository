@@ -4,8 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import ua.com.juja.yar_tur.sqlcmd.Main;
-import ua.com.juja.yar_tur.sqlcmd.controller.MainController;
-import ua.com.juja.yar_tur.sqlcmd.controller.commands.ChkConnection;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -136,7 +134,7 @@ public class IntegrationTest {
 	public void testTableDroper() {
 		// given
 		in.add("connect");
-		in.add("create|vaza|flower|char");
+		in.add("create|vaza|flower|char(10)");
 		in.add("drop|vaza");
 		// when
 		Main.main(new String[1]);
@@ -179,6 +177,65 @@ public class IntegrationTest {
 				, getData());
 	}
 
+	@Test
+	public void testDataFinder() {
+		// given
+		in.add("connect");
+		in.add("create|vaza|flower|char(10)");
+		in.add("insert|vaza|flower|rose");
+		in.add("find|vaza");
+		in.add("drop|vaza");
+		// when
+		Main.main(new String[1]);
+		// then
+		Assert.assertEquals("Hello, user!" + CARET +
+						"Please, type `help` for list available commands. " + CARET +
+						"Starting connect..." + CARET +
+						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
+						"PostgreSQL JDBC Driver Registered!" + CARET +
+						"You made it, take control your database now!" + CARET +
+						"Creating table..." + CARET +
+						"Create table successfull." + CARET +
+						"Inserting data." + CARET +
+						"Insert data into table successfull" + CARET +
+						"Finding table..." + CARET +
+ 						" | rid | flower | " + CARET +
+ 						" | 1 | rose       | " + CARET +
+						"Find data successfull." + CARET +
+						"Droping table..." + CARET +
+						"Drop table successfull" + CARET
+				, getData());
+	}
+
+	@Test
+	public void testDataDeleter() {
+		// given
+		in.add("connect");
+		in.add("create|vaza|flower|char(10)");
+		in.add("insert|vaza|flower|rose");
+		in.add("delete|vaza|flower|rose");
+		in.add("drop|vaza");
+		// when
+		Main.main(new String[1]);
+		// then
+		Assert.assertEquals("Hello, user!" + CARET +
+						"Please, type `help` for list available commands. " + CARET +
+						"Starting connect..." + CARET +
+						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
+						"PostgreSQL JDBC Driver Registered!" + CARET +
+						"You made it, take control your database now!" + CARET +
+						"Creating table..." + CARET +
+						"Create table successfull." + CARET +
+						"Inserting data." + CARET +
+						"Insert data into table successfull" + CARET +
+						"Finding table..." + CARET +
+						" | rid | flower | " + CARET +
+						" | 1 | rose       | " + CARET +
+						"Find data successfull." + CARET +
+						"Droping table..." + CARET +
+						"Drop table successfull" + CARET
+				, getData());
+	}
 
 
 	public String getData() {

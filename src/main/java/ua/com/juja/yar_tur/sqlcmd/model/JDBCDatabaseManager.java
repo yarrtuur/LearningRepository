@@ -135,20 +135,31 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
 	@Override
 	public FeedBack toDelete(String tableName, DataSet dataSet) throws SQLException {
+		resultSet = null;
 		resultSet = chkTableByName(tableName);
-		return (getExecuteUpdate(query.makeSqlDeleteData(tableName, dataSet,
-				query.getColumnsWithDataType(resultSet))) == 1) ? FeedBack.OK : FeedBack.REFUSE;
+		if(resultSet.next()) {
+			int rs = resultSet.getInt(1);
+			if (rs == 1) {
+				return (getExecuteUpdate(query.makeSqlDeleteData(tableName, dataSet,
+				query.getColumnsWithDataType(resultSet))) == 0) ? FeedBack.OK : FeedBack.REFUSE;
+			}
+		}
+		return FeedBack.REFUSE;
 	}
 
 	@Override
 	public FeedBack toFind(String tableName, boolean isDetails, DataSet dataSet) throws SQLException {
+		resultSet = null;
 		resultSet = chkTableByName(tableName);
-		if(resultSet != null) {
-			resultSet = getExecuteQuery(query.makeSqlFindData(tableName, isDetails, dataSet,
-					query.getColumnsWithDataType(resultSet)));
-			if(resultSet != null){
-				printer.printFoundData(resultSet);
-				return FeedBack.OK;
+		if(resultSet.next()) {
+			int rs = resultSet.getInt(1);
+			if (rs == 1) {
+				resultSet = getExecuteQuery(query.makeSqlFindData(tableName, isDetails, dataSet,
+						query.getColumnsWithDataType(resultSet)));
+				if (resultSet != null) {
+					printer.printFoundData(resultSet);
+					return FeedBack.OK;
+				}
 			}
 		}
 		return FeedBack.REFUSE;

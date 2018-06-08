@@ -34,6 +34,7 @@ public class DataFinder implements CommandProcess, PrepareCmdLine {
         FeedBack resultCode = FeedBack.REFUSE;
         if (prepareCmdData(commandLine).equals(PrepareResult.PREPARE_RESULT_OK)) {
             try {
+                view.write("Finding table...");
                 resultCode = dbManager.toFind(tableName, isDetail, dataSet);
                 dbManager.closePrepareStatement();
             } catch (SQLException e) {
@@ -42,7 +43,7 @@ public class DataFinder implements CommandProcess, PrepareCmdLine {
             }
         }
         if( resultCode.equals(FeedBack.OK)) {
-            view.write("Find data successfully.");
+            view.write("Find data successfull.");
         } else {
             view.write("Something wrong with find data");
         }
