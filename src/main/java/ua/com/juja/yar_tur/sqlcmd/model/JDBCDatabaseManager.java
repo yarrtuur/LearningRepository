@@ -47,7 +47,7 @@ public class JDBCDatabaseManager implements DBCommandManager {
 	@Override
 	public FeedBack toDrop(String tableName) throws SQLException {
 		resultSet = null;
-		resultSet = chkTableByName(tableName);//todo
+		resultSet = chkTableByName(tableName);
 		if(resultSet.next()) {
 			int rs = resultSet.getInt(1);
 			if (rs == 1) {
@@ -106,7 +106,7 @@ public class JDBCDatabaseManager implements DBCommandManager {
 	@Override
 	public FeedBack toCreate(String tableName, DataSet dataSet) throws SQLException {
 		resultSet = null;
-		resultSet = chkTableByName(tableName);//todo
+		resultSet = chkTableByName(tableName);
 		if(resultSet.next()) {
 			int rs = resultSet.getInt(1);
 			if (rs == 1) {
@@ -156,9 +156,19 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
 	@Override
 	public FeedBack toInsert(String tableName, DataSet dataSet) throws SQLException {
+		resultSet = null;
 		resultSet = chkTableByName(tableName);
-		return (getExecuteUpdate(query.makeSqlInsertData(tableName, dataSet,
-				query.getColumnsWithDataType(resultSet))) == 1) ? FeedBack.OK : FeedBack.REFUSE;
+		if(resultSet.next()) {
+			int rs = resultSet.getInt(1);
+			if (rs == 1) {
+				resultSet = getOneTableDetails(tableName);
+				return (getExecuteUpdate(query.makeSqlInsertData(tableName, dataSet,
+						query.getColumnsWithDataType(resultSet))) == 1) ? FeedBack.OK : FeedBack.REFUSE;
+			}
+		}else{
+			throw new SQLException(String.format("table %s hasn`t exist", tableName));
+		}
+		return FeedBack.REFUSE;
 	}
 
 	private ResultSet chkTableByName(String tableName) throws SQLException {

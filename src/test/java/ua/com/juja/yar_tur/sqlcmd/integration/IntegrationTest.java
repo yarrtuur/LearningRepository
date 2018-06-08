@@ -114,7 +114,6 @@ public class IntegrationTest {
     public void testTableCreater() {
         // given
         in.add("connect");
-        in.add("drop|vaza");
         in.add("create|vaza|flower|char");
 		in.add("drop|vaza");
 		// when
@@ -126,8 +125,6 @@ public class IntegrationTest {
                         "-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
                         "PostgreSQL JDBC Driver Registered!" + CARET +
                         "You made it, take control your database now!" + CARET +
-						"Droping table..." + CARET +
-						"Drop table successfull" + CARET +
 						"Creating table..." + CARET +
 						"Create table successfull." + CARET +
 						"Droping table..." + CARET +
@@ -157,7 +154,34 @@ public class IntegrationTest {
 				, getData());
 	}
 
-    public String getData() {
+	@Test
+	public void testDataInserter() {
+		// given
+		in.add("connect");
+		in.add("create|vaza|flower|char(10)");
+		in.add("insert|vaza|flower|rose");
+		in.add("drop|vaza");
+		// when
+		Main.main(new String[1]);
+		// then
+		Assert.assertEquals("Hello, user!" + CARET +
+						"Please, type `help` for list available commands. " + CARET +
+						"Starting connect..." + CARET +
+						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
+						"PostgreSQL JDBC Driver Registered!" + CARET +
+						"You made it, take control your database now!" + CARET +
+						"Creating table..." + CARET +
+						"Create table successfull." + CARET +
+						"Inserting data." + CARET +
+						"Insert data into table successfull" + CARET +
+						"Droping table..." + CARET +
+						"Drop table successfull" + CARET
+				, getData());
+	}
+
+
+
+	public String getData() {
 		try {
 			return new String(out.toByteArray(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
