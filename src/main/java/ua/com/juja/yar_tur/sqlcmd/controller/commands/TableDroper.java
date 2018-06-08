@@ -30,18 +30,18 @@ public class TableDroper implements CommandProcess, PrepareCmdLine {
         FeedBack resultCode = FeedBack.REFUSE;
         if (prepareCmdData(commandLine).equals(PrepareResult.PREPARE_RESULT_OK)) {
             try {
-                view.write("Droping table.");
+                view.write("Droping table...");
                 resultCode = dbManager.toDrop(tableName);
                 dbManager.closePrepareStatement();
             } catch (SQLException ex) {
-                view.write("Drop table is interrupted.");
+                view.write("Drop table has interrupted.");
                 view.write(ex.getMessage());
             }
         }
         if( resultCode.equals(FeedBack.OK) ) {
             view.write("Drop table successfull");
         } else {
-            view.write("Something wrong with drop table...");
+            view.write("Something wrong with droping table...");
         }
         return CmdLineState.WAIT;
     }

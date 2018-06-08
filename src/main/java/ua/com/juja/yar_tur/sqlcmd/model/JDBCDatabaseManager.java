@@ -46,11 +46,17 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
 	@Override
 	public FeedBack toDrop(String tableName) throws SQLException {
-		if (chkTableByName(tableName) != null) {
-			return (getExecuteUpdate(query.makeSqlDropTable(tableName)) == 1) ? FeedBack.OK : FeedBack.REFUSE;
+		resultSet = null;
+		resultSet = chkTableByName(tableName);//todo
+		if(resultSet.next()) {
+			int rs = resultSet.getInt(1);
+			if (rs == 1) {
+				return (getExecuteUpdate(query.makeSqlDropTable(tableName)) == 0) ? FeedBack.OK : FeedBack.REFUSE;
+			}
 		} else {
-			return FeedBack.REFUSE;
+			throw new SQLException(String.format("table %s hasn`t exist", tableName));
 		}
+		return FeedBack.REFUSE;
 	}
 
 	@Override
@@ -107,7 +113,7 @@ public class JDBCDatabaseManager implements DBCommandManager {
 				throw new SQLException(String.format("table %s has already exist", tableName));
 			}
 		} else {
-			return (getExecuteUpdate(query.makeSqlCreateTable(tableName, dataSet)) == 1) ? FeedBack.OK : FeedBack.REFUSE;
+			return (getExecuteUpdate(query.makeSqlCreateTable(tableName, dataSet)) == 0) ? FeedBack.OK : FeedBack.REFUSE;
 		}
 		return FeedBack.REFUSE;
 	}

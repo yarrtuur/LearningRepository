@@ -32,10 +32,11 @@ public class TableCreater implements CommandProcess, PrepareCmdLine {
         FeedBack resultCode = FeedBack.REFUSE;
         if (prepareCmdData(commandLine).equals(PrepareResult.PREPARE_RESULT_OK)) {
             try {
+                view.write("Creating table...");
                 resultCode = dbManager.toCreate(tableName, dataSet);
                 dbManager.closePrepareStatement();
             } catch (SQLException ex) {
-                view.write("Create table is interrupted.");
+                view.write("Create table has interrupted.");
                 view.write(ex.getMessage());
                 try {
                     dbManager.closePrepareStatement();
@@ -46,7 +47,7 @@ public class TableCreater implements CommandProcess, PrepareCmdLine {
             }
         }
         if( resultCode.equals(FeedBack.OK)) {
-            view.write("CREATE TABLE Query returned successfully.");
+            view.write("Create table successfull.");
         } else {
             view.write("Something wrong with Create table");
         }

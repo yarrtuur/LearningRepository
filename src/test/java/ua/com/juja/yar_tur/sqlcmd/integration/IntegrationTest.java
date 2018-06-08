@@ -114,8 +114,10 @@ public class IntegrationTest {
     public void testTableCreater() {
         // given
         in.add("connect");
+        in.add("drop|vaza");
         in.add("create|vaza|flower|char");
-        // when
+		in.add("drop|vaza");
+		// when
         Main.main(new String[1]);
         // then
         Assert.assertEquals("Hello, user!" + CARET +
@@ -123,11 +125,37 @@ public class IntegrationTest {
                         "Starting connect..." + CARET +
                         "-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
                         "PostgreSQL JDBC Driver Registered!" + CARET +
-                        "You made it, take control your database now!" + CARET
-                , getData());
+                        "You made it, take control your database now!" + CARET +
+						"Droping table..." + CARET +
+						"Drop table successfull" + CARET +
+						"Creating table..." + CARET +
+						"Create table successfull." + CARET +
+						"Droping table..." + CARET +
+						"Drop table successfull" + CARET
+				, getData());
     }
 
-
+	@Test
+	public void testTableDroper() {
+		// given
+		in.add("connect");
+		in.add("create|vaza|flower|char");
+		in.add("drop|vaza");
+		// when
+		Main.main(new String[1]);
+		// then
+		Assert.assertEquals("Hello, user!" + CARET +
+						"Please, type `help` for list available commands. " + CARET +
+						"Starting connect..." + CARET +
+						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
+						"PostgreSQL JDBC Driver Registered!" + CARET +
+						"You made it, take control your database now!" + CARET +
+						"Creating table..." + CARET +
+						"Create table successfull." + CARET +
+						"Droping table..." + CARET +
+						"Drop table successfull" + CARET
+				, getData());
+	}
 
     public String getData() {
 		try {
