@@ -39,7 +39,7 @@
 
     </dependencies>
     <build>
-
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <!-- Set a compiler level -->
             <plugin>
@@ -59,9 +59,9 @@
                 <version>3.1.0</version>
                 <configuration>
                     <!-- get all project dependencies -->
-                    <descriptorRefs>
+                    <!--<descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
+                    </descriptorRefs>-->
                     <!-- MainClass in mainfest make a executable jar -->
                     <archive>
                         <manifest>
@@ -70,16 +70,16 @@
                     </archive>
 
                 </configuration>
-                <executions>
+               <!-- <executions>
                     <execution>
                         <id>make-assembly</id>
-                        <!-- bind to the packaging phase -->
+                        &lt;!&ndash; bind to the packaging phase &ndash;&gt;
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>
                     </execution>
-                </executions>
+                </executions>-->
             </plugin>
         </plugins>
     </build>

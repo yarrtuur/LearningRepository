@@ -101,7 +101,7 @@ public class PgSQLPreparator implements SQLPreparator {
 
 	@Override
 	public String makeSqlChkTableAvailable(String tableName) {
-		return String.format("SELECT t.table_name FROM information_schema.tables t " +
+		return String.format("SELECT 1 FROM information_schema.tables t " +
 				"WHERE t.table_schema = 'public' AND t.table_name = \'%s\' ", tableName);
 	}
 

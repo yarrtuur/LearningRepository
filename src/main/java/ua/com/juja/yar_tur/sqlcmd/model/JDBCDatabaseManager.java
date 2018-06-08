@@ -101,12 +101,15 @@ public class JDBCDatabaseManager implements DBCommandManager {
 	public FeedBack toCreate(String tableName, DataSet dataSet) throws SQLException {
 		resultSet = null;
 		resultSet = chkTableByName(tableName);//todo
-		if ( resultSet.next() ) {
-			return (getExecuteUpdate(query.makeSqlCreateTable(tableName, dataSet)) == 1) ? FeedBack.OK : FeedBack.REFUSE;
+		if(resultSet.next()) {
+			int rs = resultSet.getInt(1);
+			if (rs == 1) {
+				throw new SQLException(String.format("table %s has already exist", tableName));
+			}
 		} else {
-			//return FeedBack.REFUSE;
-			throw new SQLException(String.format("table %s has already exist",tableName));
+			return (getExecuteUpdate(query.makeSqlCreateTable(tableName, dataSet)) == 1) ? FeedBack.OK : FeedBack.REFUSE;
 		}
+		return FeedBack.REFUSE;
 	}
 
 	@Override
