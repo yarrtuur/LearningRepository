@@ -228,10 +228,8 @@ public class IntegrationTest {
 						"Create table successfull." + CARET +
 						"Inserting data." + CARET +
 						"Insert data into table successfull" + CARET +
-						"Finding table..." + CARET +
-						" | rid | flower | " + CARET +
-						" | 1 | rose       | " + CARET +
-						"Find data successfull." + CARET +
+						"Deleting data from table." + CARET +
+						"Delete data operation successfull." + CARET +
 						"Droping table..." + CARET +
 						"Drop table successfull" + CARET
 				, getData());

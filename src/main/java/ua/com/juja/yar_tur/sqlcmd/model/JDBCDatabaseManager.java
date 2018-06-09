@@ -140,8 +140,9 @@ public class JDBCDatabaseManager implements DBCommandManager {
 		if(resultSet.next()) {
 			int rs = resultSet.getInt(1);
 			if (rs == 1) {
+				resultSet = getOneTableDetails(tableName);
 				return (getExecuteUpdate(query.makeSqlDeleteData(tableName, dataSet,
-				query.getColumnsWithDataType(resultSet))) == 0) ? FeedBack.OK : FeedBack.REFUSE;
+				query.getColumnsWithDataType(resultSet))) > 0) ? FeedBack.OK : FeedBack.REFUSE;
 			}
 		}
 		return FeedBack.REFUSE;
