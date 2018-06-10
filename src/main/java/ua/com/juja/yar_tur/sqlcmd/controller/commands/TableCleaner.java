@@ -30,7 +30,7 @@ public class TableCleaner implements CommandProcess, PrepareCmdLine {
         FeedBack resultCode = FeedBack.REFUSE;
         if (prepareCmdData(commandLine).equals(PrepareResult.PREPARE_RESULT_OK)) {
             try {
-                view.write("Deleting data from table.");
+                view.write("Clearing table...");
                 resultCode = dbManager.toClean(tableName);
                 dbManager.closePrepareStatement();
             } catch (SQLException ex) {
@@ -39,7 +39,7 @@ public class TableCleaner implements CommandProcess, PrepareCmdLine {
             }
         }
         if( resultCode.equals(FeedBack.OK)) {
-            view.write("Data deleted successfull");
+            view.write("Clear table successfull");
         } else {
             view.write("Something wrong with Clear data");
         }

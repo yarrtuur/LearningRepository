@@ -61,16 +61,22 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
 	@Override
 	public FeedBack toClean(String tableName) throws SQLException {
+		resultSet = null;
 		resultSet = chkTableByName(tableName);
-		if ( resultSet != null) {
-			return (getExecuteUpdate(query.makeSqlClearTable(tableName)) == 1) ? FeedBack.OK : FeedBack.REFUSE;
+		if ( resultSet.next()) {
+		int rs = resultSet.getInt(1);
+			if (rs == 1) {
+				return (getExecuteUpdate(query.makeSqlClearTable(tableName)) == 1) ? FeedBack.OK : FeedBack.REFUSE;
+			}
 		} else {
-			return FeedBack.REFUSE;
+			throw new SQLException(String.format("table %s hasn`t exist", tableName));
 		}
+		return FeedBack.REFUSE;
 	}
 
 	@Override
 	public FeedBack toView(String tableName) throws SQLException {
+		resultSet = null;
 		resultSet = getOneTableDetails(tableName);
 		if(resultSet != null){
 			printer.printOneTableDetails(resultSet, tableName);
@@ -127,10 +133,18 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
 	@Override
 	public FeedBack toUpdate(String tableName, DataSet dataSetSet, DataSet dataSetWhere) throws SQLException {
+		resultSet = null;
 		resultSet = chkTableByName(tableName);
-		return (getExecuteUpdate(query.makeSqlUpdateData(tableName, dataSetSet, dataSetWhere,
-					query.getColumnsWithDataType(resultSet))) == 1)
-					? FeedBack.OK : FeedBack.REFUSE;
+		if(resultSet.next()) {
+			int rs = resultSet.getInt(1);
+			if (rs == 1) {
+				resultSet = getOneTableDetails(tableName);
+				return (getExecuteUpdate(query.makeSqlUpdateData(tableName, dataSetSet, dataSetWhere,
+						query.getColumnsWithDataType(resultSet))) == 1)
+						? FeedBack.OK : FeedBack.REFUSE;
+			}
+		}
+		return FeedBack.REFUSE;
 	}
 
 	@Override

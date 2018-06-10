@@ -208,12 +208,12 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testDataDeleter() {
+	public void testDataUpdater() {
 		// given
 		in.add("connect");
 		in.add("create|vaza|flower|char(10)");
 		in.add("insert|vaza|flower|rose");
-		in.add("delete|vaza|flower|rose");
+		in.add("update|vaza|set|flower|pion|where|flower|rose");
 		in.add("drop|vaza");
 		// when
 		Main.main(new String[1]);
@@ -228,12 +228,52 @@ public class IntegrationTest {
 						"Create table successfull." + CARET +
 						"Inserting data." + CARET +
 						"Insert data into table successfull" + CARET +
-						"Deleting data from table." + CARET +
-						"Delete data operation successfull." + CARET +
+						"Updating data." + CARET +
+						"Update data successfull" + CARET +
 						"Droping table..." + CARET +
 						"Drop table successfull" + CARET
 				, getData());
 	}
+
+	@Test
+	public void testTableCleaner() {
+		// given
+		in.add("connect");
+		in.add("create|vaza|flower|char(10)");
+		in.add("insert|vaza|flower|rose");
+		in.add("find|vaza");
+		in.add("clear|vaza");
+		in.add("find|vaza");
+		in.add("drop|vaza");
+
+		// when
+		Main.main(new String[1]);
+		// then
+		Assert.assertEquals("Hello, user!" + CARET +
+						"Please, type `help` for list available commands. " + CARET +
+						"Starting connect..." + CARET +
+						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
+						"PostgreSQL JDBC Driver Registered!" + CARET +
+						"You made it, take control your database now!" + CARET +
+						"Creating table..." + CARET +
+						"Create table successfull." + CARET +
+						"Inserting data." + CARET +
+						"Insert data into table successfull" + CARET +
+						"Finding table..." + CARET +
+						" | rid | flower | " + CARET +
+ 						" | 1 | rose       | " + CARET +
+						"Find data successfull." + CARET +
+						"Clearing table..." + CARET +
+						"Clear table successfull" + CARET +
+						"Finding table..." + CARET +
+						" | rid | flower | " + CARET +
+						"Find data successfull." + CARET +
+						"Droping table..." + CARET +
+						"Drop table successfull" + CARET
+				, getData());
+	}
+
+
 
 
 	public String getData() {
