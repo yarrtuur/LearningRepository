@@ -1,6 +1,7 @@
 package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
 import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
+import ua.com.juja.yar_tur.sqlcmd.model.ConnectionProperties;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.MakeDBConnectLine;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
@@ -9,11 +10,11 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
 
-import static ua.com.juja.yar_tur.sqlcmd.model.ConnectionProperties.*;
 
 public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
 	private DBCommandManager dbManager;
 	private View view;
+	private ConnectionProperties connectionProperties = new ConnectionProperties();//todo
 	private String login, passwd;
 
 	public PostgreConnect(DBCommandManager dbManager, View view) {
@@ -67,9 +68,9 @@ public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
 
 	@Override
 	public String setSocketProperties() {
-		this.login = DEFAULT_POSTGRE_DB_LOGIN;
-		this.passwd = DEFAULT_POSTGRE_DB_PASSWD;
-		return String.format("%s/%s", DEFAULT_POSTGRE_DB_SOCKET, DEFAULT_POSTGRE_DB_NAME);
+		this.login = connectionProperties.getConnDbLogin();
+		this.passwd = connectionProperties.getConnDbPasswd();
+		return String.format("%s/%s", connectionProperties.getConnDbSocket(), connectionProperties.getConnDbName());
 	}
 
 	@Override
