@@ -273,7 +273,19 @@ public class IntegrationTest {
 				, getData());
 	}
 
-
+	@Test
+	public void testUnreachable() {
+		// given
+		in.add("single");
+		// when
+		Main.main(new String[1]);
+		// then
+		Assert.assertEquals("Hello, user!" + CARET +
+						"Please, type `help` for list available commands. " + CARET +
+						"Not available command. Maybe your connection hasn`t done yet. " +
+						"Please type `help` to list all commands " + CARET
+				, getData());
+	}
 
 
 	public String getData() {
