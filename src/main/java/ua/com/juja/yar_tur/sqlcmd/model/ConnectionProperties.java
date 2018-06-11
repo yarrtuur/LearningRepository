@@ -1,38 +1,42 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Properties;
 
 public final class ConnectionProperties {
 
 	private Properties connProperties = new Properties();
+	private static final String CONFIG_SQLCMD_PROPERTIES = "resourses/config/sqlcmd.properties";
 
-	public ConnectionProperties() {
-		try (
-				InputStream in = getClass().getResourceAsStream("../resourses/conn.properties");
-		) {
-			connProperties.load(in);
-
-		} catch (IOException e) {
-			e.printStackTrace();
+	public ConnectionProperties() throws FileNotFoundException {
+		File file = new File(CONFIG_SQLCMD_PROPERTIES);
+		if(file.exists()) {
+			try (
+					InputStream in = new FileInputStream(file);
+			) {
+				connProperties.load(in);
+			} catch (IOException | NullPointerException e) {
+				System.out.println(e.getMessage());
+			}
+		}else{
+			throw new FileNotFoundException(String.format("Файл %s не найден",file.getAbsolutePath()));
 		}
 	}
 
 	public String getConnDbName() {
-		return connProperties.getProperty("POSTGRE_DB_NAME");
+		return connProperties.getProperty("DB_NAME");
 	}
 
 	public String getConnDbPasswd() {
-		return connProperties.getProperty("POSTGRE_DB_PASSWD");
+		return connProperties.getProperty("DB_PASSWD");
 	}
 
 	public String getConnDbLogin() {
-		return connProperties.getProperty("POSTGRE_DB_LOGIN");
+		return connProperties.getProperty("DB_LOGIN");
 	}
 
 	public String getConnDbSocket() {
-		return connProperties.getProperty("POSTGRE_DB_SOCKET");
+		return connProperties.getProperty("DB_SOCKET");
 	}
 
 

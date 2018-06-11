@@ -8,13 +8,14 @@ import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 
 
 public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
 	private DBCommandManager dbManager;
 	private View view;
-	private ConnectionProperties connectionProperties = new ConnectionProperties();//todo
+	private ConnectionProperties connectionProperties;
 	private String login, passwd;
 
 	public PostgreConnect(DBCommandManager dbManager, View view) {
@@ -46,6 +47,12 @@ public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
 		if (commandLine.length >= 4) {
 			connectLine = setSocketData(commandLine);
 		} else if (commandLine.length == 1) {
+			try {
+				connectionProperties = new ConnectionProperties();
+			} catch (FileNotFoundException e) {
+				view.write(e.getMessage());
+				return CmdLineState.WAIT;
+			}
 			connectLine = setSocketProperties();
 		} else {
 			view.write("Command line is not correct Please type 'help' command.");
