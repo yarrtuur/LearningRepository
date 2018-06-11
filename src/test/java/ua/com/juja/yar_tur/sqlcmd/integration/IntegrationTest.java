@@ -34,7 +34,7 @@ public class IntegrationTest {
 						"List of commands:" + CARET +
 						" exit : exit" + CARET +
 						" help : help" + CARET +
-						" connect : connect OR connect | username | password | database_sid | <IP-addr> | <port> " + CARET +
+						" connect : connect " + CARET +
 						" create : create | tableName | column1 | type1 | ... | columnN " + CARET +
 						" tables : tables OR tables | tableName " + CARET +
 						" insert : insert | tableName | column1 | value1 | column2 | value2 | ... | columnN | valueN " + CARET +

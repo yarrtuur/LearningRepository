@@ -18,7 +18,7 @@ public class TableViewer implements CommandProcess, PrepareCmdLine {
 	private boolean isDetails;
 	private boolean isOne;
 	private ResultSet resultSet;
-
+//todo
 	public TableViewer(DBCommandManager dbManager, View view) {
 		this.dbManager = dbManager;
 		this.view = view;

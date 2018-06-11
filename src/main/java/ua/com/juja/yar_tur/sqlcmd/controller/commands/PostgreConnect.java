@@ -44,9 +44,7 @@ public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
 		}
 		view.write("PostgreSQL JDBC Driver Registered!");
 
-		if (commandLine.length >= 4) {
-			connectLine = setSocketData(commandLine);
-		} else if (commandLine.length == 1) {
+		if (commandLine.length == 1) {
 			try {
 				connectionProperties = new ConnectionProperties();
 			} catch (FileNotFoundException e) {
@@ -80,24 +78,4 @@ public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
 		return String.format("%s/%s", connectionProperties.getConnDbSocket(), connectionProperties.getConnDbName());
 	}
 
-	@Override
-	public String setSocketData(String[] commandLine) {
-		String dbSid = "", ipAddr, connPort;
-
-		if (commandLine[1] != null) this.login = commandLine[1];
-		if (commandLine[2] != null) this.passwd = commandLine[2];
-		if (commandLine[3] != null) dbSid = commandLine[3];
-
-		if (commandLine.length >= 5) {
-			ipAddr = commandLine[4];
-		} else {
-			ipAddr = "127.0.0.1";
-		}
-		if (commandLine.length >= 6) {
-			connPort = commandLine[5];
-		} else {
-			connPort = "5432";
-		}
-		return String.format("jdbc:postgresql://%s:%s/%s", ipAddr, connPort, dbSid);
-	}
 }
