@@ -6,13 +6,13 @@ import java.util.Properties;
 public final class ConnectionProperties {
 
 	private Properties connProperties = new Properties();
-	private static final String CONFIG_SQLCMD_PROPERTIES = "resourses/config/sqlcmd.properties";
+	private static final String CONFIG_SQLCMD_PROPERTIES = "config/sqlcmd.properties";
 
 	public ConnectionProperties() throws FileNotFoundException {
 		File file = new File(CONFIG_SQLCMD_PROPERTIES);
 		if(file.exists()) {
 			try (
-					InputStream in = new FileInputStream(file);
+					InputStream in = new FileInputStream(file)
 			) {
 				connProperties.load(in);
 			} catch (IOException | NullPointerException e) {

@@ -46,7 +46,7 @@
                 <filtering>true</filtering>
             </resource>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>
@@ -80,6 +80,9 @@
                                 <resource>
                                     <directory>resources</directory>
                                     <filtering>true</filtering>
+                                    <includes>
+                                        <include>**/**/*.properties</include>
+                                    </includes>
                                 </resource>
                             </resources>
                         </configuration>
@@ -121,9 +124,7 @@
                             <Class-Path>.</Class-Path>
                         </manifestEntries>
                     </archive>
-                    <excludes>
-                        <exclude>**/*.properties</exclude>
-                    </excludes>
+
 
                     <finalName>yar_tur-${project.artifactId}-${project.version}</finalName>
                 </configuration>
