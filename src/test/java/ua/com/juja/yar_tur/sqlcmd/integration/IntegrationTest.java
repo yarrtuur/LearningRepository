@@ -23,52 +23,13 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void testHelp() {
-		// given
-		in.add("help");
-		// when
-        Main.main(new String[1]);
-		// then
-		Assert.assertEquals("Hello, user!" + CARET +
-						"Please, type `help` for list available commands. " + CARET +
-						"List of commands:" + CARET +
-						" exit : exit" + CARET +
-						" help : help" + CARET +
-						" connect : connect " + CARET +
-						" create : create | tableName | column1 | type1 | ... | columnN " + CARET +
-						" tables : tables OR tables | tableName " + CARET +
-						" insert : insert | tableName | column1 | value1 | column2 | value2 | ... | columnN | valueN " + CARET +
-						" find : find | tableName OR  find | tableName | column | value " + CARET +
-						" clear : clear | tableName " + CARET +
-						" drop : drop | tableName " + CARET +
-						" delete : delete | tableName | column | value " + CARET +
-						" update : update | tableName | SET | column1 | value1 | column2 | value2 | WHERE| columnX | valueX " + CARET +
-						" chkconn : chkconn " + CARET
-				, getData());
-	}
-
-	@Test
-	public void testExit() {
-		// given
-		in.add("exit");
-		// when
-        Main.main(new String[1]);
-		// then
-		Assert.assertEquals("Hello, user!" + CARET +
-				"Please, type `help` for list available commands. " + CARET +
-				"Closing connection..." + CARET +
-				"Connection closed." + CARET
-				, getData());
-	}
-
-	@Test
 	public void testChkConnectionOn() {
-        // given
-        in.add("connect");
-        in.add("chkconn");
-        // when
-        Main.main(new String[1]);
-        // then
+		// given
+		in.add("connect");
+		in.add("chkconn");
+		// when
+		Main.main(new String[1]);
+		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
 						"Starting connect..." + CARET +
@@ -84,7 +45,7 @@ public class IntegrationTest {
 		// given
 		in.add("chkconn");
 		// when
-        Main.main(new String[1]);
+		Main.main(new String[1]);
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
@@ -93,71 +54,12 @@ public class IntegrationTest {
 	}
 
 	@Test
-    public void testPostgreConnectOn() {
-        // given
-        in.add("connect");
-        // when
-        Main.main(new String[1]);
-        // then
-        Assert.assertEquals("Hello, user!" + CARET +
-                        "Please, type `help` for list available commands. " + CARET +
-                        "Starting connect..." + CARET +
-                        "-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
-                        "PostgreSQL JDBC Driver Registered!" + CARET +
-                        "You made it, take control your database now!" + CARET
-                , getData());
-    }
-
-    @Test
-    public void testTableCreater() {
-        // given
-        in.add("connect");
-        in.add("create|vaza|flower|char");
-		in.add("drop|vaza");
-		// when
-        Main.main(new String[1]);
-        // then
-        Assert.assertEquals("Hello, user!" + CARET +
-                        "Please, type `help` for list available commands. " + CARET +
-                        "Starting connect..." + CARET +
-                        "-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
-                        "PostgreSQL JDBC Driver Registered!" + CARET +
-                        "You made it, take control your database now!" + CARET +
-						"Creating table..." + CARET +
-						"Create table successfull." + CARET +
-						"Droping table..." + CARET +
-						"Drop table successfull" + CARET
-				, getData());
-    }
-
-	@Test
-	public void testTableDroper() {
-		// given
-		in.add("connect");
-		in.add("create|vaza|flower|char(10)");
-		in.add("drop|vaza");
-		// when
-		Main.main(new String[1]);
-		// then
-		Assert.assertEquals("Hello, user!" + CARET +
-						"Please, type `help` for list available commands. " + CARET +
-						"Starting connect..." + CARET +
-						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
-						"PostgreSQL JDBC Driver Registered!" + CARET +
-						"You made it, take control your database now!" + CARET +
-						"Creating table..." + CARET +
-						"Create table successfull." + CARET +
-						"Droping table..." + CARET +
-						"Drop table successfull" + CARET
-				, getData());
-	}
-
-	@Test
-	public void testDataInserter() {
+	public void testDataDeleter() {
 		// given
 		in.add("connect");
 		in.add("create|vaza|flower|char(10)");
 		in.add("insert|vaza|flower|rose");
+		in.add("delete|vaza|flower|rose");
 		in.add("drop|vaza");
 		// when
 		Main.main(new String[1]);
@@ -172,6 +74,8 @@ public class IntegrationTest {
 						"Create table successfull." + CARET +
 						"Inserting data." + CARET +
 						"Insert data into table successfull" + CARET +
+						"Deleting data from table." + CARET +
+						"Delete data operation successfull." + CARET +
 						"Droping table..." + CARET +
 						"Drop table successfull" + CARET
 				, getData());
@@ -199,9 +103,34 @@ public class IntegrationTest {
 						"Inserting data." + CARET +
 						"Insert data into table successfull" + CARET +
 						"Finding table..." + CARET +
- 						" | rid | flower | " + CARET +
- 						" | 1 | rose       | " + CARET +
+						" | rid | flower | " + CARET +
+						" | 1 | rose       | " + CARET +
 						"Find data successfull." + CARET +
+						"Droping table..." + CARET +
+						"Drop table successfull" + CARET
+				, getData());
+	}
+
+	@Test
+	public void testDataInserter() {
+		// given
+		in.add("connect");
+		in.add("create|vaza|flower|char(10)");
+		in.add("insert|vaza|flower|rose");
+		in.add("drop|vaza");
+		// when
+		Main.main(new String[1]);
+		// then
+		Assert.assertEquals("Hello, user!" + CARET +
+						"Please, type `help` for list available commands. " + CARET +
+						"Starting connect..." + CARET +
+						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
+						"PostgreSQL JDBC Driver Registered!" + CARET +
+						"You made it, take control your database now!" + CARET +
+						"Creating table..." + CARET +
+						"Create table successfull." + CARET +
+						"Inserting data." + CARET +
+						"Insert data into table successfull" + CARET +
 						"Droping table..." + CARET +
 						"Drop table successfull" + CARET
 				, getData());
@@ -236,6 +165,61 @@ public class IntegrationTest {
 	}
 
 	@Test
+	public void testExit() {
+		// given
+		in.add("exit");
+		// when
+		Main.main(new String[1]);
+		// then
+		Assert.assertEquals("Hello, user!" + CARET +
+						"Please, type `help` for list available commands. " + CARET +
+						"Closing connection..." + CARET +
+						"Connection closed." + CARET
+				, getData());
+	}
+
+	@Test
+	public void testHelp() {
+		// given
+		in.add("help");
+		// when
+        Main.main(new String[1]);
+		// then
+		Assert.assertEquals("Hello, user!" + CARET +
+						"Please, type `help` for list available commands. " + CARET +
+						"List of commands:" + CARET +
+						" exit : exit" + CARET +
+						" help : help" + CARET +
+						" connect : connect " + CARET +
+						" create : create | tableName | column1 | type1 | ... | columnN " + CARET +
+						" tables : tables OR tables | tableName " + CARET +
+						" insert : insert | tableName | column1 | value1 | column2 | value2 | ... | columnN | valueN " + CARET +
+						" find : find | tableName OR  find | tableName | column | value " + CARET +
+						" clear : clear | tableName " + CARET +
+						" drop : drop | tableName " + CARET +
+						" delete : delete | tableName | column | value " + CARET +
+						" update : update | tableName | SET | column1 | value1 | column2 | value2 | WHERE| columnX | valueX " + CARET +
+						" chkconn : chkconn " + CARET
+				, getData());
+	}
+
+	@Test
+    public void testPostgreConnectOn() {
+        // given
+        in.add("connect");
+        // when
+        Main.main(new String[1]);
+        // then
+        Assert.assertEquals("Hello, user!" + CARET +
+                        "Please, type `help` for list available commands. " + CARET +
+                        "Starting connect..." + CARET +
+                        "-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
+                        "PostgreSQL JDBC Driver Registered!" + CARET +
+                        "You made it, take control your database now!" + CARET
+                , getData());
+    }
+
+	@Test
 	public void testTableCleaner() {
 		// given
 		in.add("connect");
@@ -268,6 +252,76 @@ public class IntegrationTest {
 						"Finding table..." + CARET +
 						" | rid | flower | " + CARET +
 						"Find data successfull." + CARET +
+						"Droping table..." + CARET +
+						"Drop table successfull" + CARET
+				, getData());
+	}
+
+	@Test
+	public void testTableCreater() {
+		// given
+		in.add("connect");
+		in.add("create|vaza|flower|char");
+		in.add("drop|vaza");
+		// when
+		Main.main(new String[1]);
+		// then
+		Assert.assertEquals("Hello, user!" + CARET +
+						"Please, type `help` for list available commands. " + CARET +
+						"Starting connect..." + CARET +
+						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
+						"PostgreSQL JDBC Driver Registered!" + CARET +
+						"You made it, take control your database now!" + CARET +
+						"Creating table..." + CARET +
+						"Create table successfull." + CARET +
+						"Droping table..." + CARET +
+						"Drop table successfull" + CARET
+				, getData());
+	}
+
+	@Test
+	public void testTableDroper() {
+		// given
+		in.add("connect");
+		in.add("create|vaza|flower|char(10)");
+		in.add("drop|vaza");
+
+		// when
+		Main.main(new String[1]);
+		// then
+		Assert.assertEquals("Hello, user!" + CARET +
+						"Please, type `help` for list available commands. " + CARET +
+						"Starting connect..." + CARET +
+						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
+						"PostgreSQL JDBC Driver Registered!" + CARET +
+						"You made it, take control your database now!" + CARET +
+						"Creating table..." + CARET +
+						"Create table successfull." + CARET +
+						"Droping table..." + CARET +
+						"Drop table successfull" + CARET
+				, getData());
+	}
+
+	@Test
+	public void testTableViewer() {
+		// given
+		in.add("connect");
+		in.add("create|vaza|flower|char(10)");
+		in.add("tables|vaza");
+		in.add("drop|vaza");
+		// when
+		Main.main(new String[1]);
+		// then
+		Assert.assertEquals("Hello, user!" + CARET +
+						"Please, type `help` for list available commands. " + CARET +
+						"Starting connect..." + CARET +
+						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
+						"PostgreSQL JDBC Driver Registered!" + CARET +
+						"You made it, take control your database now!" + CARET +
+						"Creating table..." + CARET +
+						"Create table successfull." + CARET +
+						"Table: vaza , Columns:  rid:integer, flower:character " + CARET +
+						"View table successfull" + CARET +
 						"Droping table..." + CARET +
 						"Drop table successfull" + CARET
 				, getData());
