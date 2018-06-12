@@ -7,17 +7,18 @@ import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ChkConnectionTest {
-    DBCommandManager dbManagerMock = mock(DBCommandManager.class);
-    View viewMock = mock(Console.class);
-    ConnectionKeeper connectionKeeperMock = mock(ConnectionKeeper.class);
-    ChkConnection command;
-    String singleCommand;
-    String[] commandLine = {"chkconn"};
+    private DBCommandManager dbManagerMock = mock(DBCommandManager.class);
+    private View viewMock = mock(Console.class);
+    private ConnectionKeeper connectionKeeperMock = mock(ConnectionKeeper.class);
+    private ChkConnection command;
+    private String singleCommand;
+    private String[] commandLine = {"chkconn"};
 
     @BeforeClass
     public static void setUpClass()  {
@@ -44,7 +45,7 @@ public class ChkConnectionTest {
 
     @Test
     public void canProcess() {
-        assertEquals(true, command.canProcess(singleCommand));
+		assertTrue(command.canProcess(singleCommand));
     }
 
     @Test

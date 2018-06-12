@@ -342,7 +342,7 @@ public class IntegrationTest {
 	}
 
 
-	public String getData() {
+	private String getData() {
 		try {
 			return new String(out.toByteArray(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {

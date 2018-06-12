@@ -3,6 +3,7 @@ package ua.com.juja.yar_tur.sqlcmd.model;
 import java.util.Iterator;
 
 public class LinkedTableList implements Iterator {
+	//todo
 	private TableNode currentTableNode;
 
 	public boolean add(){
@@ -13,10 +14,7 @@ public class LinkedTableList implements Iterator {
 
 	@Override
 	public boolean hasNext() {
-		if (currentTableNode != null) {
-			return true;
-		}
-		return false;
+		return currentTableNode != null;
 	}
 
 	@Override

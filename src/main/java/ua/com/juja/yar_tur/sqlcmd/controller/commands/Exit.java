@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class Exit implements CommandProcess {
     private DBCommandManager dbManager;
-    View view;
+    private View view;
 
     public Exit(DBCommandManager dbManager, View view) {
         this.dbManager = dbManager;

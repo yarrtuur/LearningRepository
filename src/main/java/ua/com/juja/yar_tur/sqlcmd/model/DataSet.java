@@ -20,7 +20,7 @@ public class DataSet {
         private String columnName;
         private String value;
 
-        public Data(String columnName, String value) {
+        Data(String columnName, String value) {
             this.columnName = columnName;
             this.value = value;
         }

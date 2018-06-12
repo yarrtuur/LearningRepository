@@ -8,16 +8,13 @@ import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.PrepareResult;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class TableViewer implements CommandProcess, PrepareCmdLine {
 	private DBCommandManager dbManager;
 	private View view;
 	private String tableName;
-	private boolean isDetails;
 	private boolean isOne;
-	private ResultSet resultSet;
 
 	public TableViewer(DBCommandManager dbManager, View view) {
 		this.dbManager = dbManager;
@@ -44,7 +41,7 @@ public class TableViewer implements CommandProcess, PrepareCmdLine {
 				view.write(ex.getMessage());
 			}
 		}
-		if( resultCode.equals(FeedBack.OK) ) {
+		if (resultCode.equals(FeedBack.OK)) {
 			view.write("View table successfull");
 		} else {
 			view.write("Something wrong with view table...");
@@ -54,10 +51,10 @@ public class TableViewer implements CommandProcess, PrepareCmdLine {
 
 	@Override
 	public PrepareResult prepareCmdData(String[] commandLine) {
-		if (commandLine.length > 1 ) {
+		if (commandLine.length > 1) {
 			isOne = true;
 			this.tableName = commandLine[1];
-		} else  {
+		} else {
 			isOne = false;
 		}
 		return PrepareResult.PREPARE_RESULT_OK;

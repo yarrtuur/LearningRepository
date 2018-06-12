@@ -12,6 +12,7 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -52,7 +53,7 @@ public class TableViewerTest {
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
 		when(command.canProcess(singleCommand)).thenReturn(true);
-		assertEquals(true, command.canProcess(singleCommand));
+		assertTrue(command.canProcess(singleCommand));
 	}
 
 	@Test

@@ -13,6 +13,7 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -52,7 +53,7 @@ public class DataFinderTest {
 	public void canProcess() {
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		assertEquals(true, command.canProcess(singleCommand));
+		assertTrue(command.canProcess(singleCommand));
 	}
 
 	@Test

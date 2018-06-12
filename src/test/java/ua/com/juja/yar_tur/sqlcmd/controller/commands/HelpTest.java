@@ -7,6 +7,7 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class HelpTest {
 
@@ -41,7 +42,7 @@ public class HelpTest {
 
 	@Test
 	public void canProcessTest(){
-		assertEquals(true, command.canProcess(singleCommand));
+		assertTrue(command.canProcess(singleCommand));
 	}
 
 	@Test

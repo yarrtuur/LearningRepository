@@ -2,7 +2,7 @@ package ua.com.juja.yar_tur.sqlcmd.integration;
 
 import java.io.InputStream;
 
-public class ConfigurableInputStream extends InputStream {
+class ConfigurableInputStream extends InputStream {
     private final String CARET = System.getProperty ( "line.separator" );
     private String line;
 

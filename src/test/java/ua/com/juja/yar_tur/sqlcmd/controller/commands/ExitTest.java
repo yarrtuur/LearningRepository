@@ -13,6 +13,7 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -65,7 +66,7 @@ public class ExitTest {
 
 	@Test
 	public void canProcessTest() {
-		assertEquals(true, command.canProcess(singleCommand));
+		assertTrue(command.canProcess(singleCommand));
 	}
 
 }
