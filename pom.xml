@@ -7,36 +7,34 @@
     <groupId>ua.com.juja.yar_tur.sqlcmd</groupId>
     <artifactId>JujaSqlCmd</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <!--<packaging>jar</packaging>-->
     <name>JujaProject SQLcmd</name>
 
     <properties>
-        <jdk.version>1.9</jdk.version>
+        <jdk.version>1.7</jdk.version>
+        <compiler.plugin>3.7.0</compiler.plugin>
         <junit.version>4.12</junit.version>
         <mockito.version>2.18.3</mockito.version>
         <postgre.version>42.2.1</postgre.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>${mockito.version}</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgre.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
@@ -49,7 +47,7 @@
               <plugin>
                   <groupId>org.apache.maven.plugins</groupId>
                   <artifactId>maven-compiler-plugin</artifactId>
-                  <version>3.7.0</version>
+                  <version>${compiler.plugin}</version>
                    <configuration>
                         <source>${jdk.version}</source>
                         <target>${jdk.version}</target>
@@ -69,10 +67,10 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/config</outputDirectory>
+                            <outputDirectory>${basedir}/target</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${basedir}/config</directory>
+                                    <directory>${basedir}/src/main/resources</directory>
                                     <filtering>true</filtering>
                                 </resource>
                             </resources>
