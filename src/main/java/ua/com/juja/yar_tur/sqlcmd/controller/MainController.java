@@ -22,7 +22,7 @@ public class MainController {
         commands = new CreateCommands(view, dbManager).initCommandList();
         view.write("Hello, user!");
         view.write("Please, type `help` for list available commands. ");
-        while (this.getCMDState().equals(CmdLineState.WAIT)) {
+        while (!this.getCMDState().equals(CmdLineState.EXIT)) {
             this.readCmd(view.read());
         }
     }

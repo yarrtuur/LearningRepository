@@ -126,6 +126,7 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
 	@Override
 	public FeedBack toConnect(String dbSidLine, String login, String passwd) throws SQLException {
+		//todo
 		connectionKeeper.setConnection(DriverManager.getConnection(dbSidLine, login, passwd));
 		return (connectionKeeper.isConnected()) ? FeedBack.OK : FeedBack.REFUSE;
 	}

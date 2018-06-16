@@ -8,14 +8,12 @@ import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
-import java.io.FileNotFoundException;
 import java.sql.SQLException;
 
 
 public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
 	private DBCommandManager dbManager;
 	private View view;
-	private ConnectionProperties connectionProperties;
 	private String login, passwd;
 
 	public PostgreConnect(DBCommandManager dbManager, View view) {
@@ -33,36 +31,14 @@ public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
 		FeedBack resultCode;
 		String connectLine;
 
-		view.write("Starting connect...");
-		view.write("-------- PostgreSQL JDBC Connection Testing ------------");
-		try {
-			Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException ex) {
-			view.write("Where is your PostgreSQL JDBC Driver? "
-					+ "Include in your library path!");
-			return CmdLineState.WAIT;
-		}
-		view.write("PostgreSQL JDBC Driver Registered!");
-
-		if (commandLine.length == 1) {
-			try {
-				connectionProperties = new ConnectionProperties();
-			} catch (FileNotFoundException e) {
-				view.write(e.getMessage());
-				return CmdLineState.WAIT;
-			}
-			connectLine = setSocketProperties();
-		} else {
-			view.write("Command line is not correct Please type 'help' command.");
-			return CmdLineState.WAIT;
-		}
+		if (!registerJDBCDriver()) return CmdLineState.WRONG;
+		connectLine = setSocketProperties();
 
 		try {
 			resultCode = dbManager.toConnect(connectLine, this.login, this.passwd);
 		} catch (SQLException ex) {
-			view.write("Connection Failed! Check output console");
 			view.write(ex.getMessage());
-			return CmdLineState.WAIT;
+			return CmdLineState.WRONG;
 		}
 		if (resultCode.equals(FeedBack.OK)) {
 			view.write("You made it, take control your database now!");
@@ -71,8 +47,22 @@ public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
 		return CmdLineState.WAIT;
 	}
 
+	private boolean registerJDBCDriver() {
+		view.write("-------- PostgreSQL JDBC Connection Testing ------------");
+		try {
+			Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException ex) {
+			view.write("Where is your PostgreSQL JDBC Driver? "
+					+ "Include in your library path!");
+			return true;
+		}
+		view.write("PostgreSQL JDBC Driver Registered!");
+		return false;
+	}
+
 	@Override
 	public String setSocketProperties() {
+		ConnectionProperties connectionProperties = new ConnectionProperties();;
 		this.login = connectionProperties.getConnDbLogin();
 		this.passwd = connectionProperties.getConnDbPasswd();
 		return String.format("%s/%s", connectionProperties.getConnDbSocket(), connectionProperties.getConnDbName());

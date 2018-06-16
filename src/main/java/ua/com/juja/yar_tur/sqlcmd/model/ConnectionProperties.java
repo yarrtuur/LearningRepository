@@ -1,6 +1,9 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public final class ConnectionProperties {
@@ -8,7 +11,7 @@ public final class ConnectionProperties {
 	private Properties connProperties = new Properties();
 	private static final String CONFIG_SQLCMD_PROPERTIES = "config/sqlcmd.properties";
 
-	public ConnectionProperties() throws FileNotFoundException {
+	public ConnectionProperties() {
 		File file = new File(CONFIG_SQLCMD_PROPERTIES);
 		if(file.exists()) {
 			try (
@@ -18,8 +21,6 @@ public final class ConnectionProperties {
 			} catch (IOException | NullPointerException e) {
 				System.out.println(e.getMessage());
 			}
-		}else{
-			throw new FileNotFoundException(String.format("Файл %s не найден",file.getAbsolutePath()));
 		}
 	}
 
