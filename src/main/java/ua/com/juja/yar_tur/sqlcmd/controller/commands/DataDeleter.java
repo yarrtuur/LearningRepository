@@ -24,7 +24,7 @@ public class DataDeleter implements CommandProcess, PrepareCmdLine {
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return (singleCommand.equals("delete") && dbManager.getConnection().isConnected());
+        return (singleCommand.startsWith("delete") && dbManager.getConnection().isConnected());
     }
 
     @Override

@@ -14,7 +14,7 @@ public class Help implements CommandProcess {
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return singleCommand.equals("help");
+        return singleCommand.startsWith("help");
     }
 
     @Override

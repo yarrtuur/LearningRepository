@@ -26,7 +26,7 @@ public class DataFinder implements CommandProcess, PrepareCmdLine {
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return (singleCommand.equals("find") && dbManager.getConnection().isConnected());
+        return (singleCommand.startsWith("find") && dbManager.getConnection().isConnected());
     }
 
     @Override

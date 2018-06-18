@@ -14,6 +14,7 @@ public class Main {
          Printable printer = new PrinterData(view);
          DBCommandManager dbManager = new JDBCDatabaseManager(printer);
          MainController dialogue = new MainController(dbManager, view);
+
          dialogue.mainDialogueHolder();
     }
 }

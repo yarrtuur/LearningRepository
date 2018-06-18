@@ -25,7 +25,7 @@ public class DataUpdater implements CommandProcess, PrepareCmdLine {
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return (singleCommand.equals("update") && dbManager.getConnection().isConnected());
+        return (singleCommand.startsWith("update") && dbManager.getConnection().isConnected());
     }
 
     @Override

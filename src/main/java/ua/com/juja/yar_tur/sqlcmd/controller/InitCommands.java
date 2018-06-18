@@ -8,11 +8,11 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CreateCommands {
+public class InitCommands {
 	View view;
 	DBCommandManager dbManager;
 
-	public CreateCommands(View view, DBCommandManager dbManager) {
+	public InitCommands(View view, DBCommandManager dbManager) {
 		this.view = view;
 		this.dbManager = dbManager;
 	}

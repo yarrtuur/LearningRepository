@@ -24,7 +24,7 @@ public class TableCreater implements CommandProcess, PrepareCmdLine {
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return (singleCommand.equals("create") && dbManager.getConnection().isConnected());
+        return (singleCommand.startsWith("create") && dbManager.getConnection().isConnected());
     }
 
     @Override

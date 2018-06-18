@@ -23,7 +23,7 @@ public class TableViewer implements CommandProcess, PrepareCmdLine {
 
 	@Override
 	public boolean canProcess(String singleCommand) {
-		return (singleCommand.equals("tables") && dbManager.getConnection().isConnected());
+		return (singleCommand.startsWith("tables") && dbManager.getConnection().isConnected());
 	}
 
 	@Override

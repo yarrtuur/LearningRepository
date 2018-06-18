@@ -19,7 +19,7 @@ public class Exit implements CommandProcess {
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return singleCommand.equals("exit");
+        return singleCommand.startsWith("exit");
     }
 
     @Override

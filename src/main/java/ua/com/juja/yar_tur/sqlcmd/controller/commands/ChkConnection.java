@@ -16,7 +16,7 @@ public class ChkConnection implements CommandProcess {
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return (singleCommand.equals("chkconn"));
+        return (singleCommand.startsWith("chkconn"));
     }
 
     @Override

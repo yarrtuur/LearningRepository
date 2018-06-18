@@ -8,29 +8,32 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 import java.util.List;
 
 public class MainController {
-    View view;
-    DBCommandManager dbManager;
+    private View view;
+    private DBCommandManager dbManager;
     private List<CommandProcess> commands;
     private CmdLineState cmdState;
 
     public MainController(DBCommandManager dbManager, View view) {
         this.view = view;
         this.dbManager = dbManager;
+        this.commands = new InitCommands(view, dbManager).initCommandList();
     }
 
     public void mainDialogueHolder() {
-        commands = new CreateCommands(view, dbManager).initCommandList();
+        setCmdState(CmdLineState.WAIT);
         view.write("Hello, user!");
         view.write("Please, type `help` for list available commands. ");
-        while (!this.getCMDState().equals(CmdLineState.EXIT)) {
-            this.readCmd(view.read());
+        while (true){
+            if(getCMDState().equals(CmdLineState.EXIT))
+                return;
+            readCmd(view.read());
         }
     }
 
     private void readCmd(String cmdLine) {
-        String[] commandLine = cmdLine.replaceAll(" ", "").toLowerCase().split("\\|");
         for (CommandProcess dbCommand : commands) {
-            if (dbCommand.canProcess(commandLine[0])) {
+            if (dbCommand.canProcess(cmdLine)) {
+                String[] commandLine = cmdLine.replaceAll("\\s", "").toLowerCase().split("\\|");
                 setCmdState(dbCommand.process(commandLine));
                 break;
             }

@@ -23,7 +23,7 @@ public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
 
 	@Override
 	public boolean canProcess(String singleCommand) {
-		return singleCommand.equals("connect");
+		return singleCommand.startsWith("connect");
 	}
 
 	@Override
@@ -33,7 +33,6 @@ public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
 
 		if (!registerJDBCDriver()) return CmdLineState.WRONG;
 		connectLine = setSocketProperties();
-
 		try {
 			resultCode = dbManager.toConnect(connectLine, this.login, this.passwd);
 		} catch (SQLException ex) {
@@ -42,6 +41,8 @@ public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
 		}
 		if (resultCode.equals(FeedBack.OK)) {
 			view.write("You made it, take control your database now!");
+		}else{
+			view.write("There is no connect!");
 		}
 
 		return CmdLineState.WAIT;

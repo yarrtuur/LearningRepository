@@ -18,6 +18,7 @@ public class Console implements View {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             return reader.readLine();
         } catch (IOException ex) {
+            System.out.println(ex.getMessage());
             return null;
         }
     }

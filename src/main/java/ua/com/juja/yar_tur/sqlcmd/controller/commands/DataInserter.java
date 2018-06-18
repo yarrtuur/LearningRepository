@@ -24,7 +24,7 @@ public class DataInserter implements CommandProcess, PrepareCmdLine {
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return (singleCommand.equals("insert") && dbManager.getConnection().isConnected());
+        return (singleCommand.startsWith("insert") && dbManager.getConnection().isConnected());
     }
 
     @Override

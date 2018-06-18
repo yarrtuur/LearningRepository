@@ -22,7 +22,7 @@ public class TableDroper implements CommandProcess, PrepareCmdLine {
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return (singleCommand.equals("drop") && dbManager.getConnection().isConnected());
+        return (singleCommand.startsWith("drop") && dbManager.getConnection().isConnected());
     }
 
     @Override

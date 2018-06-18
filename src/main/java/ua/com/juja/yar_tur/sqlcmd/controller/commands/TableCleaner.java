@@ -22,7 +22,7 @@ public class TableCleaner implements CommandProcess, PrepareCmdLine {
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return (singleCommand.equals("clear") && dbManager.getConnection().isConnected());
+        return (singleCommand.startsWith("clear") && dbManager.getConnection().isConnected());
     }
 
     @Override
