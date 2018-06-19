@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 
 public class Console implements View {
 
+    private final String CARET = System.getProperty("line.separator");
+
     @Override
     public void write(String message) {
         System.out.println(message);
@@ -18,7 +20,7 @@ public class Console implements View {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
         	String input = reader.readLine();
-            return input;
+            return (input == null) ? CARET: input;
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return null;
