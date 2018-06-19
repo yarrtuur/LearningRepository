@@ -19,25 +19,25 @@ public class MainController {
         this.commands = new InitCommands(view, dbManager).initCommandList();
     }
 
-    public void mainDialogueHolder() {
-        setCmdState(CmdLineState.WAIT);
-        view.write("Hello, user!");
-        view.write("Please, type `help` for list available commands. ");
-        while (true){
-            if(getCMDState().equals(CmdLineState.EXIT))
-                return;
-            readCmd(view.read());
+    public void mainDialogueHolder() {//todo
+		String incomStr;
+		setCmdState(CmdLineState.WAIT);
+		view.write("Hello, user!");
+		view.write("Please, type `help` for list available commands. ");
+		while (getCMDState().equals(CmdLineState.WAIT)){
+			incomStr = view.read();
+			readCmd(incomStr);
         }
     }
 
     private void readCmd(String cmdLine) {
-        for (CommandProcess dbCommand : commands) {
-            if (dbCommand.canProcess(cmdLine)) {
-                String[] commandLine = cmdLine.replaceAll("\\s", "").toLowerCase().split("\\|");
-                setCmdState(dbCommand.process(commandLine));
-                break;
-            }
-        }
+    	for (CommandProcess dbCommand : commands) {
+    		if (dbCommand.canProcess(cmdLine)) {
+    			String[] commandLine = cmdLine.replaceAll("\\s", "").toLowerCase().split("\\|");
+    			setCmdState(dbCommand.process(commandLine));
+    			break;
+    		}
+    	}
     }
 
     private CmdLineState getCMDState() {

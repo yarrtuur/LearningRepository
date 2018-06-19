@@ -33,7 +33,8 @@ public class IntegrationTest {
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
-						"PostgreSQL JDBC Driver Registered!" + CARET
+						"PostgreSQL JDBC Driver Registered!" + CARET +
+						"Connection has already done"
 				, getData());
 	}
 

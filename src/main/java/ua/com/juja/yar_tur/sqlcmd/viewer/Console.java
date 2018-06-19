@@ -14,11 +14,13 @@ public class Console implements View {
 
     @Override
     public String read() {
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            return reader.readLine();
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+        	String input = reader.readLine();
+            return input;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
             return null;
         }
     }
