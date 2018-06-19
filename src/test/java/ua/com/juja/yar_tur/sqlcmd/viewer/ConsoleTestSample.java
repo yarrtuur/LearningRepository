@@ -10,7 +10,7 @@ import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
 
-	public class ConsoleTest {
+	public class ConsoleTestSample {
 		private static final String LINE_SEPARATOR = System.lineSeparator();
 
 		private ByteArrayOutputStream outputStream;
