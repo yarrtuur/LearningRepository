@@ -13,67 +13,62 @@ import java.sql.SQLException;
 
 
 public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
-	private DBCommandManager dbManager;
-	private View view;
-	private String login, passwd;
+    private DBCommandManager dbManager;
+    private View view;
+    private String login, passwd;
 
-	public PostgreConnect(DBCommandManager dbManager, View view) {
-		this.dbManager = dbManager;
-		this.view = view;
-	}
+    public PostgreConnect(DBCommandManager dbManager, View view) {
+        this.dbManager = dbManager;
+        this.view = view;
+    }
 
-	@Override
-	public boolean canProcess(String singleCommand) {
-		return singleCommand.startsWith("connect");
-	}
+    @Override
+    public boolean canProcess(String singleCommand) {
+        return singleCommand.startsWith("connect");
+    }
 
-	@Override
-	public CmdLineState process(String[] commandLine) {
-		FeedBack resultCode;
-		String connectLine;
-		if (!registerJDBCDriver()) return CmdLineState.WAIT;
-		connectLine = setSocketProperties();
-		try {
-			resultCode = dbManager.toConnect(connectLine, this.login, this.passwd);
-		} catch (SQLException ex) {
-			view.write(ex.getMessage());
-			return CmdLineState.WAIT;
-		}
-		if (resultCode.equals(FeedBack.OK)) {
-			view.write("You made it, take control your database now!");
-		}else{
-			view.write("There is no connect!");
-		}
+    @Override
+    public CmdLineState process(String[] commandLine) {
+        FeedBack resultCode;
+        String connectLine;
+        if (!registerJDBCDriver()) return CmdLineState.WAIT;
+        try {
+            connectLine = setSocketProperties();
+            resultCode = dbManager.toConnect(connectLine, login, passwd);
+        } catch (SQLException | NullPointerException | ExitException ex) {
+            view.write(ex.getMessage());
+            return CmdLineState.WAIT;
+        }
+        if (resultCode.equals(FeedBack.OK)) {
+            view.write("You made it, take control your database now!");
+        } else {
+            view.write("There is no connect!");
+        }
 
-		return CmdLineState.WAIT;
-	}
+        return CmdLineState.WAIT;
+    }
 
-	private boolean registerJDBCDriver() {
-		view.write("-------- PostgreSQL JDBC Connection Testing ------------");
-		try {
-			Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException ex) {
-			view.write("Where is your PostgreSQL JDBC Driver? "
-					+ "Include in your library path!");
-			view.write(ex.getMessage());
-			return false;
-		}
-		view.write("PostgreSQL JDBC Driver Registered!");
-		return true;
-	}
+    private boolean registerJDBCDriver() {
+        view.write("-------- PostgreSQL JDBC Connection Testing ------------");
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException ex) {
+            view.write("Where is your PostgreSQL JDBC Driver? "
+                    + "Include in your library path!");
+            view.write(ex.getMessage());
+            return false;
+        }
+        view.write("PostgreSQL JDBC Driver Registered!");
+        return true;
+    }
 
-	@Override
-	public String setSocketProperties() {
-		ConnectionProperties connectionProperties = null;
-		try {
-			connectionProperties = new ConnectionProperties();
-		} catch (ExitException e) {
-			e.printStackTrace();
-		}
+    @Override
+    public String setSocketProperties() throws ExitException {
+        ConnectionProperties connectionProperties = new ConnectionProperties();
 
-		this.login = connectionProperties.getConnDbLogin();
-		this.passwd = connectionProperties.getConnDbPasswd();
-		return String.format("%s/%s", connectionProperties.getConnDbSocket(), connectionProperties.getConnDbName());
-	}
+        login = connectionProperties.getConnDbLogin();
+        passwd = connectionProperties.getConnDbPasswd();
+        return String.format("%s/%s", connectionProperties.getConnDbSocket(), connectionProperties.getConnDbName());
+    }
 
 }

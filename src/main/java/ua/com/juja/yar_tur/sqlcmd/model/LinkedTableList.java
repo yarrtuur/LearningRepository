@@ -25,6 +25,11 @@ public class LinkedTableList implements Iterator {
 		return tableNodeForReturn;
 	}
 
+	@Override
+	public void remove() {
+
+	}
+
 
 }
 
