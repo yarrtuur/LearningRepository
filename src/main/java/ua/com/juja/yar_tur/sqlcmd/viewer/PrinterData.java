@@ -54,11 +54,9 @@ public class PrinterData implements Printable {
 	@Override
 	public void printOneTableDetails(ResultSet resultSet, String tableName) throws SQLException {
 		StringBuilder columnString = new StringBuilder();
-		if (resultSet != null) {
-			while (resultSet.next()) {
-				columnString.append(" ").append(resultSet.getString("column_name")).append(":")
-						.append(resultSet.getString("data_type")).append(",");
-			}
+		while (resultSet.next()) {
+			columnString.append(" ").append(resultSet.getString("column_name")).append(":")
+					.append(resultSet.getString("data_type")).append(",");
 		}
 		String columnView = columnString.replace(columnString.length() - 1, columnString.length(), " ").toString();
 		view.write(String.format("Table: %s , Columns: %s", tableName, columnView));

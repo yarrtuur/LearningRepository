@@ -4,7 +4,6 @@ import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.PrepareCmdLine;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.PrepareResult;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
@@ -27,24 +26,13 @@ public class TableViewer implements CommandProcess, PrepareCmdLine {
 	}
 
 	@Override
-	public CmdLineState process(String[] commandLine) {
-		FeedBack resultCode = FeedBack.REFUSE;
+	public CmdLineState process(String[] commandLine) {//todo
 		if (prepareCmdData(commandLine).equals(PrepareResult.PREPARE_RESULT_OK)) {
 			try {
-				if (isOne) {
-					resultCode = dbManager.toView(tableName);
-				} else {
-					resultCode = dbManager.toView();
-				}
+				dbManager.toView(tableName);
 			} catch (SQLException ex) {
-				view.write("Select data about table interrupted.");
 				view.write(ex.getMessage());
 			}
-		}
-		if (resultCode.equals(FeedBack.OK)) {
-			view.write("View table successfull");
-		} else {
-			view.write("Something wrong with view table...");
 		}
 		return CmdLineState.WAIT;
 	}
