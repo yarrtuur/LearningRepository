@@ -19,8 +19,7 @@ public class Console implements View {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
-        	String input = reader.readLine();
-            return (input == null) ? CARET: input;
+            return reader.readLine();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return null;
