@@ -74,11 +74,4 @@ public class PostgreConnectTest {
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
-	@Test
-	public void processNotCorrectCMDLine() throws SQLException{
-		commandLine = new String[]{"connect","postgres"};
-		when(dbManagerMock.toConnect(anyString(), anyString(), anyString())).thenReturn(FeedBack.OK);
-		assertEquals(CmdLineState.WAIT, command.process(commandLine));
-	}
-
 }
