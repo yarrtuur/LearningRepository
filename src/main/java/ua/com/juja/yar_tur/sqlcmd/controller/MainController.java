@@ -19,7 +19,7 @@ public class MainController {
         this.commands = new InitCommands(view, dbManager).initCommandList();
     }
 
-    public void mainDialogueHolder() {//todo
+    public void mainDialogueHolder() {
 		String incomStr;
 		setCmdState(CmdLineState.WAIT);
 		view.write("Hello, user!");
