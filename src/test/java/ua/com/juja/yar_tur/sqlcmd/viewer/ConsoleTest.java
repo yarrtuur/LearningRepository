@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
@@ -18,14 +19,14 @@ public class ConsoleTest {
 	private final String CARET = System.getProperty("line.separator");
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		out = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(out));
 		view = new Console();
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown(){
 	}
 
 	@Test
@@ -44,7 +45,7 @@ public class ConsoleTest {
 		assertEquals(message+ CARET, actual);
 	}
 	@Test
-	public void read() {
+	public void read()  {
 		String message = "help";
 		in = new ByteArrayInputStream(message.getBytes());
 		System.setIn(in);
@@ -53,7 +54,7 @@ public class ConsoleTest {
 	}
 
 	@Test
-	public void readBlank() {
+	public void readBlank()   {
 		String message = "";
 		in = new ByteArrayInputStream(message.getBytes());
 		System.setIn(in);

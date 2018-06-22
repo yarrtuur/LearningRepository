@@ -1,7 +1,5 @@
 package ua.com.juja.yar_tur.sqlcmd.viewer;
 
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.ExitException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
