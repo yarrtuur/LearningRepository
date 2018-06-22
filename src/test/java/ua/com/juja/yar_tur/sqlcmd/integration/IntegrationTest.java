@@ -34,7 +34,8 @@ public class IntegrationTest {
 						"Please, type `help` for list available commands. " + CARET +
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
-						"Connection has already done"
+						"You made it, take control your database now!" + CARET +
+						"Connection has already done" + CARET
 				, getData());
 	}
 
@@ -46,10 +47,11 @@ public class IntegrationTest {
 		Main.main(new String[1]);
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
-						"Please, type `help` for list available commands. "
+						"Please, type `help` for list available commands. " + CARET +
+						"Connection hasnn`t done yet" + CARET
 				, getData());
 	}
-/*
+
 	@Test
 	public void testDataDeleter() {
 		// given
@@ -63,7 +65,6 @@ public class IntegrationTest {
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
-						"Starting connect..." + CARET +
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
@@ -91,7 +92,6 @@ public class IntegrationTest {
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
-						"Starting connect..." + CARET +
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
@@ -120,7 +120,6 @@ public class IntegrationTest {
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
-						"Starting connect..." + CARET +
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
@@ -146,7 +145,6 @@ public class IntegrationTest {
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
-						"Starting connect..." + CARET +
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
@@ -209,10 +207,9 @@ public class IntegrationTest {
         // then
         Assert.assertEquals("Hello, user!" + CARET +
                         "Please, type `help` for list available commands. " + CARET +
-                        "Starting connect..." + CARET +
-                        "-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
-                        "PostgreSQL JDBC Driver Registered!" + CARET +
-                        "You made it, take control your database now!" + CARET
+						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
+						"PostgreSQL JDBC Driver Registered!" + CARET +
+						"You made it, take control your database now!" + CARET
                 , getData());
     }
 
@@ -232,7 +229,6 @@ public class IntegrationTest {
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
-						"Starting connect..." + CARET +
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
@@ -265,7 +261,6 @@ public class IntegrationTest {
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
-						"Starting connect..." + CARET +
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
@@ -288,7 +283,6 @@ public class IntegrationTest {
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
-						"Starting connect..." + CARET +
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
@@ -311,7 +305,6 @@ public class IntegrationTest {
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
-						"Starting connect..." + CARET +
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
@@ -337,7 +330,7 @@ public class IntegrationTest {
 						"Please type `help` to list all commands " + CARET
 				, getData());
 	}
-*/
+
 
 	private String getData() {
 		try {

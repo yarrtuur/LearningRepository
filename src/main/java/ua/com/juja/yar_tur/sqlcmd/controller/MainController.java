@@ -19,25 +19,33 @@ public class MainController {
         this.commands = new InitCommands(view, dbManager).initCommandList();
     }
 
-    public void mainDialogueHolder() {//todo
-        String incomStr;
-        setCmdState(CmdLineState.WAIT);
-        view.write("Hello, user!");
-        view.write("Please, type `help` for list available commands. ");
-        while (getCMDState().equals(CmdLineState.WAIT)) {
-            incomStr = view.read();
-            readCmd(incomStr);
-        }
+    public void mainDialogueHolder() {
+		String incomStr;
+		setCmdState(CmdLineState.WAIT);
+		view.write("Hello, user!");
+		view.write("Please, type `help` for list available commands. ");
+		try{
+			while (getCMDState().equals(CmdLineState.WAIT)){
+				incomStr = view.read();
+				readCmd(incomStr);
+			}
+		} catch (NullPointerException ex) {
+			ex.printStackTrace();
+		}
     }
 
     private void readCmd(String cmdLine) {
-        for (CommandProcess dbCommand : commands) {
-            if (dbCommand.canProcess(cmdLine)) {
-                String[] commandLine = cmdLine.replaceAll("\\s", "").toLowerCase().split("\\|");
-                setCmdState(dbCommand.process(commandLine));
-                break;
-            }
-        }
+		if (cmdLine == null) {
+			setCmdState(CmdLineState.EXIT);
+		} else {
+    		for (CommandProcess dbCommand : commands) {
+    			if (dbCommand.canProcess(cmdLine)) {
+    				String[] commandLine = cmdLine.replaceAll("\\s", "").toLowerCase().split("\\|");
+    				setCmdState(dbCommand.process(commandLine));
+    				break;
+    			}
+    		}
+		}
     }
 
     private CmdLineState getCMDState() {

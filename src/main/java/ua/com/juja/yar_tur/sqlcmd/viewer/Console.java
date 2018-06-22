@@ -24,8 +24,9 @@ public class Console implements View {
     @Override
     public String read() {
         try {
-            return reader.readLine();//todo
-        } catch (IOException|NullPointerException e) {
+            return reader.readLine();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
             return null;
         }
 

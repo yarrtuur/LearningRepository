@@ -76,21 +76,31 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
 	@Override
 	public FeedBack toView(String tableName) throws SQLException {
-		resultSet = null;
-		resultSet = getOneTableDetails(tableName);
-		if(resultSet != null){
-			printer.printOneTableDetails(resultSet, tableName);
-			closePrepareStatement();
-			return FeedBack.OK;
+		if(tableName == null){
+			toView();
 		}else {
-			closePrepareStatement();
+			ResultSet resultSet = getOneTableDetails(tableName);
+			return printOneTableParams(resultSet, tableName);
+		}
+		return FeedBack.OK;
+	}
+
+	private FeedBack printOneTableParams(ResultSet resultSet, String tableName) throws SQLException {
+		if (resultSet != null) {
+			printer.printOneTableDetails(resultSet, tableName);
+		}else{
 			return FeedBack.REFUSE;
 		}
+		return FeedBack.OK;
+	}
+
+	private ResultSet getOneTableDetails(String tableName) throws SQLException {
+		return getExecuteQuery(query.makeSqlGetOneTableDetails(tableName));
 	}
 
 	@Override
 	public FeedBack toView() throws SQLException {
-		resultSet = getTablesList();
+		ResultSet resultSet = getTablesList();
 		if(resultSet != null){
 			printer.printTablesList(resultSet);
 			closePrepareStatement();
@@ -99,10 +109,6 @@ public class JDBCDatabaseManager implements DBCommandManager {
 			closePrepareStatement();
 			return FeedBack.REFUSE;
 		}
-	}
-
-	private ResultSet getOneTableDetails(String tableName) throws SQLException {
-		return getExecuteQuery(query.makeSqlGetOneTableDetails(tableName));
 	}
 
 	private ResultSet getTablesList() throws SQLException {
@@ -126,11 +132,10 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
 	@Override
 	public FeedBack toConnect(String dbSidLine, String login, String passwd) throws SQLException {
-		//todo
-		connectionKeeper.setConnection(DriverManager.getConnection(dbSidLine, login, passwd));
+		Connection connection = DriverManager.getConnection(dbSidLine, login, passwd);
+		connectionKeeper.setConnection(connection);
 		return (connectionKeeper.isConnected()) ? FeedBack.OK : FeedBack.REFUSE;
 	}
-
 
 	@Override
 	public FeedBack toUpdate(String tableName, DataSet dataSetSet, DataSet dataSetWhere) throws SQLException {

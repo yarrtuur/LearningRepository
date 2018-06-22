@@ -9,10 +9,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class ConsoleTest {
 	private static ByteArrayOutputStream out;
-	private  static  ByteArrayInputStream in;
+	private static ByteArrayInputStream in;
 	private View view;
 	private final String CARET = System.getProperty("line.separator");
 
@@ -56,7 +57,7 @@ public class ConsoleTest {
 		String message = "";
 		in = new ByteArrayInputStream(message.getBytes());
 		System.setIn(in);
-		assertEquals(message + CARET, view.read());
+		assertNull(message, view.read());
 
 	}
 }
