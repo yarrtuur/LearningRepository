@@ -27,6 +27,7 @@ public class IntegrationTest {
 		// given
 		in.add("connect");
 		in.add("chkconn");
+        in.add("exit");
 		// when
 		Main.main(new String[1]);
 		// then
@@ -35,7 +36,9 @@ public class IntegrationTest {
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
-						"Connection has already done" + CARET
+                        "Connection has already done" + CARET +
+                        "Closing connection..." + CARET +
+                        "Connection closed." + CARET
 				, getData());
 	}
 
@@ -43,12 +46,15 @@ public class IntegrationTest {
 	public void testChkConnectionOff() {
 		// given
 		in.add("chkconn");
+        in.add("exit");
 		// when
 		Main.main(new String[1]);
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
-						"Connection hasnn`t done yet" + CARET
+                        "Connection hasnn`t done yet" + CARET +
+                        "Closing connection..." + CARET +
+                        "Connection closed." + CARET
 				, getData());
 	}
 
@@ -60,6 +66,7 @@ public class IntegrationTest {
 		in.add("insert|vaza|flower|rose");
 		in.add("delete|vaza|flower|rose");
 		in.add("drop|vaza");
+        in.add("exit");
 		// when
 		Main.main(new String[1]);
 		// then
@@ -75,7 +82,9 @@ public class IntegrationTest {
 						"Deleting data from table." + CARET +
 						"Delete data operation successfull." + CARET +
 						"Droping table..." + CARET +
-						"Drop table successfull" + CARET
+                        "Drop table successfull" + CARET +
+                        "Closing connection..." + CARET +
+                        "Connection closed." + CARET
 				, getData());
 	}
 
@@ -87,6 +96,7 @@ public class IntegrationTest {
 		in.add("insert|vaza|flower|rose");
 		in.add("find|vaza");
 		in.add("drop|vaza");
+        in.add("exit");
 		// when
 		Main.main(new String[1]);
 		// then
@@ -104,7 +114,9 @@ public class IntegrationTest {
 						" | 1 | rose       | " + CARET +
 						"Find data successfull." + CARET +
 						"Droping table..." + CARET +
-						"Drop table successfull" + CARET
+                        "Drop table successfull" + CARET +
+                        "Closing connection..." + CARET +
+                        "Connection closed." + CARET
 				, getData());
 	}
 
@@ -115,6 +127,7 @@ public class IntegrationTest {
 		in.add("create|vaza|flower|char(10)");
 		in.add("insert|vaza|flower|rose");
 		in.add("drop|vaza");
+        in.add("exit");
 		// when
 		Main.main(new String[1]);
 		// then
@@ -128,7 +141,9 @@ public class IntegrationTest {
 						"Inserting data." + CARET +
 						"Insert data into table successfull" + CARET +
 						"Droping table..." + CARET +
-						"Drop table successfull" + CARET
+                        "Drop table successfull" + CARET +
+                        "Closing connection..." + CARET +
+                        "Connection closed." + CARET
 				, getData());
 	}
 
@@ -140,6 +155,7 @@ public class IntegrationTest {
 		in.add("insert|vaza|flower|rose");
 		in.add("update|vaza|set|flower|pion|where|flower|rose");
 		in.add("drop|vaza");
+        in.add("exit");
 		// when
 		Main.main(new String[1]);
 		// then
@@ -155,7 +171,9 @@ public class IntegrationTest {
 						"Updating data." + CARET +
 						"Update data successfull" + CARET +
 						"Droping table..." + CARET +
-						"Drop table successfull" + CARET
+                        "Drop table successfull" + CARET +
+                        "Closing connection..." + CARET +
+                        "Connection closed." + CARET
 				, getData());
 	}
 
@@ -177,6 +195,7 @@ public class IntegrationTest {
 	public void testHelp() {
 		// given
 		in.add("help");
+        in.add("exit");
 		// when
         Main.main(new String[1]);
 		// then
@@ -194,7 +213,9 @@ public class IntegrationTest {
 						" drop : drop | tableName " + CARET +
 						" delete : delete | tableName | column | value " + CARET +
 						" update : update | tableName | SET | column1 | value1 | column2 | value2 | WHERE| columnX | valueX " + CARET +
-						" chkconn : chkconn " + CARET
+                        " chkconn : chkconn " + CARET +
+                        "Closing connection..." + CARET +
+                        "Connection closed." + CARET
 				, getData());
 	}
 
@@ -202,6 +223,7 @@ public class IntegrationTest {
     public void testPostgreConnectOn() {
         // given
         in.add("connect");
+        in.add("exit");
         // when
         Main.main(new String[1]);
         // then
@@ -209,7 +231,9 @@ public class IntegrationTest {
                         "Please, type `help` for list available commands. " + CARET +
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
-						"You made it, take control your database now!" + CARET
+                        "You made it, take control your database now!" + CARET +
+                        "Closing connection..." + CARET +
+                        "Connection closed." + CARET
                 , getData());
     }
 
@@ -223,6 +247,7 @@ public class IntegrationTest {
 		in.add("clear|vaza");
 		in.add("find|vaza");
 		in.add("drop|vaza");
+        in.add("exit");
 
 		// when
 		Main.main(new String[1]);
@@ -246,7 +271,9 @@ public class IntegrationTest {
 						" | rid | flower | " + CARET +
 						"Find data successfull." + CARET +
 						"Droping table..." + CARET +
-						"Drop table successfull" + CARET
+                        "Drop table successfull" + CARET +
+                        "Closing connection..." + CARET +
+                        "Connection closed." + CARET
 				, getData());
 	}
 
@@ -256,6 +283,7 @@ public class IntegrationTest {
 		in.add("connect");
 		in.add("create|vaza|flower|char");
 		in.add("drop|vaza");
+        in.add("exit");
 		// when
 		Main.main(new String[1]);
 		// then
@@ -267,7 +295,9 @@ public class IntegrationTest {
 						"Creating table..." + CARET +
 						"Create table successfull." + CARET +
 						"Droping table..." + CARET +
-						"Drop table successfull" + CARET
+                        "Drop table successfull" + CARET +
+                        "Closing connection..." + CARET +
+                        "Connection closed." + CARET
 				, getData());
 	}
 
@@ -277,6 +307,7 @@ public class IntegrationTest {
 		in.add("connect");
 		in.add("create|vaza|flower|char(10)");
 		in.add("drop|vaza");
+        in.add("exit");
 
 		// when
 		Main.main(new String[1]);
@@ -289,7 +320,9 @@ public class IntegrationTest {
 						"Creating table..." + CARET +
 						"Create table successfull." + CARET +
 						"Droping table..." + CARET +
-						"Drop table successfull" + CARET
+                        "Drop table successfull" + CARET +
+                        "Closing connection..." + CARET +
+                        "Connection closed." + CARET
 				, getData());
 	}
 
@@ -300,6 +333,7 @@ public class IntegrationTest {
 		in.add("create|vaza|flower|char(10)");
 		in.add("tables|vaza");
 		in.add("drop|vaza");
+        in.add("exit");
 		// when
 		Main.main(new String[1]);
 		// then
@@ -312,7 +346,9 @@ public class IntegrationTest {
 						"Create table successfull." + CARET +
 						"Table: vaza , Columns:  rid:integer, flower:character " + CARET +
 						"Droping table..." + CARET +
-						"Drop table successfull" + CARET
+                        "Drop table successfull" + CARET +
+                        "Closing connection..." + CARET +
+                        "Connection closed." + CARET
 				, getData());
 	}
 
@@ -320,13 +356,16 @@ public class IntegrationTest {
 	public void testUnreachable() {
 		// given
 		in.add("single");
+        in.add("exit");
 		// when
 		Main.main(new String[1]);
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
 						"Not available command. Maybe your connection hasn`t done yet. " +
-						"Please type `help` to list all commands " + CARET
+                        "Please type `help` to list all commands " + CARET +
+                        "Closing connection..." + CARET +
+                        "Connection closed." + CARET
 				, getData());
 	}
 

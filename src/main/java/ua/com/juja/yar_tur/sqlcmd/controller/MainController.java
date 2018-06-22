@@ -24,28 +24,20 @@ public class MainController {
 		setCmdState(CmdLineState.WAIT);
 		view.write("Hello, user!");
 		view.write("Please, type `help` for list available commands. ");
-		try{
-			while (getCMDState().equals(CmdLineState.WAIT)){
-				incomStr = view.read();
-				readCmd(incomStr);
-			}
-		} catch (NullPointerException ex) {
-			ex.printStackTrace();
+        while (getCMDState().equals(CmdLineState.WAIT)) {
+            incomStr = view.read();
+            readCmd(incomStr);
 		}
     }
 
     private void readCmd(String cmdLine) {
-		if (cmdLine == null) {
-			setCmdState(CmdLineState.EXIT);
-		} else {
-    		for (CommandProcess dbCommand : commands) {
-    			if (dbCommand.canProcess(cmdLine)) {
-    				String[] commandLine = cmdLine.replaceAll("\\s", "").toLowerCase().split("\\|");
-    				setCmdState(dbCommand.process(commandLine));
-    				break;
-    			}
-    		}
-		}
+        for (CommandProcess dbCommand : commands) {
+            if (dbCommand.canProcess(cmdLine)) {
+                String[] commandLine = cmdLine.replaceAll("\\s", "").toLowerCase().split("\\|");
+                setCmdState(dbCommand.process(commandLine));
+                break;
+            }
+        }
     }
 
     private CmdLineState getCMDState() {
