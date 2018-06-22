@@ -6,13 +6,6 @@ import java.io.InputStreamReader;
 
 
 public class Console implements View {
-    private BufferedReader reader;
-    private InputStreamReader in;
-
-    public Console() {
-        this.in = new InputStreamReader(System.in);
-        this.reader = new BufferedReader(in);
-    }
 
     @Override
     public void write(String message) {
@@ -21,8 +14,10 @@ public class Console implements View {
 
     @Override
     public String read() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
-            return reader.readLine();
+            String input = reader.readLine();
+            return input;
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return null;
