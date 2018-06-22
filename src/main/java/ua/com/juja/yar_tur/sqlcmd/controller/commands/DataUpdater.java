@@ -5,6 +5,7 @@ import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.model.PrepareCmdLine;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
+import ua.com.juja.yar_tur.sqlcmd.types_enums_except.ExitException;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.PrepareResult;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
@@ -50,16 +51,15 @@ public class DataUpdater implements CommandProcess, PrepareCmdLine {
     }
 
     @Override
-    public PrepareResult prepareCmdData(String[] commandLine) {
-        if(commandLine.length > 1){
-            tableName = commandLine[1];
-        } else {
-            view.write("There isn`t tablename at string. Try again.");
-            return PrepareResult.PREPARE_RESULT_WRONG;
-        }
+    public void prepareCmdData(String[] commandLine) throws ExitException {
+        chkAndGetTableName(commandLine);
+        chkAndGetFieldsParams(commandLine);
+    }
+
+    private void chkAndGetFieldsParams(String[] commandLine) throws ExitException {
+        //todo make collection instead array
         if (commandLine.length % 2 != 0 && commandLine.length > 2) {
-            view.write("String format is wrong. Must be even count of data. Try again.");
-            return PrepareResult.PREPARE_RESULT_WRONG;
+            throw new ExitException("String format is wrong. Must be even count of data. Try again.");
         } else {
             int where = 0, set = 0;
             for (int i = 0; i < commandLine.length; i++) {
@@ -80,6 +80,13 @@ public class DataUpdater implements CommandProcess, PrepareCmdLine {
                 dataSetWhere.add(commandLine[i], commandLine[i + 1]);
             }
         }
-        return PrepareResult.PREPARE_RESULT_OK;
+    }
+
+    private void chkAndGetTableName(String[] commandLine) throws ExitException {
+        if(commandLine.length > 1){
+            tableName = commandLine[1];
+        } else {
+            throw new ExitException("There isn`t tablename at string. Try again.");
+        }
     }
 }

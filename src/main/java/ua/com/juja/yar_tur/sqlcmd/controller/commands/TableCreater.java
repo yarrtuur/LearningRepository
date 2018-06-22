@@ -5,8 +5,7 @@ import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.model.PrepareCmdLine;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.PrepareResult;
+import ua.com.juja.yar_tur.sqlcmd.types_enums_except.ExitException;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
@@ -29,51 +28,39 @@ public class TableCreater implements CommandProcess, PrepareCmdLine {
 
     @Override
     public CmdLineState process(String[] commandLine) {
-        FeedBack resultCode = FeedBack.REFUSE;
-        if (prepareCmdData(commandLine).equals(PrepareResult.PREPARE_RESULT_OK)) {
-            try {
-                view.write("Creating table...");
-                resultCode = dbManager.toCreate(tableName, dataSet);
-                dbManager.closePrepareStatement();
-            } catch (SQLException ex) {
-                view.write("Create table has interrupted.");
-                view.write(ex.getMessage());
-                try {
-                    dbManager.closePrepareStatement();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                return CmdLineState.WAIT;
-            }
-        }
-        if( resultCode.equals(FeedBack.OK)) {
-            view.write("Create table successfull.");
-        } else {
-            view.write("Something wrong with Create table");
+        try {
+            prepareCmdData(commandLine);
+            dbManager.toCreate(tableName, dataSet);
+        } catch (SQLException | ExitException ex) {
+            view.write(ex.getMessage());
         }
         return CmdLineState.WAIT;
     }
 
+
     @Override
-    public PrepareResult prepareCmdData(String[] commandLine) {
-        if (commandLine.length > 1) {
-            if (commandLine[1] != null) {
-                tableName = commandLine[1];
-            }
-        } else {
-            view.write("There isn`t tablename at string. Try again.");
-            return PrepareResult.PREPARE_RESULT_WRONG;
-        }
+    public void prepareCmdData(String[] commandLine) throws ExitException {
+        chkAndGetTableName(commandLine);
+        chkAndGetFieldsParams(commandLine);
+    }
+
+    private void chkAndGetFieldsParams(String[] commandLine) throws ExitException {
         if (commandLine.length % 2 != 0) {
-            view.write("String format is wrong. Try again.");
-            return PrepareResult.PREPARE_RESULT_WRONG;
+            throw new ExitException("String format is wrong. Try again.");
         } else {
             dataSet = new DataSet();
             for (int i = 2; i < commandLine.length; i += 2) {
                 dataSet.add(commandLine[i], commandLine[i + 1]);
             }
         }
-        return PrepareResult.PREPARE_RESULT_OK;
+    }
+
+    private void chkAndGetTableName(String[] commandLine) throws ExitException {
+        if (commandLine.length > 1) {
+            tableName = commandLine[1];
+        } else {
+            throw new ExitException("There isn`t tablename at string. Try again.");
+        }
     }
 
 }
