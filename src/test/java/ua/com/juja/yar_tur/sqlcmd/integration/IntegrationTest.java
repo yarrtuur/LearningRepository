@@ -311,7 +311,6 @@ public class IntegrationTest {
 						"Creating table..." + CARET +
 						"Create table successfull." + CARET +
 						"Table: vaza , Columns:  rid:integer, flower:character " + CARET +
-						"View table successfull" + CARET +
 						"Droping table..." + CARET +
 						"Drop table successfull" + CARET
 				, getData());
