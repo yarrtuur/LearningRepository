@@ -6,8 +6,6 @@ import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.model.PrepareCmdLine;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.ExitException;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.PrepareResult;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
@@ -34,21 +32,11 @@ public class DataUpdater implements CommandProcess, PrepareCmdLine {
 
     @Override
     public CmdLineState process(String[] commandLine) {
-        FeedBack resultCode = FeedBack.REFUSE;
-        if (prepareCmdData(commandLine).equals(PrepareResult.PREPARE_RESULT_OK)) {
-            try {
-                view.write("Updating data.");
-                resultCode = this.dbManager.toUpdate(this.tableName, this.dataSetSet, this.dataSetWhere);
-                dbManager.closePrepareStatement();
-            } catch (SQLException ex) {
-                view.write("Update data is interrupted...");
-                view.write(ex.getMessage());
-            }
-        }
-        if( resultCode.equals(FeedBack.OK) ) {
-            view.write("Update data successfull");
-        } else {
-            view.write("Something wrong with update data...");
+        try {
+            prepareCmdData(commandLine);
+            dbManager.toUpdate(tableName, dataSetSet, dataSetWhere);//todo Object instead three args
+        } catch (SQLException | ExitException ex) {
+            view.write(ex.getMessage());
         }
         return CmdLineState.WAIT;
     }
@@ -60,21 +48,24 @@ public class DataUpdater implements CommandProcess, PrepareCmdLine {
     }
 
     private void chkAndGetFieldsParams(String[] commandLine) throws ExitException {
-        //todo make collection instead array
         List<String> cmdList = new ArrayList<String> (Arrays.asList(commandLine));
         if (cmdList.size() % 2 != 0 && cmdList.size() > 2) {
             throw new ExitException("String format is wrong. Must be even count of data. Try again.");
         } else {
-            int set = cmdList.indexOf("set");
-            int where = cmdList.indexOf("where");
-            dataSetSet = new DataSet();
-            for (int i = set + 1; i < where; i += 2) {
-                dataSetSet.add(cmdList.get(i), cmdList.get(i + 1));
-            }
-            dataSetWhere = new DataSet();
-            for (int i = where + 1; i < commandLine.length; i += 2) {
-                dataSetWhere.add(cmdList.get(i), cmdList.get(i));
-            }
+            fillDataSets(cmdList);
+        }
+    }
+
+    private void fillDataSets(List<String> cmdList) {
+        int set = cmdList.indexOf("set");
+        int where = cmdList.indexOf("where");
+        dataSetSet = new DataSet(); //todo make collection methods instead for loop
+        for (int i = set + 1; i < where; i += 2) {
+            dataSetSet.add(cmdList.get(i), cmdList.get(i + 1));
+        }
+        dataSetWhere = new DataSet();
+        for (int i = where + 1; i < cmdList.size(); i += 2) {
+            dataSetWhere.add(cmdList.get(i), cmdList.get(i));
         }
     }
 
