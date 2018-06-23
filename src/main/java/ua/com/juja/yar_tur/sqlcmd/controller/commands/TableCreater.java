@@ -39,8 +39,8 @@ public class TableCreater implements CommandProcess, PrepareCmdLine, PrepareComm
 
     @Override
     public void prepareCmdData(String[] commandLine) throws ExitException {
-        tableName = chkAndGetTableName(commandLine);
-        dataSet = chkAndGetFieldsParams(commandLine);
+        tableName = getTableName(commandLine);
+        dataSet = getFieldsParams(commandLine);
     }
 
 }

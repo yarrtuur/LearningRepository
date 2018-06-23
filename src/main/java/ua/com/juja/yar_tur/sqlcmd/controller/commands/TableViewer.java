@@ -34,10 +34,10 @@ public class TableViewer implements CommandProcess, PrepareCmdLine, PrepareComma
     }
 
     public void prepareCmdData(String[] commandLine) {
-        tableName = chkAndGetTableName(commandLine);
+        tableName = getTableName(commandLine);
     }
 
-    public String chkAndGetTableName(String[] commandLine) {
+    public String getTableName(String[] commandLine) {
         if (commandLine.length > 1) {
             return commandLine[1];
         }

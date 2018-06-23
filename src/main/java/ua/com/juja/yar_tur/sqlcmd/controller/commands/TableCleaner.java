@@ -37,6 +37,6 @@ public class TableCleaner implements CommandProcess, PrepareCmdLine, PrepareComm
 
 	@Override
 	public void prepareCmdData(String[] commandLine) throws ExitException {
-		tableName = chkAndGetTableName(commandLine);
+		tableName = getTableName(commandLine);
 	}
 }

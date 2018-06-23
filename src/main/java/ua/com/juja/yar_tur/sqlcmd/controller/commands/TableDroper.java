@@ -37,7 +37,7 @@ public class TableDroper implements CommandProcess, PrepareCmdLine, PrepareComma
 
     @Override
     public void prepareCmdData(String[] commandLine) throws ExitException {
-        tableName = chkAndGetTableName(commandLine);
+        tableName = getTableName(commandLine);
     }
 
 }

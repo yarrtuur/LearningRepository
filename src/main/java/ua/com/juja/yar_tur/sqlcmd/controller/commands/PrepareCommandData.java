@@ -5,7 +5,7 @@ import ua.com.juja.yar_tur.sqlcmd.types_enums_except.ExitException;
 
 public interface PrepareCommandData {
 
-    default DataSet chkAndGetFieldsParams(String[] commandLine) throws ExitException {
+    default DataSet getFieldsParams(String[] commandLine) throws ExitException {
         DataSet dataSet;
         if (commandLine.length % 2 != 0 && commandLine.length > 2) {
             throw new ExitException("String format is wrong. Try again.");
@@ -18,7 +18,7 @@ public interface PrepareCommandData {
         return dataSet;
     }
 
-    default String chkAndGetTableName(String[] commandLine) throws ExitException {
+    default String getTableName(String[] commandLine) throws ExitException {
         if (commandLine.length > 1) {
             return commandLine[1];
         } else {

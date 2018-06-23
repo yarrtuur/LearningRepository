@@ -41,11 +41,11 @@ public class DataFinder implements CommandProcess, PrepareCmdLine, PrepareComman
 
     @Override
     public void prepareCmdData(String[] commandLine) throws ExitException {
-        tableName = chkAndGetTableName(commandLine);
-        dataSet = chkAndGetFieldsParams(commandLine);
+        tableName = getTableName(commandLine);
+        dataSet = getFieldsParams(commandLine);
     }
 
-    public DataSet chkAndGetFieldsParams(String[] commandLine) throws ExitException {
+    public DataSet getFieldsParams(String[] commandLine) throws ExitException {
         DataSet dataSet;
         if (commandLine.length % 2 != 0 && commandLine.length > 2) {
             throw new ExitException("String format is wrong. Must be even count of data. Try again.");
