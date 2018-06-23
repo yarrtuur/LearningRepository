@@ -10,7 +10,7 @@
     <name>JujaProject SQLcmd</name>
 
     <properties>
-        <jdk.version>1.7</jdk.version>
+        <jdk.version>1.8</jdk.version>
         <compiler.plugin>3.7.0</compiler.plugin>
         <junit.version>4.12</junit.version>
         <mockito.version>2.18.3</mockito.version>
@@ -116,6 +116,14 @@
 
 
                     <finalName>yar_tur-${project.artifactId}-${project.version}</finalName>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
         </plugins>

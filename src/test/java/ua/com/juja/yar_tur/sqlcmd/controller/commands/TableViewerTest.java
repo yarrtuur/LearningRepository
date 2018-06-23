@@ -5,7 +5,6 @@ import ua.com.juja.yar_tur.sqlcmd.model.ConnectionKeeper;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
@@ -14,8 +13,7 @@ import java.sql.SQLException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class TableViewerTest {
 	private String singleCommand;
@@ -26,23 +24,23 @@ public class TableViewerTest {
 	private TableViewer command;
 
 	@BeforeClass
-	public static void setUpClass() throws Exception {
+    public static void setUpClass() {
 		System.out.println("Before TableViewerTest.class");
 	}
 
 	@AfterClass
-	public static void tearDownClass() throws Exception {
+    public static void tearDownClass() {
 		System.out.println("After TableViewerTest.class");
 	}
 
 	@Before
-	public void setUp() throws Exception {
+    public void setUp() {
 		singleCommand = "tables";
 		command = new TableViewer(dbManagerMock, viewMock);
 	}
 
 	@After
-	public void tearDown() throws Exception {
+    public void tearDown() {
 		singleCommand = null;
 		commandLine = null;
 		command = null;
@@ -61,7 +59,7 @@ public class TableViewerTest {
 		commandLine = new String[]{"tables"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toView()).thenReturn(FeedBack.OK);
+        doNothing().when(dbManagerMock).toView(anyString());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
@@ -70,7 +68,16 @@ public class TableViewerTest {
 		commandLine = new String[]{"tables","tbl"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toView(anyString())).thenReturn(FeedBack.OK);
+        doNothing().when(dbManagerMock).toView(anyString());
+        assertEquals(CmdLineState.WAIT, command.process(commandLine));
+    }
+
+    @Test
+    public void processOneTablePrintWithSQLE() throws SQLException {
+        commandLine = new String[]{"tables", "tbl"};
+        when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
+        when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
+        doThrow(SQLException.class).when(dbManagerMock).toView(anyString());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
@@ -79,7 +86,7 @@ public class TableViewerTest {
 		commandLine = new String[]{"tables"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toView()).thenThrow(new SQLException());
+        doThrow(SQLException.class).when(dbManagerMock).toView(anyString());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 

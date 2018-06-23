@@ -342,11 +342,7 @@ public class IntegrationTest {
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
-						"Creating table..." + CARET +
-						"Create table successfull." + CARET +
 						"Table: vaza , Columns:  rid:integer, flower:character " + CARET +
-						"Droping table..." + CARET +
-                        "Drop table successfull" + CARET +
                         "Closing connection..." + CARET +
                         "Connection closed." + CARET
 				, getData());
@@ -368,11 +364,6 @@ public class IntegrationTest {
                         "-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
                         "PostgreSQL JDBC Driver Registered!" + CARET +
                         "You made it, take control your database now!" + CARET +
-                        "Creating table..." + CARET +
-                        "Create table successfull." + CARET +
-
-                        "Droping table..." + CARET +
-                        "Drop table successfull" + CARET +
                         "Closing connection..." + CARET +
                         "Connection closed." + CARET
                 , getData());

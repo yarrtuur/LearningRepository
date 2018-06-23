@@ -6,7 +6,6 @@ import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
@@ -16,8 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class TableCreaterTest {
 	private String singleCommand;
@@ -25,37 +23,35 @@ public class TableCreaterTest {
 	private DBCommandManager dbManagerMock = mock(JDBCDatabaseManager.class);
 	private ConnectionKeeper connectionKeeperMock = mock(ConnectionKeeper.class);
 	private View viewMock = mock(Console.class);
-	private DataSet dataSetMock = mock(DataSet.class);
 	private TableCreater command;
 
 	@BeforeClass
-	public static void setUpClass() throws Exception {
+	public static void setUpClass() {
 		System.out.println("Before TableCreaterTest.class");
 	}
 
 	@AfterClass
-	public static void tearDownClass() throws Exception {
+	public static void tearDownClass() {
 		System.out.println("After TableCreaterTest.class");
 	}
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		singleCommand = "create";
 		command = new TableCreater(dbManagerMock,viewMock);
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		singleCommand = null;
 		command = null;
 		commandLine = null;
 	}
 
 	@Test
-	public void canProcess() throws SQLException {
+	public void canProcess() {
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toConnect(anyString(), anyString(), anyString())).thenReturn(FeedBack.OK);
 		assertTrue(command.canProcess(singleCommand));
 	}
 
@@ -64,7 +60,7 @@ public class TableCreaterTest {
 		commandLine = new String[] {"create","tbl","fld","int"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toCreate(anyString(), any(DataSet.class))).thenReturn(FeedBack.OK);
+		doNothing().when(dbManagerMock).toCreate(anyString(), any(DataSet.class));
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
@@ -73,8 +69,7 @@ public class TableCreaterTest {
 		commandLine = new String[] {"create","tbl","fld","int"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toCreate(anyString(), any(DataSet.class))).
-				thenThrow(new SQLException());
+		doThrow(SQLException.class).when(dbManagerMock).toCreate(anyString(), any(DataSet.class));
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
@@ -83,7 +78,7 @@ public class TableCreaterTest {
 		commandLine = new String[] {"create"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toCreate(anyString(), any(DataSet.class))).thenReturn(FeedBack.OK);
+		doNothing().when(dbManagerMock).toCreate(anyString(), any(DataSet.class));
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
@@ -92,7 +87,7 @@ public class TableCreaterTest {
 		commandLine = new String[] {"create","tbl","fld"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toCreate(anyString(), any(DataSet.class))).thenReturn(FeedBack.OK);
+		doNothing().when(dbManagerMock).toCreate(anyString(), any(DataSet.class));
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 

@@ -9,7 +9,7 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
 
-public class TableCleaner implements CommandProcess, PrepareCmdLine {
+public class TableCleaner implements CommandProcess, PrepareCmdLine, PrepareCommandData {
 	private DBCommandManager dbManager;
 	private View view;
 	private String tableName;
@@ -37,10 +37,6 @@ public class TableCleaner implements CommandProcess, PrepareCmdLine {
 
 	@Override
 	public void prepareCmdData(String[] commandLine) throws ExitException {
-		if (commandLine.length > 1) {
-			tableName = commandLine[1];
-		} else {
-			throw new ExitException("There isn`t tablename at string. Try again.");
-		}
+		tableName = chkAndGetTableName(commandLine);
 	}
 }

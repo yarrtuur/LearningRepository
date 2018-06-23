@@ -8,35 +8,41 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
 
-public class TableViewer implements CommandProcess, PrepareCmdLine {
-	private DBCommandManager dbManager;
-	private View view;
-	private String tableName;
+public class TableViewer implements CommandProcess, PrepareCmdLine, PrepareCommandData {
+    private DBCommandManager dbManager;
+    private View view;
+    private String tableName;
 
-	public TableViewer(DBCommandManager dbManager, View view) {
-		this.dbManager = dbManager;
-		this.view = view;
-	}
+    public TableViewer(DBCommandManager dbManager, View view) {
+        this.dbManager = dbManager;
+        this.view = view;
+    }
 
-	@Override
-	public boolean canProcess(String singleCommand) {
-		return (singleCommand.startsWith("tables") && dbManager.getConnection().isConnected());
-	}
+    @Override
+    public boolean canProcess(String singleCommand) {
+        return (singleCommand.startsWith("tables") && dbManager.getConnection().isConnected());
+    }
 
-	@Override
-	public CmdLineState process(String[] commandLine) {//todo
-		try {
-			prepareCmdData(commandLine);
-			dbManager.toView(tableName);
-		} catch (SQLException ex) {
-			view.write(ex.getMessage());
-		}
-		return CmdLineState.WAIT;
-	}
+    @Override
+    public CmdLineState process(String[] commandLine) {//todo
+        try {
+            prepareCmdData(commandLine);
+            dbManager.toView(tableName);
+        } catch (SQLException ex) {
+            view.write(ex.getMessage());
+        }
+        return CmdLineState.WAIT;
+    }
 
-	public void prepareCmdData(String[] commandLine) {
-		if (commandLine.length > 1)
-			this.tableName = commandLine[1];
-	}
+    public void prepareCmdData(String[] commandLine) {
+        tableName = chkAndGetTableName(commandLine);
+    }
+
+    public String chkAndGetTableName(String[] commandLine) {
+        if (commandLine.length > 1) {
+            return commandLine[1];
+        }
+        return null;
+    }
 
 }

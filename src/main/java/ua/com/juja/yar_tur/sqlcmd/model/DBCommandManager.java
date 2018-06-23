@@ -45,14 +45,14 @@ public interface DBCommandManager {
     /**
      * to view one table with details
      * */
-    FeedBack toView(String tableName) throws SQLException;
+    void toView(String tableName) throws SQLException;
 
     // insert into  table
     FeedBack toInsert(String tableName, DataSet dataSet)throws SQLException;
 
     //create table
-    FeedBack toCreate(String tableName, DataSet dataSet)throws SQLException;
+    void toCreate(String tableName, DataSet dataSet) throws SQLException;
 
     // connect to DB
-    FeedBack toConnect(String dbSidLine, String login, String passwd)throws SQLException;
+    void toConnect(String dbSidLine, String login, String passwd) throws SQLException;
 }

@@ -9,7 +9,7 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
 
-public class TableDroper implements CommandProcess, PrepareCmdLine {
+public class TableDroper implements CommandProcess, PrepareCmdLine, PrepareCommandData {
     private DBCommandManager dbManager;
     private View view;
     private String tableName;
@@ -37,11 +37,7 @@ public class TableDroper implements CommandProcess, PrepareCmdLine {
 
     @Override
     public void prepareCmdData(String[] commandLine) throws ExitException {
-        if(commandLine.length == 2) {
-            tableName = commandLine[1];
-        }else {
-            throw new ExitException("There isn`t tablename at string. Try again.");
-        }
+        tableName = chkAndGetTableName(commandLine);
     }
 
 }

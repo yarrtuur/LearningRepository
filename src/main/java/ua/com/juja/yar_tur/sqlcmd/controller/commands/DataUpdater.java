@@ -43,12 +43,20 @@ public class DataUpdater implements CommandProcess, PrepareCmdLine {
 
     @Override
     public void prepareCmdData(String[] commandLine) throws ExitException {
-        chkAndGetTableName(commandLine);
+        tableName = chkAndGetTableName(commandLine);
         chkAndGetFieldsParams(commandLine);
     }
 
+    private String chkAndGetTableName(String[] commandLine) throws ExitException {
+        if (commandLine.length > 1) {
+            return commandLine[1];
+        } else {
+            throw new ExitException("There isn`t tablename at string. Try again.");
+        }
+    }
+
     private void chkAndGetFieldsParams(String[] commandLine) throws ExitException {
-        List<String> cmdList = new ArrayList<String> (Arrays.asList(commandLine));
+        List<String> cmdList = new ArrayList<>(Arrays.asList(commandLine));
         if (cmdList.size() % 2 != 0 && cmdList.size() > 2) {
             throw new ExitException("String format is wrong. Must be even count of data. Try again.");
         } else {
@@ -69,11 +77,4 @@ public class DataUpdater implements CommandProcess, PrepareCmdLine {
         }
     }
 
-    private void chkAndGetTableName(String[] commandLine) throws ExitException {
-        if(commandLine.length > 1){
-            tableName = commandLine[1];
-        } else {
-            throw new ExitException("There isn`t tablename at string. Try again.");
-        }
-    }
 }

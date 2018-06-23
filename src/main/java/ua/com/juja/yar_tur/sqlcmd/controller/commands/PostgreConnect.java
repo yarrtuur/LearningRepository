@@ -6,7 +6,6 @@ import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.MakeDBConnectLine;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.ExitException;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
@@ -29,22 +28,15 @@ public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
 
     @Override
     public CmdLineState process(String[] commandLine) {
-        FeedBack resultCode;
         String connectLine;
         if (!registerJDBCDriver()) return CmdLineState.WAIT;
         try {
             connectLine = setSocketProperties();
-            resultCode = dbManager.toConnect(connectLine, login, passwd);
+            dbManager.toConnect(connectLine, login, passwd);
         } catch (SQLException | NullPointerException | ExitException ex) {
             view.write(ex.getMessage());
             return CmdLineState.WAIT;
         }
-        if (resultCode.equals(FeedBack.OK)) {
-            view.write("You made it, take control your database now!");
-        } else {
-            view.write("There is no connect!");
-        }
-
         return CmdLineState.WAIT;
     }
 
@@ -65,7 +57,6 @@ public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
     @Override
     public String setSocketProperties() throws ExitException {
         ConnectionProperties connectionProperties = new ConnectionProperties();
-
         login = connectionProperties.getConnDbLogin();
         passwd = connectionProperties.getConnDbPasswd();
         return String.format("%s/%s", connectionProperties.getConnDbSocket(), connectionProperties.getConnDbName());

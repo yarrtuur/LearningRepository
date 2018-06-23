@@ -10,7 +10,7 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
 
-public class DataInserter implements CommandProcess, PrepareCmdLine {
+public class DataInserter implements CommandProcess, PrepareCmdLine, PrepareCommandData {
     private DBCommandManager dbManager;
     private View view;
     private String tableName;
@@ -39,27 +39,8 @@ public class DataInserter implements CommandProcess, PrepareCmdLine {
 
     @Override
     public void prepareCmdData(String[] commandLine) throws ExitException {
-        chkAndGetTableName(commandLine);
-        chkAndGetFieldsParams(commandLine);
+        tableName = chkAndGetTableName(commandLine);
+        dataSet = chkAndGetFieldsParams(commandLine);
     }
 
-    private void chkAndGetFieldsParams(String[] commandLine) throws ExitException {
-        if (commandLine.length % 2 != 0 && commandLine.length > 2) {
-            throw new ExitException("String format is wrong. Must be even count of data. Try again.");
-        } else {
-            dataSet = new DataSet();
-            for (int i = 2; i < commandLine.length; i += 2) {
-                dataSet.add(commandLine[i], commandLine[i + 1]);
-            }
-        }
-    }
-
-    private void chkAndGetTableName(String[] commandLine) throws ExitException {
-        if (commandLine.length > 1) {
-            tableName = commandLine[1];
-        } else {
-            throw new ExitException("There isn`t tablename at string. Try again.");
-
-        }
-    }
 }
