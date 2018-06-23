@@ -344,6 +344,25 @@ public class IntegrationTest {
     }
 
 	@Test
+	public void testAllTableViewerifNoTables() {//todo
+		// given
+		in.add("connect");
+		in.add("tables");
+		in.add("exit");
+		// when
+		Main.main(new String[1]);
+		// then
+		Assert.assertEquals("Hello, user!" + CARET +
+						"Please, type `help` for list available commands. " + CARET +
+						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
+						"PostgreSQL JDBC Driver Registered!" + CARET +
+						"You made it, take control your database now!" + CARET +
+						"There are no tables in the database" + CARET +
+						"Connection closed." + CARET
+				, getData());
+	}
+
+	@Test
 	public void testUnreachable() {
 		// given
 		in.add("single");

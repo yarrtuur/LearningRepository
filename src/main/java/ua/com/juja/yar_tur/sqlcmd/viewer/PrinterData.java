@@ -47,8 +47,12 @@ public class PrinterData implements Printable {
 		for (String step : tblList) {
 			tableString.append(" ").append(step).append(",");
 		}
-		view.write(String.format("Tables: %s ",
-				tableString.replace(tableString.length() - 1, tableString.length(), " ").toString()));
+		try {
+			view.write(String.format("Tables: %s ",
+					tableString.replace(tableString.length() - 1, tableString.length(), " ").toString()));
+		} catch (StringIndexOutOfBoundsException e) {
+			view.write("There are no tables in the database");
+		}
 	}
 
 	@Override
