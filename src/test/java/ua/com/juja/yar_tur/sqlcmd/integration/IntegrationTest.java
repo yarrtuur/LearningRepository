@@ -75,7 +75,6 @@ public class IntegrationTest {
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
-						"Creating table..." + CARET +
 						"Create table successfull." + CARET +
 						"Inserting data." + CARET +
 						"Insert data into table successfull" + CARET +
@@ -363,7 +362,6 @@ public class IntegrationTest {
                         "Please, type `help` for list available commands. " + CARET +
                         "-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
                         "PostgreSQL JDBC Driver Registered!" + CARET +
-                        "You made it, take control your database now!" + CARET +
                         "Closing connection..." + CARET +
                         "Connection closed." + CARET
                 , getData());

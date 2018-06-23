@@ -31,6 +31,7 @@ public class TableCreater implements CommandProcess, PrepareCmdLine, PrepareComm
         try {
             prepareCmdData(commandLine);
             dbManager.toCreate(tableName, dataSet);
+            view.write("Create table successfull.");
         } catch (SQLException | ExitException ex) {
             view.write(ex.getMessage());
         }

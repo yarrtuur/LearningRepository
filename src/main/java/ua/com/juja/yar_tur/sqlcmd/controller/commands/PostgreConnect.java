@@ -33,6 +33,7 @@ public class PostgreConnect implements CommandProcess, MakeDBConnectLine {
         try {
             connectLine = setSocketProperties();
             dbManager.toConnect(connectLine, login, passwd);
+            view.write("You made it, take control your database now!");
         } catch (SQLException | NullPointerException | ExitException ex) {
             view.write(ex.getMessage());
             return CmdLineState.WAIT;
