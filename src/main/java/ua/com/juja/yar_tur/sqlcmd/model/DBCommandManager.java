@@ -40,7 +40,7 @@ public interface DBCommandManager {
     /**
      * to view list of all tables
      * */
-    FeedBack toView() throws SQLException;
+    void toView() throws SQLException;
 
     /**
      * to view one table with details

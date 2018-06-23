@@ -88,16 +88,9 @@ public class JDBCDatabaseManager implements DBCommandManager {
     }
 
     @Override
-    public FeedBack toView() throws SQLException {
+    public void toView() throws SQLException {
         ResultSet resultSet = getTablesList();
-        if (resultSet != null) {
-            printer.printTablesList(resultSet);
-            closePrepareStatement();
-            return FeedBack.OK;
-        } else {
-            closePrepareStatement();
-            return FeedBack.REFUSE;
-        }
+        printer.printTablesList(resultSet);
     }
 
     private ResultSet getTablesList() throws SQLException {
@@ -107,9 +100,11 @@ public class JDBCDatabaseManager implements DBCommandManager {
     @Override
     public void toCreate(String tableName, DataSet dataSet) throws SQLException {
         ResultSet resultSet = chkTableByName(tableName);
-        String columnFilling = resultSet.getString("1");
-        if (columnFilling.equals("1")) {
-            throw new SQLException(String.format("table %s has already exist", tableName));
+        if (resultSet.next()) {
+            String columnFilling = resultSet.getString("table_name");
+            if (columnFilling.equals(tableName)) {
+                throw new SQLException(String.format("table %s has already exist", tableName));
+            }
         } else {
             getExecuteUpdate(query.makeSqlCreateTable(tableName, dataSet));
         }

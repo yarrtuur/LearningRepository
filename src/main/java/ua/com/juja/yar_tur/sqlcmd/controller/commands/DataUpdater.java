@@ -3,7 +3,6 @@ package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
-import ua.com.juja.yar_tur.sqlcmd.model.PrepareCmdLine;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.ExitException;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
@@ -35,6 +34,7 @@ public class DataUpdater implements CommandProcess, PrepareCmdLine {
         try {
             prepareCmdData(commandLine);
             dbManager.toUpdate(tableName, dataSetSet, dataSetWhere);//todo Object instead three args
+            view.write("Update data successfull");
         } catch (SQLException | ExitException ex) {
             view.write(ex.getMessage());
         }

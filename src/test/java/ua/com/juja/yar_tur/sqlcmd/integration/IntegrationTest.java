@@ -37,7 +37,6 @@ public class IntegrationTest {
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
                         "Connection has already done" + CARET +
-                        "Closing connection..." + CARET +
                         "Connection closed." + CARET
 				, getData());
 	}
@@ -53,7 +52,6 @@ public class IntegrationTest {
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
                         "Connection hasnn`t done yet" + CARET +
-                        "Closing connection..." + CARET +
                         "Connection closed." + CARET
 				, getData());
 	}
@@ -76,13 +74,9 @@ public class IntegrationTest {
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
 						"Create table successfull." + CARET +
-						"Inserting data." + CARET +
 						"Insert data into table successfull" + CARET +
-						"Deleting data from table." + CARET +
-						"Delete data operation successfull." + CARET +
-						"Droping table..." + CARET +
+                        "Delete data operation successfull" + CARET +
                         "Drop table successfull" + CARET +
-                        "Closing connection..." + CARET +
                         "Connection closed." + CARET
 				, getData());
 	}
@@ -104,17 +98,12 @@ public class IntegrationTest {
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
-						"Creating table..." + CARET +
 						"Create table successfull." + CARET +
-						"Inserting data." + CARET +
 						"Insert data into table successfull" + CARET +
-						"Finding table..." + CARET +
 						" | rid | flower | " + CARET +
 						" | 1 | rose       | " + CARET +
-						"Find data successfull." + CARET +
-						"Droping table..." + CARET +
+                        "Find data successfull" + CARET +
                         "Drop table successfull" + CARET +
-                        "Closing connection..." + CARET +
                         "Connection closed." + CARET
 				, getData());
 	}
@@ -135,13 +124,9 @@ public class IntegrationTest {
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
-						"Creating table..." + CARET +
 						"Create table successfull." + CARET +
-						"Inserting data." + CARET +
 						"Insert data into table successfull" + CARET +
-						"Droping table..." + CARET +
                         "Drop table successfull" + CARET +
-                        "Closing connection..." + CARET +
                         "Connection closed." + CARET
 				, getData());
 	}
@@ -163,15 +148,10 @@ public class IntegrationTest {
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
-						"Creating table..." + CARET +
 						"Create table successfull." + CARET +
-						"Inserting data." + CARET +
 						"Insert data into table successfull" + CARET +
-						"Updating data." + CARET +
 						"Update data successfull" + CARET +
-						"Droping table..." + CARET +
                         "Drop table successfull" + CARET +
-                        "Closing connection..." + CARET +
                         "Connection closed." + CARET
 				, getData());
 	}
@@ -185,7 +165,6 @@ public class IntegrationTest {
 		// then
 		Assert.assertEquals("Hello, user!" + CARET +
 						"Please, type `help` for list available commands. " + CARET +
-						"Closing connection..." + CARET +
 						"Connection closed." + CARET
 				, getData());
 	}
@@ -213,7 +192,6 @@ public class IntegrationTest {
 						" delete : delete | tableName | column | value " + CARET +
 						" update : update | tableName | SET | column1 | value1 | column2 | value2 | WHERE| columnX | valueX " + CARET +
                         " chkconn : chkconn " + CARET +
-                        "Closing connection..." + CARET +
                         "Connection closed." + CARET
 				, getData());
 	}
@@ -231,7 +209,6 @@ public class IntegrationTest {
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
                         "You made it, take control your database now!" + CARET +
-                        "Closing connection..." + CARET +
                         "Connection closed." + CARET
                 , getData());
     }
@@ -256,22 +233,15 @@ public class IntegrationTest {
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
-						"Creating table..." + CARET +
 						"Create table successfull." + CARET +
-						"Inserting data." + CARET +
 						"Insert data into table successfull" + CARET +
-						"Finding table..." + CARET +
 						" | rid | flower | " + CARET +
  						" | 1 | rose       | " + CARET +
-						"Find data successfull." + CARET +
-						"Clearing table..." + CARET +
+                        "Find data successfull" + CARET +
 						"Clear table successfull" + CARET +
-						"Finding table..." + CARET +
 						" | rid | flower | " + CARET +
-						"Find data successfull." + CARET +
-						"Droping table..." + CARET +
+                        "Find data successfull" + CARET +
                         "Drop table successfull" + CARET +
-                        "Closing connection..." + CARET +
                         "Connection closed." + CARET
 				, getData());
 	}
@@ -291,11 +261,8 @@ public class IntegrationTest {
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
-						"Creating table..." + CARET +
 						"Create table successfull." + CARET +
-						"Droping table..." + CARET +
                         "Drop table successfull" + CARET +
-                        "Closing connection..." + CARET +
                         "Connection closed." + CARET
 				, getData());
 	}
@@ -316,11 +283,8 @@ public class IntegrationTest {
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
-						"Creating table..." + CARET +
 						"Create table successfull." + CARET +
-						"Droping table..." + CARET +
                         "Drop table successfull" + CARET +
-                        "Closing connection..." + CARET +
                         "Connection closed." + CARET
 				, getData());
 	}
@@ -341,8 +305,9 @@ public class IntegrationTest {
 						"-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
 						"PostgreSQL JDBC Driver Registered!" + CARET +
 						"You made it, take control your database now!" + CARET +
+                        "Create table successfull." + CARET +
 						"Table: vaza , Columns:  rid:integer, flower:character " + CARET +
-                        "Closing connection..." + CARET +
+                        "Drop table successfull" + CARET +
                         "Connection closed." + CARET
 				, getData());
 	}
@@ -352,8 +317,12 @@ public class IntegrationTest {
         // given
         in.add("connect");
         in.add("create|vaza|flower|char(10)");
+        in.add("create|userz|name|char(10)");
+        in.add("create|tbl|form|char(10)");
         in.add("tables");
         in.add("drop|vaza");
+        in.add("drop|userz");
+        in.add("drop|tbl");
         in.add("exit");
         // when
         Main.main(new String[1]);
@@ -362,7 +331,14 @@ public class IntegrationTest {
                         "Please, type `help` for list available commands. " + CARET +
                         "-------- PostgreSQL JDBC Connection Testing ------------" + CARET +
                         "PostgreSQL JDBC Driver Registered!" + CARET +
-                        "Closing connection..." + CARET +
+                        "You made it, take control your database now!" + CARET +
+                        "Create table successfull." + CARET +
+                        "Create table successfull." + CARET +
+                        "Create table successfull." + CARET +
+                        "Tables:  tbl, userz, vaza  " + CARET +
+                        "Drop table successfull" + CARET +
+                        "Drop table successfull" + CARET +
+                        "Drop table successfull" + CARET +
                         "Connection closed." + CARET
                 , getData());
     }
@@ -379,7 +355,6 @@ public class IntegrationTest {
 						"Please, type `help` for list available commands. " + CARET +
 						"Not available command. Maybe your connection hasn`t done yet. " +
                         "Please type `help` to list all commands " + CARET +
-                        "Closing connection..." + CARET +
                         "Connection closed." + CARET
 				, getData());
 	}

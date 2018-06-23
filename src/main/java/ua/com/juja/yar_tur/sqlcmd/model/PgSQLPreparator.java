@@ -95,8 +95,9 @@ public class PgSQLPreparator implements SQLPreparator {
 
 	@Override
 	public String makeSqlGetTablesList() {
-		return "SELECT 1 FROM information_schema.tables t " +
-				"WHERE t.table_schema = 'public'";
+        return "SELECT table_name FROM information_schema.tables t " +
+                "WHERE t.table_schema = 'public'" +
+                "ORDER BY 1";
 	}
 
 	@Override

@@ -38,14 +38,14 @@ public class ExitTest {
 	}
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		command = new Exit(dbManagerMock, viewMock);
 		commandLine = new String[]{"exit"};
 		singleCommand = "exit";
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		command = null;
 		commandLine = null;
 		singleCommand = null;
@@ -55,7 +55,7 @@ public class ExitTest {
 	public void processNoConnectTest() throws Exception {
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.toExit()).thenThrow(new SQLException());
-		assertEquals(CmdLineState.WAIT, command.process(commandLine));
+		assertEquals(CmdLineState.EXIT, command.process(commandLine));
 	}
 
 	@Test

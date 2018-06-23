@@ -1,4 +1,4 @@
-package ua.com.juja.yar_tur.sqlcmd.model;
+package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.ExitException;
 

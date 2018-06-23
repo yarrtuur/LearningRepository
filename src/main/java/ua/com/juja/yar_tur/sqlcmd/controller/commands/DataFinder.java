@@ -3,7 +3,6 @@ package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
-import ua.com.juja.yar_tur.sqlcmd.model.PrepareCmdLine;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.types_enums_except.ExitException;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
@@ -33,6 +32,7 @@ public class DataFinder implements CommandProcess, PrepareCmdLine, PrepareComman
         try {
             prepareCmdData(commandLine);
             dbManager.toFind(tableName, isDetail, dataSet);
+            view.write("Find data successfull");
         } catch (SQLException | ExitException e) {
             view.write(e.getMessage());
         }
