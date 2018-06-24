@@ -2,8 +2,8 @@ package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
 import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.ExitException;
+import ua.com.juja.yar_tur.sqlcmd.utils.CmdLineState;
+import ua.com.juja.yar_tur.sqlcmd.utils.ExitException;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;

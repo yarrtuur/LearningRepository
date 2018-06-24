@@ -1,5 +1,7 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
+import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
@@ -42,24 +44,35 @@ public class PgSQLPreparator implements SQLPreparator {
 	}
 
 	@Override
-	public String makeSqlDeleteData(String tableName, DataSet dataSet, Map tableFields) {
+	public String makeDeleteQuery(DataContainer dataContainer) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("DELETE from public.%s ", tableName));
-		sb.append(" WHERE ");
-		for (DataSet.Data step : dataSet.getData()) {
-			String columnName = step.getName();
-			String columnValue = step.getValue().toString();
-			sb.append(" ").append(columnName).append(" = ");
-			if (tableFields.get(columnName).toString().startsWith("char") ||
-					tableFields.get(columnName).toString().startsWith("varchar") ||
-					tableFields.get(columnName).toString().startsWith("text")) {
-				sb.append("'").append(columnValue).append("'").append(" AND ");
-			} else {
-				sb.append(columnValue).append(" AND ");
-			}
-		}
-		sb.replace(sb.length() - 4, sb.length(), " ");
+		sb.append(String.format("DELETE from public.%s ", dataContainer.getTableName()));
+		gatherDeleteString(sb, dataContainer);
 		return sb.toString();
+	}
+
+	private void gatherDeleteString(StringBuilder sb, DataContainer dataContainer) {
+		if (dataContainer.getDataSet().getSize() > 0) {
+			sb.append(" WHERE ");
+			for (DataSet.Data step : dataContainer.getDataSet().getData()) {
+				String columnName = step.getName();
+				String columnValue = step.getValue().toString();
+				String typeColumn = dataContainer.getTableFieldsMap().get(columnName);
+				sb.append(" ").append(columnName).append(" = ");
+				ifQuotesNeed(sb, columnValue, typeColumn);
+			}
+			sb.replace(sb.length() - 4, sb.length(), " ");
+		}
+	}
+
+	private void ifQuotesNeed(StringBuilder sb, String columnValue, String typeColumn) {
+		if (typeColumn.startsWith("char") ||
+				typeColumn.startsWith("varchar") ||
+				typeColumn.startsWith("text")) {
+			sb.append("'").append(columnValue).append("'").append(" AND ");
+		} else {
+			sb.append(columnValue).append(" AND ");
+		}
 	}
 
 	@Override

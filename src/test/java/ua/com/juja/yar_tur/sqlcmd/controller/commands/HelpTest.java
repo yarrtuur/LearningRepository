@@ -2,7 +2,7 @@ package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
 import org.junit.*;
 import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
+import ua.com.juja.yar_tur.sqlcmd.utils.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
@@ -27,7 +27,7 @@ public class HelpTest {
 	}
 
 	@Before
-	public void setUp() throws Exception{
+	public void setUp() {
 		singleCommand = "help";
 		commandLine = new String[]{"help"};
 		view = new Console();

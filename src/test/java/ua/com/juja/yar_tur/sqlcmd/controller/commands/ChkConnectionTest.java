@@ -3,7 +3,7 @@ package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 import org.junit.*;
 import ua.com.juja.yar_tur.sqlcmd.model.ConnectionKeeper;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
+import ua.com.juja.yar_tur.sqlcmd.utils.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
@@ -31,13 +31,13 @@ public class ChkConnectionTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+	public void setUp() {
         command = new ChkConnection(dbManagerMock, viewMock);
         singleCommand = "chkconn";
     }
 
     @After
-    public void tearDown() throws Exception {
+	public void tearDown() {
         command = null;
         singleCommand = null;
         commandLine = null;

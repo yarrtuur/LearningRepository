@@ -1,9 +1,7 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.ExitException;
+import ua.com.juja.yar_tur.sqlcmd.utils.ExitException;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -16,7 +14,7 @@ public final class ConnectionProperties {
 
 	public ConnectionProperties() throws ExitException {
 			try (
-					InputStream in = classloader.getResourceAsStream(CONFIG_SQLCMD_PROPERTIES);
+					InputStream in = classloader.getResourceAsStream(CONFIG_SQLCMD_PROPERTIES)
 			) {
 				connProperties.load(in);
 			} catch (IOException | NullPointerException e) {

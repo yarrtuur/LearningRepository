@@ -1,6 +1,7 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
+import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
+import ua.com.juja.yar_tur.sqlcmd.utils.FeedBack;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -25,7 +26,7 @@ public interface DBCommandManager {
     FeedBack toUpdate(String tableName, DataSet dataSetSet, DataSet dataSetWhere) throws SQLException;
 
     // delete data
-    FeedBack toDelete(String tableName, DataSet dataSet) throws SQLException;
+    void toDelete(DataContainer dataContainer) throws SQLException;
 
     // drop table
     FeedBack toDrop(String tableName)throws SQLException;

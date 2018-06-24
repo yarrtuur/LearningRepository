@@ -5,8 +5,8 @@ import ua.com.juja.yar_tur.sqlcmd.model.ConnectionKeeper;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.FeedBack;
+import ua.com.juja.yar_tur.sqlcmd.utils.CmdLineState;
+import ua.com.juja.yar_tur.sqlcmd.utils.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
@@ -28,23 +28,23 @@ public class DataUpdaterTest {
 	private DataUpdater command;
 
 	@BeforeClass
-	public static void setUpClass() throws Exception {
+	public static void setUpClass() {
 		System.out.println("Before DataUpdaterTest.class");
 	}
 
 	@AfterClass
-	public static void tearDownClass() throws Exception {
+	public static void tearDownClass() {
 		System.out.println("After DataUpdaterTest.class");
 	}
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		singleCommand = "update";
 		command = new DataUpdater(dbManagerMock, viewMock);
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		singleCommand = null;
 		commandLine = null;
 		command = null;

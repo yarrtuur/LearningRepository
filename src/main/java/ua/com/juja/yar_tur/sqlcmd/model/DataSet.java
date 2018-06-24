@@ -4,33 +4,35 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DataSet {
+	private List<Data> columnList = new LinkedList<>();
 
+	public int getSize() {
+		return columnList.size();
+	}
 
-    private List<Data> columnList = new LinkedList<>();
+	public List<Data> getData() {
+		return columnList;
+	}
 
-    public List<Data> getData() {
-        return columnList;
-    }
+	public void add(String columnName, String value) {
+		columnList.add(new Data(columnName, value));
+	}
 
-    public void add(String columnName, String value) {
-        columnList.add(new Data(columnName, value));
-    }
+	public class Data {
+		private String columnName;
+		private String value;
 
-    public class Data {
-        private String columnName;
-        private String value;
+		Data(String columnName, String value) {
+			this.columnName = columnName;
+			this.value = value;
+		}
 
-        Data(String columnName, String value) {
-            this.columnName = columnName;
-            this.value = value;
-        }
+		public String getName() {
+			return columnName;
+		}
 
-        public String getName() {
-            return columnName;
-        }
-
-        public Object getValue() {
-            return value;
-        }
-    }
+		public Object getValue() {
+			return value;
+		}
+	}
 }

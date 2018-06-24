@@ -4,7 +4,7 @@ import org.junit.*;
 import ua.com.juja.yar_tur.sqlcmd.model.ConnectionKeeper;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
+import ua.com.juja.yar_tur.sqlcmd.utils.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 

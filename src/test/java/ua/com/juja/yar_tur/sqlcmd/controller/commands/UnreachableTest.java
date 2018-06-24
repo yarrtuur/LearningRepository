@@ -2,7 +2,7 @@ package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
 import org.junit.*;
 import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.CmdLineState;
+import ua.com.juja.yar_tur.sqlcmd.utils.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
@@ -17,17 +17,17 @@ public class UnreachableTest {
 	private CommandProcess command;
 
 	@BeforeClass
-	public static void setUpClass() throws Exception {
+	public static void setUpClass() {
 		System.out.println("Before UnreachableTest.class");
 	}
 
 	@AfterClass
-	public static void tearDownClass() throws Exception {
+	public static void tearDownClass() {
 		System.out.println("After UnreachableTest.class");
 	}
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		singleCommand = "single";
 		view = new Console();
 		command = new Unreachable(view);
@@ -35,7 +35,7 @@ public class UnreachableTest {
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		singleCommand = null;
 		command = null;
 		commandLine = null;

@@ -1,7 +1,7 @@
 package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
 import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
-import ua.com.juja.yar_tur.sqlcmd.types_enums_except.ExitException;
+import ua.com.juja.yar_tur.sqlcmd.utils.ExitException;
 
 public interface PrepareCommandData {
 

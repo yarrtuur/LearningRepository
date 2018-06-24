@@ -1,4 +1,4 @@
-package ua.com.juja.yar_tur.sqlcmd.types_enums_except;
+package ua.com.juja.yar_tur.sqlcmd.utils;
 
 public class ExitException extends Exception {
 
