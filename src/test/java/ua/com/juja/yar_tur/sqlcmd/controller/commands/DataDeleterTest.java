@@ -59,7 +59,7 @@ public class DataDeleterTest {
 		commandLine = new String[]{"delete","tableName","column","value"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-        doNothing().when(dbManagerMock).toDelete(any(DataContainer.class));
+        when(dbManagerMock.toDelete(any(DataContainer.class))).thenReturn(anyInt());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
@@ -68,7 +68,7 @@ public class DataDeleterTest {
 		commandLine = new String[]{"delete","tableName","column"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-        doNothing().when(dbManagerMock).toDelete(any(DataContainer.class));
+        when(dbManagerMock.toDelete(any(DataContainer.class))).thenReturn(anyInt());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
@@ -77,7 +77,7 @@ public class DataDeleterTest {
 		commandLine = new String[]{"delete"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-        doNothing().when(dbManagerMock).toDelete(any(DataContainer.class));
+        when(dbManagerMock.toDelete(any(DataContainer.class))).thenReturn(anyInt());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
@@ -86,7 +86,7 @@ public class DataDeleterTest {
 		commandLine = new String[]{"delete","tableName"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-        doThrow(SQLException.class).when(dbManagerMock).toDelete(any(DataContainer.class));
+        when(dbManagerMock.toDelete(any(DataContainer.class))).thenReturn(anyInt());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 

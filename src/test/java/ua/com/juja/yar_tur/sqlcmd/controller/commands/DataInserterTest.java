@@ -3,10 +3,9 @@ package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 import org.junit.*;
 import ua.com.juja.yar_tur.sqlcmd.model.ConnectionKeeper;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
-import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
 import ua.com.juja.yar_tur.sqlcmd.utils.CmdLineState;
-import ua.com.juja.yar_tur.sqlcmd.utils.FeedBack;
+import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
@@ -15,7 +14,7 @@ import java.sql.SQLException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -62,8 +61,7 @@ public class DataInserterTest {
 		commandLine = new String[]{"insert","tbl","fld","vly"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toInsert(anyString(), any(DataSet.class))).
-				thenReturn(FeedBack.OK);
+		when(dbManagerMock.toInsert(any(DataContainer.class))).thenReturn(anyInt());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
@@ -72,8 +70,7 @@ public class DataInserterTest {
 		commandLine = new String[]{"insert"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toInsert(anyString(), any(DataSet.class))).
-				thenReturn(FeedBack.OK);
+		when(dbManagerMock.toInsert(any(DataContainer.class))).thenReturn(anyInt());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
@@ -82,8 +79,7 @@ public class DataInserterTest {
 		commandLine = new String[]{"insert","tbl","fld"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toInsert(anyString(), any(DataSet.class))).
-				thenReturn(FeedBack.OK);
+		when(dbManagerMock.toInsert(any(DataContainer.class))).thenReturn(anyInt());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
@@ -92,8 +88,7 @@ public class DataInserterTest {
 		commandLine = new String[]{"insert","tbl","fld","vly"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toInsert(anyString(), any(DataSet.class))).
-				thenThrow(new SQLException());
+		when(dbManagerMock.toInsert(any(DataContainer.class))).thenThrow(new SQLException());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
@@ -102,8 +97,7 @@ public class DataInserterTest {
 		commandLine = new String[]{"insert","tbl","fld"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toInsert(anyString(), any(DataSet.class))).
-				thenReturn(FeedBack.REFUSE);
+		when(dbManagerMock.toInsert(any(DataContainer.class))).thenReturn(anyInt());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 }
