@@ -9,13 +9,11 @@ import java.util.List;
 
 public class MainController {
     private View view;
-    private DBCommandManager dbManager;
     private List<CommandProcess> commands;
     private CmdLineState cmdState;
 
     public MainController(DBCommandManager dbManager, View view) {
         this.view = view;
-        this.dbManager = dbManager;
         this.commands = new InitCommands(view, dbManager).initCommandList();
     }
 

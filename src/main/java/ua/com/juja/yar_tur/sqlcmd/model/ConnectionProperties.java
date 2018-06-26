@@ -10,10 +10,10 @@ public final class ConnectionProperties {
 
 	private Properties connProperties = new Properties();
 	private static final String CONFIG_SQLCMD_PROPERTIES = "config/sqlcmd.properties";
-	private ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 
 	public ConnectionProperties() throws ExitException {
-			try (
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        try (
 					InputStream in = classloader.getResourceAsStream(CONFIG_SQLCMD_PROPERTIES)
 			) {
 				connProperties.load(in);

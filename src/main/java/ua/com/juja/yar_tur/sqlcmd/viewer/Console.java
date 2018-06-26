@@ -16,8 +16,7 @@ public class Console implements View {
     public String read() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
-            String input = reader.readLine();
-            return input;
+            return reader.readLine();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return null;

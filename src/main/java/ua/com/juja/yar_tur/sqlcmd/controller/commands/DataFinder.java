@@ -2,7 +2,6 @@ package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
 import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
-import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.utils.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
 import ua.com.juja.yar_tur.sqlcmd.utils.ExitException;
@@ -13,11 +12,7 @@ import java.sql.SQLException;
 public class DataFinder implements CommandProcess, PrepareCmdLine, PrepareCommandData {
     private DBCommandManager dbManager;
     private View view;
-    private String tableName;
-    private DataSet dataSet;
-    private boolean isDetail;
     private DataContainer dataContainer;
-
 
     public DataFinder(DBCommandManager dbManager, View view) {
         this.dbManager = dbManager;

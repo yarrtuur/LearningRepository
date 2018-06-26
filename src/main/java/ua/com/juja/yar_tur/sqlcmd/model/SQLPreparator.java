@@ -22,8 +22,6 @@ interface SQLPreparator {
 
 	String makeSqlGetOneTableDetails(String tableName);
 
-	String makeSqlChkTableAvailable(String tableName);
-
 	String makeSqlGetTablesList();
 
 	String makeSqlCreateTable(DataContainer dataContainer);

@@ -144,25 +144,6 @@ public class PgSQLPreparator implements SQLPreparator {
     }
 
     @Override
-    public String makeSqlChkTableAvailable(String tableName) {
-        return String.format("SELECT 1 FROM information_schema.tables t " +
-                "WHERE t.table_schema = 'public' AND t.table_name = \'%s\' ", tableName);
-    }
-
-    private void chkQuoterUrgency(Map tableFields, StringBuilder columns, StringBuilder values, DataSet.Data step) {
-        String columnName = step.getName();
-        String columnValue = step.getValue().toString();
-        columns.append(columnName).append(", ");
-        if (tableFields.get(columnName).toString().startsWith("char") ||
-                tableFields.get(columnName).toString().startsWith("varchar") ||
-                tableFields.get(columnName).toString().startsWith("text")) {
-            values.append("'").append(columnValue).append("'");
-        } else {
-            values.append(columnValue);
-        }
-    }
-
-    @Override
     public Map<String, String> getColumnsNamesWithDataType(ResultSet resultSet) throws SQLException {
         Map<String, String> columnsMap = new LinkedHashMap<>();
         while (resultSet.next()) {

@@ -65,12 +65,10 @@ public class DataUpdater implements CommandProcess, PrepareCmdLine, PrepareComma
         int set = cmdList.indexOf("set");
         int where = cmdList.indexOf("where");
 
-        String[] setCommandLine = Arrays.copyOfRange(commandLine, set, where);
+        String[] setCommandLine = Arrays.copyOfRange(commandLine, set + 1, where);
         dataSetSet = getFieldsParams(setCommandLine);
 
-        String[] whereCommandLine = Arrays.copyOfRange(commandLine, where, commandLine.length);
+        String[] whereCommandLine = Arrays.copyOfRange(commandLine, where + 1, commandLine.length);
         dataSetWhere = getFieldsParams(whereCommandLine);
     }
-
-
 }

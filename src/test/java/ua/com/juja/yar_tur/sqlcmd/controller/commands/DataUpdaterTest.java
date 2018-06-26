@@ -58,7 +58,7 @@ public class DataUpdaterTest {
 
 	@Test
 	public void process() throws SQLException {
-		commandLine = new String[]{"update", "tableName", "SET", "column1", "value1", "WHERE", "columnX", "valueX"};
+		commandLine = new String[]{"update", "tableName", "set", "column1", "value1", "where", "columnX", "valueX"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
 		when(dbManagerMock.toUpdate(any(DataContainer.class))).thenReturn(anyInt());
@@ -76,7 +76,7 @@ public class DataUpdaterTest {
 
 	@Test
 	public void processWithSQLE() throws SQLException {
-		commandLine = new String[]{"update", "tableName", "SET", "column1", "value1", "WHERE", "columnX", "valueX"};
+		commandLine = new String[]{"update", "tableName", "set", "column1", "value1", "where", "columnX", "valueX"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
 		when(dbManagerMock.toUpdate(any(DataContainer.class))).thenThrow(new SQLException());
@@ -85,7 +85,7 @@ public class DataUpdaterTest {
 
 	@Test
 	public void processWrongInsertData() throws SQLException {
-		commandLine = new String[]{"update", "tableName", "SET", "column1", "value1"};
+		commandLine = new String[]{"update", "tableName", "set", "column1", "value1"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
 		when(dbManagerMock.toUpdate(any(DataContainer.class))).thenReturn(anyInt());

@@ -6,7 +6,7 @@ import ua.com.juja.yar_tur.sqlcmd.utils.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 public class ChkConnection implements CommandProcess {
-    private DBCommandManager dbManager;
+    private final DBCommandManager dbManager;
     private View view;
 
     public ChkConnection(DBCommandManager dbManager, View view) {
@@ -24,7 +24,7 @@ public class ChkConnection implements CommandProcess {
         if(dbManager.getConnection().isConnected()){
             view.write("Connection has already done");
         }else{
-            view.write("Connection hasnn`t done yet");
+            view.write("Connection hasn`t done yet");
         }
         return CmdLineState.WAIT;
     }

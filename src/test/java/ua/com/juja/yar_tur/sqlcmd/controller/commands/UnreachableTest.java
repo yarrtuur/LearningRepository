@@ -13,7 +13,6 @@ import static org.junit.Assert.assertTrue;
 public class UnreachableTest {
 	private String singleCommand;
 	private String[] commandLine;
-	private View view;
 	private CommandProcess command;
 
 	@BeforeClass
@@ -29,7 +28,7 @@ public class UnreachableTest {
 	@Before
 	public void setUp() {
 		singleCommand = "single";
-		view = new Console();
+        View view = new Console();
 		command = new Unreachable(view);
 		commandLine = new String[]{"single"};
 	}

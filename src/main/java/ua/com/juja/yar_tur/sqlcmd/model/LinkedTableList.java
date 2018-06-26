@@ -2,7 +2,7 @@ package ua.com.juja.yar_tur.sqlcmd.model;
 
 import java.util.Iterator;
 
-public class LinkedTableList implements Iterator {
+class LinkedTableList implements Iterator {
 	//todo
 	private TableNode currentTableNode;
 

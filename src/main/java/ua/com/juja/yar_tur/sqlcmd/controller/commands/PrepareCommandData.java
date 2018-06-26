@@ -3,7 +3,7 @@ package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.utils.ExitException;
 
-public interface PrepareCommandData {
+interface PrepareCommandData {
 
     default DataSet getFieldsParams(String[] commandLine) throws ExitException {
         DataSet dataSet;
