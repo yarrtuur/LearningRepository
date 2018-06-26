@@ -24,7 +24,7 @@ public interface DBCommandManager {
 
     FeedBack toDrop(String tableName)throws SQLException;
 
-    FeedBack toClean(String tableName)throws SQLException;
+    int toClean(String tableName) throws SQLException;
 
     int toUpdate(DataContainer dataContainer) throws SQLException;
 

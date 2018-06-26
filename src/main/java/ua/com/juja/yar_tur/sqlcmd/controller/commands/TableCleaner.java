@@ -27,8 +27,8 @@ public class TableCleaner implements CommandProcess, PrepareCmdLine, PrepareComm
 	public CmdLineState process(String[] commandLine) {
 		try {
 			prepareCmdData(commandLine);
-			dbManager.toClean(tableName);
-            view.write("Clear table successfull");
+            int countClear = dbManager.toClean(tableName);
+            view.write(String.format("Clear table successfull for %d rows", countClear));
 		} catch (SQLException | ExitException ex) {
 			view.write(ex.getMessage());
 		}

@@ -61,18 +61,9 @@ public class JDBCDatabaseManager implements DBCommandManager {
 	}
 
 	@Override
-	public FeedBack toClean(String tableName) throws SQLException {
-		resultSet = null;
-		resultSet = chkTableByName(tableName);
-		if (resultSet.next()) {
-			int rs = resultSet.getInt(1);
-			if (rs == 1) {
-				return (getExecuteUpdate(prepareForQuery.makeSqlClearTable(tableName)) == 1) ? FeedBack.OK : FeedBack.REFUSE;
-			}
-		} else {
-			throw new SQLException(String.format("table %s hasn`t exist", tableName));
-		}
-		return FeedBack.REFUSE;
+	public int toClean(String tableName) throws SQLException {
+		String queryString = prepareForQuery.makeSqlClearTable(tableName);
+		return getExecuteUpdate(queryString);
 	}
 
 	@Override
