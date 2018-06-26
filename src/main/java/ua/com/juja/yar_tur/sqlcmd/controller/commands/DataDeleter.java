@@ -40,7 +40,7 @@ public class DataDeleter implements CommandProcess, PrepareCmdLine, PrepareComma
 	@Override
 	public void prepareCmdData(String[] commandLine) throws ExitException {
 		dataContainer.setTableName(getTableName(commandLine));
-		dataContainer.setDataSet(getFieldsParams(commandLine));
+		dataContainer.setDataSetWhere(getFieldsParams(commandLine));
 	}
 
 }

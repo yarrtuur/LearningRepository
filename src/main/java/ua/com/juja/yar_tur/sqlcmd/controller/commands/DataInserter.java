@@ -40,7 +40,7 @@ public class DataInserter implements CommandProcess, PrepareCmdLine, PrepareComm
     @Override
     public void prepareCmdData(String[] commandLine) throws ExitException {
         dataContainer.setTableName(getTableName(commandLine));
-        dataContainer.setDataSet(getFieldsParams(commandLine));
+        dataContainer.setDataSetWhere(getFieldsParams(commandLine));
     }
 
 }

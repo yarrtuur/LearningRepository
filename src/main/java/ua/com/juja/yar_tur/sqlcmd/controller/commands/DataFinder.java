@@ -45,7 +45,7 @@ public class DataFinder implements CommandProcess, PrepareCmdLine, PrepareComman
     @Override
     public void prepareCmdData(String[] commandLine) throws ExitException {
         dataContainer.setTableName(getTableName(commandLine));
-        dataContainer.setDataSet(getFieldsParams(commandLine));
+        dataContainer.setDataSetWhere(getFieldsParams(commandLine));
     }
 
 }

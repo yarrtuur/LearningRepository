@@ -16,7 +16,7 @@ interface SQLPreparator {
 
 	String makeSqlDropTable( String tableName );
 
-	String makeSqlUpdateData(String tableName, DataSet dataSetSet, DataSet dataSetWhere, Map tableFields);
+	String makeSqlUpdateData(DataContainer dataContainer);
 
 	String makeSqlClearTable( String tableName );
 

@@ -26,7 +26,7 @@ public interface DBCommandManager {
 
     FeedBack toClean(String tableName)throws SQLException;
 
-    FeedBack toUpdate(String tableName, DataSet dataSetSet, DataSet dataSetWhere) throws SQLException;
+    int toUpdate(DataContainer dataContainer) throws SQLException;
 
     void toView() throws SQLException;
 
