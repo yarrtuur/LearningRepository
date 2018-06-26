@@ -1,6 +1,7 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
 import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
+import ua.com.juja.yar_tur.sqlcmd.utils.ExitException;
 import ua.com.juja.yar_tur.sqlcmd.utils.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Printable;
 
@@ -91,22 +92,21 @@ public class JDBCDatabaseManager implements DBCommandManager {
 	}
 
 	@Override
-	public void toCreate(String tableName, DataSet dataSet) throws SQLException {
-		ResultSet resultSet = chkTableByName(tableName);
-		if (resultSet.next()) {
-			String columnFilling = resultSet.getString("table_name");
-			if (columnFilling.equals(tableName)) {
-				throw new SQLException(String.format("table %s has already exist", tableName));
-			}
-		} else {
-			getExecuteUpdate(prepareForQuery.makeSqlCreateTable(tableName, dataSet));
-		}
-	}
-
-	@Override
 	public void toConnect(String dbSidLine, String login, String passwd) throws SQLException {
 		Connection connection = DriverManager.getConnection(dbSidLine, login, passwd);
 		connectionKeeper.setConnection(connection);
+	}
+
+	@Override
+	public int toCreate(DataContainer dataContainer) throws SQLException, ExitException {
+		ResultSet resultSet = getOneTableDetails(dataContainer.getTableName());
+		String columnFilling = resultSet.getString("table_name");
+		if (columnFilling.equals(dataContainer.getTableName())) {
+			throw new ExitException(String.format("table %s has already exist", dataContainer.getTableName()));
+		} else {
+			String queryString = prepareForQuery.makeSqlCreateTable(dataContainer);
+			return getExecuteUpdate(queryString);
+		}
 	}
 
 	@Override

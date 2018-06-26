@@ -5,7 +5,6 @@ import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class PgSQLPreparator implements SQLPreparator {
@@ -110,12 +109,11 @@ public class PgSQLPreparator implements SQLPreparator {
     }
 
     @Override
-    public String makeSqlCreateTable(String tableName, DataSet dataSet) {
+    public String makeSqlCreateTable(DataContainer dataContainer) {
         StringBuilder sb = new StringBuilder();
-        List<DataSet.Data> dataList = dataSet.getData();
-        sb.append("CREATE TABLE IF NOT EXISTS ").append(tableName)
-                .append(" ( rid serial CONSTRAINT id_").append(tableName).append("_pk PRIMARY KEY ");
-        for (DataSet.Data step : dataList) {
+        sb.append("CREATE TABLE IF NOT EXISTS ").append(dataContainer.getTableName())
+                .append(" ( rid serial CONSTRAINT id_").append(dataContainer.getTableName()).append("_pk PRIMARY KEY ");
+        for (DataSet.Data step : dataContainer.getDataSetWhere().getData()) {
             sb.append(" , ").append(step.getName()).append(" ").append(step.getValue()).append(" ");
         }
         sb.append(");");

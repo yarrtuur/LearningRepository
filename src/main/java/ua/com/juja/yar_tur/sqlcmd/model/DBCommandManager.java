@@ -1,6 +1,7 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
 import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
+import ua.com.juja.yar_tur.sqlcmd.utils.ExitException;
 import ua.com.juja.yar_tur.sqlcmd.utils.FeedBack;
 
 import java.sql.PreparedStatement;
@@ -32,7 +33,7 @@ public interface DBCommandManager {
 
     void toView(String tableName) throws SQLException;
 
-    void toCreate(String tableName, DataSet dataSet) throws SQLException;
+    int toCreate(DataContainer dataContainer) throws SQLException, ExitException;
 
     void toConnect(String dbSidLine, String login, String passwd) throws SQLException;
 }

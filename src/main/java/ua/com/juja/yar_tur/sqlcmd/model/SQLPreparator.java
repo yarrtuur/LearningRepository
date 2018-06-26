@@ -26,7 +26,7 @@ interface SQLPreparator {
 
 	String makeSqlGetTablesList();
 
-	String makeSqlCreateTable(String tableName, DataSet dataSet);
+	String makeSqlCreateTable(DataContainer dataContainer);
 
 	Map<String, String> getColumnsNamesWithDataType(ResultSet resultSet) throws SQLException;
 
