@@ -127,7 +127,7 @@ public class JDBCDatabaseManager implements DBCommandManager {
 			if (rs == 1) {
 				resultSet = getOneTableDetails(tableName);
 				return (getExecuteUpdate(prepareForQuery.makeSqlUpdateData(tableName, dataSetSet, dataSetWhere,
-						prepareForQuery.getColumnsWithDataType(resultSet))) == 1)
+						prepareForQuery.getColumnsNamesWithDataType(resultSet))) == 1)
 						? FeedBack.OK : FeedBack.REFUSE;
 			}
 		}
@@ -135,30 +135,24 @@ public class JDBCDatabaseManager implements DBCommandManager {
 	}
 
 	@Override
-	public void toDelete(DataContainer dataContainer) throws SQLException {
-		resultSet = getOneTableDetails(dataContainer.getTableName());
-		Map<String, String> tableFieldsMap = prepareForQuery.getColumnsWithDataType(resultSet);
+	public int toDelete(DataContainer dataContainer) throws SQLException {
+		ResultSet resultSet = getOneTableDetails(dataContainer.getTableName());
+		Map<String, String> tableFieldsMap = prepareForQuery.getColumnsNamesWithDataType(resultSet);
 		dataContainer.setTableFieldsMap(tableFieldsMap);
+
 		String queryString = prepareForQuery.makeDeleteQuery(dataContainer);
-		getExecuteUpdate(queryString);
+		return getExecuteUpdate(queryString);
 	}
 
 	@Override
-	public FeedBack toFind(String tableName, boolean isDetails, DataSet dataSet) throws SQLException {
-		resultSet = null;
-		resultSet = chkTableByName(tableName);
-		if (resultSet.next()) {
-			int rs = resultSet.getInt(1);
-			if (rs == 1) {
-				resultSet = getExecuteQuery(prepareForQuery.makeSqlFindData(tableName, isDetails, dataSet,
-						prepareForQuery.getColumnsWithDataType(resultSet)));
-				if (resultSet != null) {
-					printer.printFoundData(resultSet);
-					return FeedBack.OK;
-				}
-			}
-		}
-		return FeedBack.REFUSE;
+	public void toFind(DataContainer dataContainer) throws SQLException {
+		ResultSet resultSet = getOneTableDetails(dataContainer.getTableName());
+		Map<String, String> tableFieldsMap = prepareForQuery.getColumnsNamesWithDataType(resultSet);
+		dataContainer.setTableFieldsMap(tableFieldsMap);
+
+		String queryString = prepareForQuery.makeFindQuery(dataContainer);
+		resultSet = getExecuteQuery(queryString);
+		printer.printFoundData(resultSet);
 	}
 
 	@Override
@@ -170,7 +164,7 @@ public class JDBCDatabaseManager implements DBCommandManager {
 			if (rs == 1) {
 				resultSet = getOneTableDetails(tableName);
 				return (getExecuteUpdate(prepareForQuery.makeSqlInsertData(tableName, dataSet,
-						prepareForQuery.getColumnsWithDataType(resultSet))) == 1) ? FeedBack.OK : FeedBack.REFUSE;
+						prepareForQuery.getColumnsNamesWithDataType(resultSet))) == 1) ? FeedBack.OK : FeedBack.REFUSE;
 			}
 		} else {
 			throw new SQLException(String.format("table %s hasn`t exist", tableName));

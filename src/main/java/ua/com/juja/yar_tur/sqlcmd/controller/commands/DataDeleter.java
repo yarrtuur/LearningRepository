@@ -14,7 +14,6 @@ public class DataDeleter implements CommandProcess, PrepareCmdLine, PrepareComma
 	private View view;
 	private DataContainer dataContainer;
 
-
 	public DataDeleter(DBCommandManager dbManager, View view) {
 		this.dbManager = dbManager;
 		this.view = view;
@@ -30,8 +29,8 @@ public class DataDeleter implements CommandProcess, PrepareCmdLine, PrepareComma
 	public CmdLineState process(String[] commandLine) {
 		try {
 			prepareCmdData(commandLine);
-			dbManager.toDelete(dataContainer);
-			view.write("Delete data operation successfull");
+            int deleteCount = dbManager.toDelete(dataContainer);
+            view.write(String.format("Delete data operation successfull for %d rows", deleteCount));
 		} catch (SQLException | ExitException ex) {
 			view.write(ex.getMessage());
 		}

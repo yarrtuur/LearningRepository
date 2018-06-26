@@ -23,7 +23,7 @@ public class TableViewer implements CommandProcess, PrepareCmdLine, PrepareComma
     }
 
     @Override
-    public CmdLineState process(String[] commandLine) {//todo
+    public CmdLineState process(String[] commandLine) {
         try {
             prepareCmdData(commandLine);
             dbManager.toView(tableName);
@@ -37,6 +37,7 @@ public class TableViewer implements CommandProcess, PrepareCmdLine, PrepareComma
         tableName = getTableName(commandLine);
     }
 
+    @Override
     public String getTableName(String[] commandLine) {
         if (commandLine.length > 1) {
             return commandLine[1];

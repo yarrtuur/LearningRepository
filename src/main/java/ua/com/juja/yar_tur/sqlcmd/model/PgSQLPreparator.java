@@ -11,6 +11,46 @@ import java.util.Map;
 public class PgSQLPreparator implements SQLPreparator {
 
 	@Override
+	public String makeDeleteQuery(DataContainer dataContainer) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("DELETE from public.%s ", dataContainer.getTableName()));
+		gatherConditionString(sb, dataContainer);
+		return sb.toString();
+	}
+
+	@Override
+	public String makeFindQuery(DataContainer dataContainer) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("SELECT * from public.%s ", dataContainer.getTableName()));
+		gatherConditionString(sb, dataContainer);
+		return sb.toString();
+	}
+
+	private void gatherConditionString(StringBuilder sb, DataContainer dataContainer) {
+		if (dataContainer.getDataSet().getSize() > 0) {
+			sb.append(" WHERE ");
+			for (DataSet.Data step : dataContainer.getDataSet().getData()) {
+				String columnName = step.getName();
+				String columnValue = step.getValue().toString();
+				String typeColumn = dataContainer.getTableFieldsMap().get(columnName);
+				sb.append(" ").append(columnName).append(" = ");
+				ifQuotesNeed(sb, columnValue, typeColumn);
+			}
+			sb.replace(sb.length() - 4, sb.length(), " ");
+		}
+	}
+
+	private void ifQuotesNeed(StringBuilder sb, String columnValue, String typeColumn) {
+		if (typeColumn.startsWith("char") ||
+				typeColumn.startsWith("varchar") ||
+				typeColumn.startsWith("text")) {
+			sb.append("'").append(columnValue).append("'").append(" AND ");
+		} else {
+			sb.append(columnValue).append(" AND ");
+		}
+	}
+
+	@Override
 	public String makeSqlCreateTable(String tableName, DataSet dataSet) {
 		StringBuilder sb = new StringBuilder();
 		List<DataSet.Data> dataList = dataSet.getData();
@@ -43,35 +83,16 @@ public class PgSQLPreparator implements SQLPreparator {
 		return sb.toString();
 	}
 
-	@Override
-	public String makeDeleteQuery(DataContainer dataContainer) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("DELETE from public.%s ", dataContainer.getTableName()));
-		gatherDeleteString(sb, dataContainer);
-		return sb.toString();
-	}
-
-	private void gatherDeleteString(StringBuilder sb, DataContainer dataContainer) {
-		if (dataContainer.getDataSet().getSize() > 0) {
-			sb.append(" WHERE ");
-			for (DataSet.Data step : dataContainer.getDataSet().getData()) {
-				String columnName = step.getName();
-				String columnValue = step.getValue().toString();
-				String typeColumn = dataContainer.getTableFieldsMap().get(columnName);
-				sb.append(" ").append(columnName).append(" = ");
-				ifQuotesNeed(sb, columnValue, typeColumn);
-			}
-			sb.replace(sb.length() - 4, sb.length(), " ");
-		}
-	}
-
-	private void ifQuotesNeed(StringBuilder sb, String columnValue, String typeColumn) {
-		if (typeColumn.startsWith("char") ||
-				typeColumn.startsWith("varchar") ||
-				typeColumn.startsWith("text")) {
-			sb.append("'").append(columnValue).append("'").append(" AND ");
+	private void chkQuoterUrgency(Map tableFields, StringBuilder sb, DataSet.Data step) {
+		String columnName = step.getName();
+		String columnValue = step.getValue().toString();
+		sb.append(" ").append(columnName).append(" = ");
+		if (tableFields.get(columnName).toString().startsWith("char") ||
+				tableFields.get(columnName).toString().startsWith("varchar") ||
+				tableFields.get(columnName).toString().startsWith("text")) {
+			sb.append("'").append(columnValue).append("'");
 		} else {
-			sb.append(columnValue).append(" AND ");
+			sb.append(columnValue);
 		}
 	}
 
@@ -83,21 +104,6 @@ public class PgSQLPreparator implements SQLPreparator {
 	@Override
 	public String makeSqlClearTable(String tableName) {
 		return String.format("DELETE FROM %s ", tableName);
-	}
-
-	@Override
-	public String makeSqlFindData(String tableName, boolean isDetails, DataSet dataSet, Map tableFields) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("SELECT * from public.%s ", tableName));
-		if (isDetails) {
-			sb.append(" WHERE ");
-			for (DataSet.Data step : dataSet.getData()) {
-				chkQuoterUrgency(tableFields, sb, step);
-				sb.append(" AND ");
-			}
-			sb.replace(sb.length() - 4, sb.length(), " ");
-		}
-		return sb.toString();
 	}
 
 	@Override
@@ -137,19 +143,6 @@ public class PgSQLPreparator implements SQLPreparator {
 		return sb.toString();
 	}
 
-	private void chkQuoterUrgency(Map tableFields, StringBuilder sb, DataSet.Data step) {
-		String columnName = step.getName();
-		String columnValue = step.getValue().toString();
-		sb.append(" ").append(columnName).append(" = ");
-		if (tableFields.get(columnName).toString().startsWith("char") ||
-				tableFields.get(columnName).toString().startsWith("varchar") ||
-				tableFields.get(columnName).toString().startsWith("text")) {
-			sb.append("'").append(columnValue).append("'");
-		} else {
-			sb.append(columnValue);
-		}
-	}
-
 	private void chkQuoterUrgency(Map tableFields, StringBuilder columns, StringBuilder values, DataSet.Data step) {
 		String columnName = step.getName();
 		String columnValue = step.getValue().toString();
@@ -164,7 +157,7 @@ public class PgSQLPreparator implements SQLPreparator {
 	}
 
 	@Override
-	public Map<String, String> getColumnsWithDataType(ResultSet resultSet) throws SQLException {
+	public Map<String, String> getColumnsNamesWithDataType(ResultSet resultSet) throws SQLException {
 		Map<String, String> columnsMap = new LinkedHashMap<>();
 		while (resultSet.next()) {
 			columnsMap.put(resultSet.getString("column_name"), resultSet.getString("data_type"));

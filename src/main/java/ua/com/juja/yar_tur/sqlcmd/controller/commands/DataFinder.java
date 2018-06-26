@@ -4,6 +4,7 @@ import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.utils.CmdLineState;
+import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
 import ua.com.juja.yar_tur.sqlcmd.utils.ExitException;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
@@ -15,11 +16,13 @@ public class DataFinder implements CommandProcess, PrepareCmdLine, PrepareComman
     private String tableName;
     private DataSet dataSet;
     private boolean isDetail;
+    private DataContainer dataContainer;
 
 
     public DataFinder(DBCommandManager dbManager, View view) {
         this.dbManager = dbManager;
         this.view = view;
+        dataContainer = new DataContainer();
     }
 
     @Override
@@ -31,7 +34,7 @@ public class DataFinder implements CommandProcess, PrepareCmdLine, PrepareComman
     public CmdLineState process(String[] commandLine) {
         try {
             prepareCmdData(commandLine);
-            dbManager.toFind(tableName, isDetail, dataSet);
+            dbManager.toFind(dataContainer);
             view.write("Find data successfull");
         } catch (SQLException | ExitException e) {
             view.write(e.getMessage());
@@ -41,23 +44,8 @@ public class DataFinder implements CommandProcess, PrepareCmdLine, PrepareComman
 
     @Override
     public void prepareCmdData(String[] commandLine) throws ExitException {
-        tableName = getTableName(commandLine);
-        dataSet = getFieldsParams(commandLine);
+        dataContainer.setTableName(getTableName(commandLine));
+        dataContainer.setDataSet(getFieldsParams(commandLine));
     }
-
-    public DataSet getFieldsParams(String[] commandLine) throws ExitException {
-        DataSet dataSet;
-        if (commandLine.length % 2 != 0 && commandLine.length > 2) {
-            throw new ExitException("String format is wrong. Must be even count of data. Try again.");
-        } else {
-            isDetail = true;//todo check if isDetails needed
-            dataSet = new DataSet();
-            for (int i = 2; i < commandLine.length; i += 2) {
-                dataSet.add(commandLine[i], commandLine[i + 1]);
-            }
-        }
-        return dataSet;
-    }
-
 
 }

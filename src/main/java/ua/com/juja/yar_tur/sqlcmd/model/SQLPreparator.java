@@ -16,7 +16,7 @@ interface SQLPreparator {
 
 	String makeSqlClearTable( String tableName );
 
-	String makeSqlFindData( String tableName, boolean isDetails, DataSet dataSet, Map tableFields);
+	String makeFindQuery(DataContainer dataContainer);
 
 	String makeSqlGetOneTableDetails(String tableName);
 
@@ -28,6 +28,6 @@ interface SQLPreparator {
 
 	String makeSqlCreateTable(String tableName, DataSet dataSet);
 
-	Map<String, String> getColumnsWithDataType(ResultSet resultSet) throws SQLException;
+	Map<String, String> getColumnsNamesWithDataType(ResultSet resultSet) throws SQLException;
 
 }
