@@ -8,23 +8,23 @@ import java.util.Map;
 
 interface SQLPreparator {
 
-	String makeSqlUpdateData(String tableName, DataSet dataSetSet, DataSet dataSetWhere, Map tableFields);
+	String makeFindQuery(DataContainer dataContainer);
 
 	String makeDeleteQuery(DataContainer dataContainer);
 
+	String makeInsertQuery(DataContainer dataContainer);
+
 	String makeSqlDropTable( String tableName );
 
-	String makeSqlClearTable( String tableName );
+	String makeSqlUpdateData(String tableName, DataSet dataSetSet, DataSet dataSetWhere, Map tableFields);
 
-	String makeFindQuery(DataContainer dataContainer);
+	String makeSqlClearTable( String tableName );
 
 	String makeSqlGetOneTableDetails(String tableName);
 
 	String makeSqlChkTableAvailable(String tableName);
 
 	String makeSqlGetTablesList();
-
-	String makeSqlInsertData(String tableName, DataSet dataSet, Map tableFields);
 
 	String makeSqlCreateTable(String tableName, DataSet dataSet);
 

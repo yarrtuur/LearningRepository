@@ -119,19 +119,14 @@ public class JDBCDatabaseManager implements DBCommandManager {
 	}
 
 	@Override
-	public FeedBack toUpdate(String tableName, DataSet dataSetSet, DataSet dataSetWhere) throws SQLException {
-		resultSet = null;
-		resultSet = chkTableByName(tableName);
-		if (resultSet.next()) {
-			int rs = resultSet.getInt(1);
-			if (rs == 1) {
-				resultSet = getOneTableDetails(tableName);
-				return (getExecuteUpdate(prepareForQuery.makeSqlUpdateData(tableName, dataSetSet, dataSetWhere,
-						prepareForQuery.getColumnsNamesWithDataType(resultSet))) == 1)
-						? FeedBack.OK : FeedBack.REFUSE;
-			}
-		}
-		return FeedBack.REFUSE;
+	public void toFind(DataContainer dataContainer) throws SQLException {
+		ResultSet resultSet = getOneTableDetails(dataContainer.getTableName());
+		Map<String, String> tableFieldsMap = prepareForQuery.getColumnsNamesWithDataType(resultSet);
+		dataContainer.setTableFieldsMap(tableFieldsMap);
+
+		String queryString = prepareForQuery.makeFindQuery(dataContainer);
+		resultSet = getExecuteQuery(queryString);
+		printer.printFoundData(resultSet);
 	}
 
 	@Override
@@ -145,29 +140,27 @@ public class JDBCDatabaseManager implements DBCommandManager {
 	}
 
 	@Override
-	public void toFind(DataContainer dataContainer) throws SQLException {
+	public int toInsert(DataContainer dataContainer) throws SQLException {
 		ResultSet resultSet = getOneTableDetails(dataContainer.getTableName());
 		Map<String, String> tableFieldsMap = prepareForQuery.getColumnsNamesWithDataType(resultSet);
 		dataContainer.setTableFieldsMap(tableFieldsMap);
 
-		String queryString = prepareForQuery.makeFindQuery(dataContainer);
-		resultSet = getExecuteQuery(queryString);
-		printer.printFoundData(resultSet);
+		String queryString = prepareForQuery.makeInsertQuery(dataContainer);
+		return getExecuteUpdate(queryString);
 	}
 
 	@Override
-	public FeedBack toInsert(String tableName, DataSet dataSet) throws SQLException {
+	public FeedBack toUpdate(String tableName, DataSet dataSetSet, DataSet dataSetWhere) throws SQLException {
 		resultSet = null;
 		resultSet = chkTableByName(tableName);
 		if (resultSet.next()) {
 			int rs = resultSet.getInt(1);
 			if (rs == 1) {
 				resultSet = getOneTableDetails(tableName);
-				return (getExecuteUpdate(prepareForQuery.makeSqlInsertData(tableName, dataSet,
-						prepareForQuery.getColumnsNamesWithDataType(resultSet))) == 1) ? FeedBack.OK : FeedBack.REFUSE;
+				return (getExecuteUpdate(prepareForQuery.makeSqlUpdateData(tableName, dataSetSet, dataSetWhere,
+						prepareForQuery.getColumnsNamesWithDataType(resultSet))) == 1)
+						? FeedBack.OK : FeedBack.REFUSE;
 			}
-		} else {
-			throw new SQLException(String.format("table %s hasn`t exist", tableName));
 		}
 		return FeedBack.REFUSE;
 	}

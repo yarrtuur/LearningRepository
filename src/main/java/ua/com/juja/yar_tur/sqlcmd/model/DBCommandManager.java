@@ -16,21 +16,21 @@ public interface DBCommandManager {
 
     FeedBack toExit() throws SQLException;
 
-    FeedBack toUpdate(String tableName, DataSet dataSetSet, DataSet dataSetWhere) throws SQLException;
+    void toFind(DataContainer dataContainer) throws SQLException;
 
     int toDelete(DataContainer dataContainer) throws SQLException;
+
+    int toInsert(DataContainer dataContainer) throws SQLException;
 
     FeedBack toDrop(String tableName)throws SQLException;
 
     FeedBack toClean(String tableName)throws SQLException;
 
-    void toFind(DataContainer dataContainer) throws SQLException;
+    FeedBack toUpdate(String tableName, DataSet dataSetSet, DataSet dataSetWhere) throws SQLException;
 
     void toView() throws SQLException;
 
     void toView(String tableName) throws SQLException;
-
-    FeedBack toInsert(String tableName, DataSet dataSet)throws SQLException;
 
     void toCreate(String tableName, DataSet dataSet) throws SQLException;
 
