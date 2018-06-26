@@ -47,18 +47,10 @@ public class JDBCDatabaseManager implements DBCommandManager {
 	}
 
 	@Override
-	public FeedBack toDrop(String tableName) throws SQLException {
-		resultSet = null;
-		resultSet = chkTableByName(tableName);
-		if (resultSet.next()) {
-			int rs = resultSet.getInt(1);
-			if (rs == 1) {
-				return (getExecuteUpdate(prepareForQuery.makeSqlDropTable(tableName)) == 0) ? FeedBack.OK : FeedBack.REFUSE;
-			}
-		} else {
-			throw new SQLException(String.format("table %s hasn`t exist", tableName));
-		}
-		return FeedBack.REFUSE;
+	public int toDrop(String tableName) throws SQLException {
+		String queryString = prepareForQuery.makeSqlDropTable(tableName);
+		return getExecuteUpdate(queryString);
+
 	}
 
 	@Override

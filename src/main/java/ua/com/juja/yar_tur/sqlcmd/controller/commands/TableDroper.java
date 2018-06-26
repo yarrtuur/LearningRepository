@@ -28,7 +28,7 @@ public class TableDroper implements CommandProcess, PrepareCmdLine, PrepareComma
         try {
             prepareCmdData(commandLine);
             dbManager.toDrop(tableName);
-            view.write("Drop table successfull");
+            view.write(String.format("Drop table %s successfull", tableName));
         } catch (SQLException | ExitException ex) {
             view.write(ex.getMessage());
         }

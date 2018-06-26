@@ -23,7 +23,7 @@ public interface DBCommandManager {
 
     int toInsert(DataContainer dataContainer) throws SQLException;
 
-    FeedBack toDrop(String tableName)throws SQLException;
+    int toDrop(String tableName) throws SQLException;
 
     int toClean(String tableName) throws SQLException;
 
