@@ -1,6 +1,8 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
 import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
+import ua.com.juja.yar_tur.sqlcmd.utils.DataContainerUpdate;
+import ua.com.juja.yar_tur.sqlcmd.utils.DataSet;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,13 +38,13 @@ public class PgSQLPreparator implements SQLPreparator {
     }
 
     @Override
-    public String makeSqlUpdateData(DataContainer dataContainer) {
+	public String makeSqlUpdateData(DataContainerUpdate dataContainerUpdate) {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("UPDATE public.%s ", dataContainer.getTableName()));
+		sb.append(String.format("UPDATE public.%s ", dataContainerUpdate.getTableName()));
         sb.append(" SET ");
 
-        gatherConditionSet(sb, dataContainer);
-        gatherCondition(sb, dataContainer);
+		gatherConditionSet(sb, dataContainerUpdate);
+		gatherCondition(sb, dataContainerUpdate);
 
         return sb.toString();
     }
@@ -72,11 +74,11 @@ public class PgSQLPreparator implements SQLPreparator {
         sb.append(columns).append(" values ( ").append(values).append(";");
     }
 
-    private void gatherConditionSet(StringBuilder sb, DataContainer dataContainer) {
-        for (DataSet.Data step : dataContainer.getDataSetSet().getData()) {
+	private void gatherConditionSet(StringBuilder sb, DataContainerUpdate dataContainerUpdate) {
+		for (DataSet.Data step : dataContainerUpdate.getDataSetSet().getData()) {
             String columnName = step.getName();
             String columnValue = step.getValue().toString();
-            String typeColumn = dataContainer.getTableFieldsMap().get(columnName);
+			String typeColumn = dataContainerUpdate.getTableFieldsMap().get(columnName);
             sb.append(" ").append(columnName).append(" = ");
             ifQuotesNeedWithComma(sb, columnValue, typeColumn);
             sb.append(" , ");

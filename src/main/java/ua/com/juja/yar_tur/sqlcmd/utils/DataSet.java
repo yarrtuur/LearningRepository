@@ -1,4 +1,4 @@
-package ua.com.juja.yar_tur.sqlcmd.model;
+package ua.com.juja.yar_tur.sqlcmd.utils;
 
 import java.util.LinkedList;
 import java.util.List;

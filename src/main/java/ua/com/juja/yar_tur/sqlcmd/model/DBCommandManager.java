@@ -1,6 +1,7 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
 import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
+import ua.com.juja.yar_tur.sqlcmd.utils.DataContainerUpdate;
 import ua.com.juja.yar_tur.sqlcmd.utils.ExitException;
 import ua.com.juja.yar_tur.sqlcmd.utils.FeedBack;
 
@@ -27,7 +28,7 @@ public interface DBCommandManager {
 
     int toClean(String tableName) throws SQLException;
 
-    int toUpdate(DataContainer dataContainer) throws SQLException;
+	int toUpdate(DataContainerUpdate dataContainerUpdate) throws SQLException;
 
     void toView() throws SQLException;
 

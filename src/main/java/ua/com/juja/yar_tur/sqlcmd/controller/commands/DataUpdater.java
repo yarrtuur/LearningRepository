@@ -2,9 +2,9 @@ package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
 import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
-import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.utils.CmdLineState;
-import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
+import ua.com.juja.yar_tur.sqlcmd.utils.DataContainerUpdate;
+import ua.com.juja.yar_tur.sqlcmd.utils.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.utils.ExitException;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
@@ -18,12 +18,12 @@ public class DataUpdater implements CommandProcess, PrepareCmdLine, PrepareComma
     private View view;
     private DataSet dataSetSet;
     private DataSet dataSetWhere;
-    private DataContainer dataContainer;
+	private DataContainerUpdate dataContainerUpdate;
 
     public DataUpdater(DBCommandManager dbManager, View view) {
         this.dbManager = dbManager;
         this.view = view;
-        dataContainer = new DataContainer();
+		dataContainerUpdate = new DataContainerUpdate();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class DataUpdater implements CommandProcess, PrepareCmdLine, PrepareComma
     public CmdLineState process(String[] commandLine) {
         try {
             prepareCmdData(commandLine);
-            dbManager.toUpdate(dataContainer);
+			dbManager.toUpdate(dataContainerUpdate);
             view.write("Update data successfull");
         } catch (SQLException | ExitException ex) {
             view.write(ex.getMessage());
@@ -45,10 +45,10 @@ public class DataUpdater implements CommandProcess, PrepareCmdLine, PrepareComma
 
     @Override
     public void prepareCmdData(String[] commandLine) throws ExitException {
-        dataContainer.setTableName(getTableName(commandLine));
+		dataContainerUpdate.setTableName(getTableName(commandLine));
         getFieldsUpdateParams(commandLine);
-        dataContainer.setDataSetSet(dataSetSet);
-        dataContainer.setDataSetWhere(dataSetWhere);
+		dataContainerUpdate.setDataSetSet(dataSetSet);
+		dataContainerUpdate.setDataSetWhere(dataSetWhere);
     }
 
 

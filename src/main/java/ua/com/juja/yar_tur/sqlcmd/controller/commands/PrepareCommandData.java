@@ -1,6 +1,6 @@
 package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 
-import ua.com.juja.yar_tur.sqlcmd.model.DataSet;
+import ua.com.juja.yar_tur.sqlcmd.utils.DataSet;
 import ua.com.juja.yar_tur.sqlcmd.utils.ExitException;
 
 interface PrepareCommandData {

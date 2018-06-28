@@ -1,7 +1,7 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
 import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
-import ua.com.juja.yar_tur.sqlcmd.utils.ExitException;
+import ua.com.juja.yar_tur.sqlcmd.utils.DataContainerUpdate;
 import ua.com.juja.yar_tur.sqlcmd.utils.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Printable;
 
@@ -25,7 +25,6 @@ public class JDBCDatabaseManager implements DBCommandManager {
 
     @Override
     public PreparedStatement getPrepareStatement(String sql) throws SQLException {
-        preparedStatement = null;
         preparedStatement = connectionKeeper.getConnection().prepareStatement(sql);
         return preparedStatement;
     }
@@ -89,15 +88,15 @@ public class JDBCDatabaseManager implements DBCommandManager {
     }
 
     @Override
-    public int toCreate(DataContainer dataContainer) throws SQLException, ExitException {
-        ResultSet resultSet = getOneTableDetails(dataContainer.getTableName());
-        String columnFilling = resultSet.getString("table_name");
-        if (columnFilling.equals(dataContainer.getTableName())) {
-            throw new ExitException(String.format("table %s has already exist", dataContainer.getTableName()));
-        } else {
+	public int toCreate(DataContainer dataContainer) throws SQLException {
+//        ResultSet resultSet = getOneTableDetails(dataContainer.getTableName());
+//        String columnFilling = resultSet.getString("table_name");
+//        if (columnFilling.equals(dataContainer.getTableName())) {
+//            throw new ExitException(String.format("table %s has already exist", dataContainer.getTableName()));
+//        } else {
             String queryString = prepareForQuery.makeSqlCreateTable(dataContainer);
             return getExecuteUpdate(queryString);
-        }
+//        }
     }
 
     @Override
@@ -132,12 +131,12 @@ public class JDBCDatabaseManager implements DBCommandManager {
     }
 
     @Override
-    public int toUpdate(DataContainer dataContainer) throws SQLException {
-        ResultSet resultSet = getOneTableDetails(dataContainer.getTableName());
+	public int toUpdate(DataContainerUpdate dataContainerUpdate) throws SQLException {
+		ResultSet resultSet = getOneTableDetails(dataContainerUpdate.getTableName());
         Map<String, String> tableFieldsMap = prepareForQuery.getColumnsNamesWithDataType(resultSet);
-        dataContainer.setTableFieldsMap(tableFieldsMap);
+		dataContainerUpdate.setTableFieldsMap(tableFieldsMap);
 
-        String queryString = prepareForQuery.makeSqlUpdateData(dataContainer);
+		String queryString = prepareForQuery.makeSqlUpdateData(dataContainerUpdate);
         return getExecuteUpdate(queryString);
     }
 

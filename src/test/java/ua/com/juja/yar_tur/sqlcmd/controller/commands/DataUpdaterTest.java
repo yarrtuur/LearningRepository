@@ -5,7 +5,7 @@ import ua.com.juja.yar_tur.sqlcmd.model.ConnectionKeeper;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
 import ua.com.juja.yar_tur.sqlcmd.utils.CmdLineState;
-import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
+import ua.com.juja.yar_tur.sqlcmd.utils.DataContainerUpdate;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
@@ -61,7 +61,7 @@ public class DataUpdaterTest {
 		commandLine = new String[]{"update", "tableName", "set", "column1", "value1", "where", "columnX", "valueX"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toUpdate(any(DataContainer.class))).thenReturn(anyInt());
+		when(dbManagerMock.toUpdate(any(DataContainerUpdate.class))).thenReturn(anyInt());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
@@ -70,7 +70,7 @@ public class DataUpdaterTest {
 		commandLine = new String[]{"update"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toUpdate(any(DataContainer.class))).thenReturn(anyInt());
+		when(dbManagerMock.toUpdate(any(DataContainerUpdate.class))).thenReturn(anyInt());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
@@ -79,7 +79,7 @@ public class DataUpdaterTest {
 		commandLine = new String[]{"update", "tableName", "set", "column1", "value1", "where", "columnX", "valueX"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toUpdate(any(DataContainer.class))).thenThrow(new SQLException());
+		when(dbManagerMock.toUpdate(any(DataContainerUpdate.class))).thenThrow(new SQLException());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
@@ -88,7 +88,7 @@ public class DataUpdaterTest {
 		commandLine = new String[]{"update", "tableName", "set", "column1", "value1"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toUpdate(any(DataContainer.class))).thenReturn(anyInt());
+		when(dbManagerMock.toUpdate(any(DataContainerUpdate.class))).thenReturn(anyInt());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 }

@@ -1,6 +1,7 @@
 package ua.com.juja.yar_tur.sqlcmd.model;
 
 import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
+import ua.com.juja.yar_tur.sqlcmd.utils.DataContainerUpdate;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +17,7 @@ interface SQLPreparator {
 
 	String makeSqlDropTable( String tableName );
 
-	String makeSqlUpdateData(DataContainer dataContainer);
+	String makeSqlUpdateData(DataContainerUpdate dataContainerUpdate);
 
 	String makeSqlClearTable( String tableName );
 
