@@ -3,7 +3,6 @@ package ua.com.juja.yar_tur.sqlcmd.model;
 import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
 import ua.com.juja.yar_tur.sqlcmd.utils.DataContainerUpdate;
 import ua.com.juja.yar_tur.sqlcmd.utils.ExitException;
-import ua.com.juja.yar_tur.sqlcmd.utils.FeedBack;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -12,11 +11,11 @@ public interface DBCommandManager {
 
 	ConnectionKeeper getConnection();
 
-    PreparedStatement getPrepareStatement(String sql) throws SQLException;
+	PreparedStatement getPreparedStatement(String sql) throws SQLException;
 
-    void closePrepareStatement() throws SQLException;
+	void closePreparedStatement() throws SQLException;
 
-    FeedBack toExit() throws SQLException;
+	void toExit() throws SQLException;
 
     void toFind(DataContainer dataContainer) throws SQLException;
 
@@ -34,7 +33,7 @@ public interface DBCommandManager {
 
     void toView(String tableName) throws SQLException;
 
-    int toCreate(DataContainer dataContainer) throws SQLException, ExitException;
+	void toCreate(DataContainer dataContainer) throws SQLException, ExitException;
 
     void toConnect(String dbSidLine, String login, String passwd) throws SQLException;
 }

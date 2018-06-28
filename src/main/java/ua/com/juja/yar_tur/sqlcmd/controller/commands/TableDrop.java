@@ -3,34 +3,32 @@ package ua.com.juja.yar_tur.sqlcmd.controller.commands;
 import ua.com.juja.yar_tur.sqlcmd.model.CommandProcess;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.utils.CmdLineState;
-import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
 import ua.com.juja.yar_tur.sqlcmd.utils.ExitException;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
 
-public class TableCreater implements CommandProcess, PrepareCmdLine, PrepareCommandData {
+public class TableDrop implements CommandProcess, PrepareCmdLine, PrepareCommandData {
     private DBCommandManager dbManager;
     private View view;
-    private DataContainer dataContainer;
+    private String tableName;
 
-    public TableCreater(DBCommandManager dbManager, View view) {
+    public TableDrop(DBCommandManager dbManager, View view) {
         this.dbManager = dbManager;
         this.view = view;
-        this.dataContainer = new DataContainer();
     }
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return (singleCommand.startsWith("create") && dbManager.getConnection().isConnected());
+        return (singleCommand.startsWith("drop") && dbManager.getConnection().isConnected());
     }
 
     @Override
     public CmdLineState process(String[] commandLine) {
         try {
             prepareCmdData(commandLine);
-            int countCreate = dbManager.toCreate(dataContainer);
-            view.write(String.format("Create %d table %s successfull.", countCreate, dataContainer.getTableName()));
+            dbManager.toDrop(tableName);
+            view.write(String.format("Drop table %s successfull", tableName));
         } catch (SQLException | ExitException ex) {
             view.write(ex.getMessage());
         }
@@ -39,8 +37,7 @@ public class TableCreater implements CommandProcess, PrepareCmdLine, PrepareComm
 
     @Override
     public void prepareCmdData(String[] commandLine) throws ExitException {
-        dataContainer.setTableName(getTableName(commandLine));
-        dataContainer.setDataSetWhere(getFieldsParams(commandLine));
+        tableName = getTableName(commandLine);
     }
 
 }

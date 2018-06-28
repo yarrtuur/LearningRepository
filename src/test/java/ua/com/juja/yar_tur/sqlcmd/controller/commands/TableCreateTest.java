@@ -6,6 +6,7 @@ import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
 import ua.com.juja.yar_tur.sqlcmd.utils.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
+import ua.com.juja.yar_tur.sqlcmd.utils.ExitException;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
@@ -13,40 +14,37 @@ import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-public class DataInserterTest {
+public class TableCreateTest {
 	private String singleCommand;
 	private String[] commandLine;
 	private DBCommandManager dbManagerMock = mock(JDBCDatabaseManager.class);
 	private ConnectionKeeper connectionKeeperMock = mock(ConnectionKeeper.class);
 	private View viewMock = mock(Console.class);
-	private DataInserter command;
+	private TableCreate command;
 
 	@BeforeClass
 	public static void setUpClass() {
-		System.out.println("Before DataInserterTest.class");
+		System.out.println("Before TableCreateTest.class");
 	}
 
 	@AfterClass
 	public static void tearDownClass() {
-		System.out.println("After DataInserterTest.class");
+		System.out.println("After TableCreateTest.class");
 	}
 
 	@Before
 	public void setUp() {
-		singleCommand = "insert";
-		command = new DataInserter(dbManagerMock,viewMock);
+		singleCommand = "create";
+		command = new TableCreate(dbManagerMock, viewMock);
 	}
 
 	@After
 	public void tearDown() {
 		singleCommand = null;
-		commandLine = null;
 		command = null;
+		commandLine = null;
 	}
 
 	@Test
@@ -57,47 +55,39 @@ public class DataInserterTest {
 	}
 
 	@Test
-	public void process() throws SQLException {
-		commandLine = new String[]{"insert","tbl","fld","vly"};
+	public void process() throws SQLException, ExitException {
+		commandLine = new String[] {"create","tbl","fld","int"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toInsert(any(DataContainer.class))).thenReturn(anyInt());
+		doNothing().when(dbManagerMock).toCreate(any(DataContainer.class));
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
 	@Test
-	public void processNoTableName() throws SQLException {
-		commandLine = new String[]{"insert"};
+	public void processWithSQLE() throws SQLException, ExitException {
+		commandLine = new String[] {"create","tbl","fld","int"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toInsert(any(DataContainer.class))).thenReturn(anyInt());
+		doThrow(SQLException.class).when(dbManagerMock).toCreate(any(DataContainer.class));
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
 	@Test
-	public void processWithWrongCountArgs() throws SQLException {
-		commandLine = new String[]{"insert","tbl","fld"};
+	public void processNoTablename() throws SQLException, ExitException {
+		commandLine = new String[] {"create"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toInsert(any(DataContainer.class))).thenReturn(anyInt());
+		doNothing().when(dbManagerMock).toCreate(any(DataContainer.class));
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
 	@Test
-	public void processWithSQLE() throws SQLException {
-		commandLine = new String[]{"insert","tbl","fld","vly"};
+	public void processWrongCountArgs() throws SQLException, ExitException {
+		commandLine = new String[] {"create","tbl","fld"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toInsert(any(DataContainer.class))).thenThrow(new SQLException());
+		doNothing().when(dbManagerMock).toCreate(any(DataContainer.class));
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
-	@Test
-	public void processWrongInsertData() throws SQLException {
-		commandLine = new String[]{"insert","tbl","fld"};
-		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
-		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toInsert(any(DataContainer.class))).thenReturn(anyInt());
-		assertEquals(CmdLineState.WAIT, command.process(commandLine));
-	}
 }

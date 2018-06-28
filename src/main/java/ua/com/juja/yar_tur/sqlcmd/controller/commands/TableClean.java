@@ -8,12 +8,12 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
 
-public class TableCleaner implements CommandProcess, PrepareCmdLine, PrepareCommandData {
+public class TableClean implements CommandProcess, PrepareCmdLine, PrepareCommandData {
 	private DBCommandManager dbManager;
 	private View view;
 	private String tableName;
 
-	public TableCleaner(DBCommandManager dbManager, View view) {
+	public TableClean(DBCommandManager dbManager, View view) {
 		this.dbManager = dbManager;
 		this.view = view;
 	}

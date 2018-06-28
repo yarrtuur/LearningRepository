@@ -6,7 +6,6 @@ import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
 import ua.com.juja.yar_tur.sqlcmd.utils.CmdLineState;
 import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
-import ua.com.juja.yar_tur.sqlcmd.utils.ExitException;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
@@ -16,35 +15,35 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class TableCreaterTest {
+public class DataFindTest {
 	private String singleCommand;
 	private String[] commandLine;
 	private DBCommandManager dbManagerMock = mock(JDBCDatabaseManager.class);
 	private ConnectionKeeper connectionKeeperMock = mock(ConnectionKeeper.class);
 	private View viewMock = mock(Console.class);
-	private TableCreater command;
+	private DataFind command;
 
 	@BeforeClass
 	public static void setUpClass() {
-		System.out.println("Before TableCreaterTest.class");
+		System.out.println("Before DataFindTest.class");
 	}
 
 	@AfterClass
 	public static void tearDownClass() {
-		System.out.println("After TableCreaterTest.class");
+		System.out.println("After DataFindTest.class");
 	}
 
 	@Before
 	public void setUp() {
-		singleCommand = "create";
-		command = new TableCreater(dbManagerMock,viewMock);
+		singleCommand = "find";
+		command = new DataFind(dbManagerMock, viewMock);
 	}
 
 	@After
 	public void tearDown() {
 		singleCommand = null;
-		command = null;
 		commandLine = null;
+		command = null;
 	}
 
 	@Test
@@ -55,38 +54,47 @@ public class TableCreaterTest {
 	}
 
 	@Test
-	public void process() throws SQLException, ExitException {
-		commandLine = new String[] {"create","tbl","fld","int"};
+	public void process() throws SQLException {
+		commandLine = new String[]{"find","tbl"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toCreate(any(DataContainer.class))).thenReturn(anyInt());
+		doNothing().when(dbManagerMock).toFind(any(DataContainer.class));
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
 	@Test
-	public void processWithSQLE() throws SQLException, ExitException {
-		commandLine = new String[] {"create","tbl","fld","int"};
+	public void processWithSQLE() throws SQLException {
+		commandLine = new String[]{"find","tbl"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toCreate(any(DataContainer.class))).thenThrow(SQLException.class);
+		doThrow(SQLException.class).when(dbManagerMock).toFind(any(DataContainer.class));
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
 	@Test
-	public void processNoTablename() throws SQLException, ExitException {
-		commandLine = new String[] {"create"};
+	public void processWithNoTablename() throws SQLException {
+		commandLine = new String[]{"find"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toCreate(any(DataContainer.class))).thenReturn(anyInt());
+		doNothing().when(dbManagerMock).toFind(any(DataContainer.class));
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
 	@Test
-	public void processWrongCountArgs() throws SQLException, ExitException {
-		commandLine = new String[] {"create","tbl","fld"};
+	public void processWithWrongCountArgs() throws SQLException {
+		commandLine = new String[]{"find","tbl","fld"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		when(dbManagerMock.toCreate(any(DataContainer.class))).thenReturn(anyInt());
+		doNothing().when(dbManagerMock).toFind(any(DataContainer.class));
+		assertEquals(CmdLineState.WAIT, command.process(commandLine));
+	}
+
+	@Test
+	public void processWithDetails() throws SQLException {
+		commandLine = new String[]{"find","tbl","fld","dat"};
+		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
+		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
+		doNothing().when(dbManagerMock).toFind(any(DataContainer.class));
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 

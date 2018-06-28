@@ -15,28 +15,28 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class DataFinderTest {
+public class DataDeleteTest {
 	private String singleCommand;
 	private String[] commandLine;
 	private DBCommandManager dbManagerMock = mock(JDBCDatabaseManager.class);
 	private ConnectionKeeper connectionKeeperMock = mock(ConnectionKeeper.class);
 	private View viewMock = mock(Console.class);
-	private DataFinder command;
+	private DataDelete command;
 
 	@BeforeClass
 	public static void setUpClass() {
-		System.out.println("Before DataFinderTest.class");
+		System.out.println("Before DataDeleteTest.class");
 	}
 
 	@AfterClass
 	public static void tearDownClass() {
-		System.out.println("After DataFinderTest.class");
+		System.out.println("After DataDeleteTest.class");
 	}
 
 	@Before
 	public void setUp() {
-		singleCommand = "find";
-		command = new DataFinder(dbManagerMock, viewMock);
+		singleCommand = "delete";
+		command = new DataDelete(dbManagerMock, viewMock);
 	}
 
 	@After
@@ -55,46 +55,37 @@ public class DataFinderTest {
 
 	@Test
 	public void process() throws SQLException {
-		commandLine = new String[]{"find","tbl"};
+		commandLine = new String[]{"delete","tableName","column","value"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		doNothing().when(dbManagerMock).toFind(any(DataContainer.class));
-		assertEquals(CmdLineState.WAIT, command.process(commandLine));
-	}
-
-	@Test
-	public void processWithSQLE() throws SQLException {
-		commandLine = new String[]{"find","tbl"};
-		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
-		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		doThrow(SQLException.class).when(dbManagerMock).toFind(any(DataContainer.class));
-		assertEquals(CmdLineState.WAIT, command.process(commandLine));
-	}
-
-	@Test
-	public void processWithNoTablename() throws SQLException {
-		commandLine = new String[]{"find"};
-		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
-		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		doNothing().when(dbManagerMock).toFind(any(DataContainer.class));
+        when(dbManagerMock.toDelete(any(DataContainer.class))).thenReturn(anyInt());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
 	@Test
 	public void processWithWrongCountArgs() throws SQLException {
-		commandLine = new String[]{"find","tbl","fld"};
+		commandLine = new String[]{"delete","tableName","column"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		doNothing().when(dbManagerMock).toFind(any(DataContainer.class));
+        when(dbManagerMock.toDelete(any(DataContainer.class))).thenReturn(anyInt());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
 	@Test
-	public void processWithDetails() throws SQLException {
-		commandLine = new String[]{"find","tbl","fld","dat"};
+	public void processWithoutTablename() throws SQLException {
+		commandLine = new String[]{"delete"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-		doNothing().when(dbManagerMock).toFind(any(DataContainer.class));
+        when(dbManagerMock.toDelete(any(DataContainer.class))).thenReturn(anyInt());
+		assertEquals(CmdLineState.WAIT, command.process(commandLine));
+	}
+
+	@Test
+	public void processWithSQLE() throws SQLException {
+		commandLine = new String[]{"delete","tableName"};
+		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
+		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
+        when(dbManagerMock.toDelete(any(DataContainer.class))).thenReturn(anyInt());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 

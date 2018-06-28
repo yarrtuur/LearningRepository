@@ -6,7 +6,6 @@ import ua.com.juja.yar_tur.sqlcmd.model.ConnectionKeeper;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
 import ua.com.juja.yar_tur.sqlcmd.utils.CmdLineState;
-import ua.com.juja.yar_tur.sqlcmd.utils.FeedBack;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
@@ -14,8 +13,7 @@ import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ExitTest {
 
@@ -54,13 +52,13 @@ public class ExitTest {
 	@Test
 	public void processNoConnectTest() throws Exception {
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
-		when(dbManagerMock.toExit()).thenThrow(new SQLException());
+		doThrow(SQLException.class).when(dbManagerMock).toExit();
 		assertEquals(CmdLineState.EXIT, command.process(commandLine));
 	}
 
 	@Test
 	public void processTest() throws Exception {
-		when(dbManagerMock.toExit()).thenReturn(FeedBack.OK);
+		doNothing().when(dbManagerMock).toExit();
 		assertEquals(CmdLineState.EXIT, command.process(commandLine));
 	}
 

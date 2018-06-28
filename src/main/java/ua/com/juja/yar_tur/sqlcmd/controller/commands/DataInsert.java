@@ -9,30 +9,30 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
 
-public class DataFinder implements CommandProcess, PrepareCmdLine, PrepareCommandData {
+public class DataInsert implements CommandProcess, PrepareCmdLine, PrepareCommandData {
     private DBCommandManager dbManager;
     private View view;
     private DataContainer dataContainer;
 
-    public DataFinder(DBCommandManager dbManager, View view) {
+    public DataInsert(DBCommandManager dbManager, View view) {
         this.dbManager = dbManager;
         this.view = view;
-        dataContainer = new DataContainer();
+        this.dataContainer = new DataContainer();
     }
 
     @Override
     public boolean canProcess(String singleCommand) {
-        return (singleCommand.startsWith("find") && dbManager.getConnection().isConnected());
+        return (singleCommand.startsWith("insert") && dbManager.getConnection().isConnected());
     }
 
     @Override
     public CmdLineState process(String[] commandLine) {
         try {
             prepareCmdData(commandLine);
-            dbManager.toFind(dataContainer);
-            view.write("Find data successfull");
-        } catch (SQLException | ExitException e) {
-            view.write(e.getMessage());
+            int insertCount = dbManager.toInsert(dataContainer);
+            view.write(String.format("Insert data into table successfull for %d rows", insertCount));
+        } catch (SQLException | ExitException ex) {
+            view.write(ex.getMessage());
         }
         return CmdLineState.WAIT;
     }

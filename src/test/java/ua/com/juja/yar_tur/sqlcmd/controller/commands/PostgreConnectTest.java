@@ -65,5 +65,4 @@ public class PostgreConnectTest {
         doNothing().when(dbManagerMock).toConnect(anyString(), anyString(), anyString());
         assertEquals(CmdLineState.WAIT, command.process(commandLine));
     }
-
 }

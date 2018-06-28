@@ -28,9 +28,7 @@ public class PgSQLPreparator implements SQLPreparator {
     }
 
     private void ifQuotesNeedWithAnd(StringBuilder sb, String columnValue, String typeColumn) {
-        if (typeColumn.startsWith("char") ||
-                typeColumn.startsWith("varchar") ||
-                typeColumn.startsWith("text")) {
+        if (typeColumn.startsWith("char") || typeColumn.startsWith("varchar") || typeColumn.startsWith("text")) {
             sb.append("'").append(columnValue).append("'").append(" AND ");
         } else {
             sb.append(columnValue).append(" AND ");
@@ -81,9 +79,8 @@ public class PgSQLPreparator implements SQLPreparator {
 			String typeColumn = dataContainerUpdate.getTableFieldsMap().get(columnName);
             sb.append(" ").append(columnName).append(" = ");
             ifQuotesNeedWithComma(sb, columnValue, typeColumn);
-            sb.append(" , ");
         }
-        sb.replace(sb.length() - 3, sb.length(), " ");
+        sb.replace(sb.length() - 2, sb.length(), " ");
     }
 
     private void gatherCondition(StringBuilder sb, DataContainer dataContainer) {
@@ -101,9 +98,7 @@ public class PgSQLPreparator implements SQLPreparator {
     }
 
     private void ifQuotesNeedWithComma(StringBuilder sb, String columnValue, String typeColumn) {
-        if (typeColumn.startsWith("char") ||
-                typeColumn.startsWith("varchar") ||
-                typeColumn.startsWith("text")) {
+        if (typeColumn.startsWith("char") || typeColumn.startsWith("varchar") || typeColumn.startsWith("text")) {
             sb.append("'").append(columnValue).append("'").append(", ");
         } else {
             sb.append(columnValue).append(", ");

@@ -5,7 +5,6 @@ import ua.com.juja.yar_tur.sqlcmd.model.ConnectionKeeper;
 import ua.com.juja.yar_tur.sqlcmd.model.DBCommandManager;
 import ua.com.juja.yar_tur.sqlcmd.model.JDBCDatabaseManager;
 import ua.com.juja.yar_tur.sqlcmd.utils.CmdLineState;
-import ua.com.juja.yar_tur.sqlcmd.utils.DataContainer;
 import ua.com.juja.yar_tur.sqlcmd.viewer.Console;
 import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
@@ -13,30 +12,33 @@ import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-public class DataDeleterTest {
+public class TableDropTest {
 	private String singleCommand;
 	private String[] commandLine;
 	private DBCommandManager dbManagerMock = mock(JDBCDatabaseManager.class);
 	private ConnectionKeeper connectionKeeperMock = mock(ConnectionKeeper.class);
 	private View viewMock = mock(Console.class);
-	private DataDeleter command;
+	private TableDrop command;
 
 	@BeforeClass
 	public static void setUpClass() {
-		System.out.println("Before DataDeleterTest.class");
+		System.out.println("Before TableDropTest.class");
 	}
 
 	@AfterClass
 	public static void tearDownClass() {
-		System.out.println("After DataDeleterTest.class");
+		System.out.println("After TableDropTest.class");
 	}
 
 	@Before
 	public void setUp() {
-		singleCommand = "delete";
-		command = new DataDeleter(dbManagerMock,viewMock);
+		singleCommand = "drop";
+		command = new TableDrop(dbManagerMock, viewMock);
 	}
 
 	@After
@@ -55,37 +57,28 @@ public class DataDeleterTest {
 
 	@Test
 	public void process() throws SQLException {
-		commandLine = new String[]{"delete","tableName","column","value"};
+		commandLine = new String[]{"drop","tableName"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-        when(dbManagerMock.toDelete(any(DataContainer.class))).thenReturn(anyInt());
+		when(dbManagerMock.toDrop(anyString())).thenReturn(anyInt());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
 	@Test
 	public void processWithWrongCountArgs() throws SQLException {
-		commandLine = new String[]{"delete","tableName","column"};
+		commandLine = new String[]{"drop"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-        when(dbManagerMock.toDelete(any(DataContainer.class))).thenReturn(anyInt());
-		assertEquals(CmdLineState.WAIT, command.process(commandLine));
-	}
-
-	@Test
-	public void processWithoutTablename() throws SQLException {
-		commandLine = new String[]{"delete"};
-		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
-		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-        when(dbManagerMock.toDelete(any(DataContainer.class))).thenReturn(anyInt());
+		when(dbManagerMock.toDrop(anyString())).thenReturn(anyInt());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 
 	@Test
 	public void processWithSQLE() throws SQLException {
-		commandLine = new String[]{"delete","tableName"};
+		commandLine = new String[]{"drop","tableName"};
 		when(dbManagerMock.getConnection()).thenReturn(connectionKeeperMock);
 		when(dbManagerMock.getConnection().isConnected()).thenReturn(true);
-        when(dbManagerMock.toDelete(any(DataContainer.class))).thenReturn(anyInt());
+		when(dbManagerMock.toDrop(anyString())).thenThrow(new SQLException());
 		assertEquals(CmdLineState.WAIT, command.process(commandLine));
 	}
 

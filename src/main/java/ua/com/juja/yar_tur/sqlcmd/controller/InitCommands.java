@@ -9,27 +9,27 @@ import java.util.LinkedList;
 import java.util.List;
 
 class InitCommands {
-	View view;
-	DBCommandManager dbManager;
+	private View view;
+	private DBCommandManager dbManager;
 
-	public InitCommands(View view, DBCommandManager dbManager) {
+	InitCommands(View view, DBCommandManager dbManager) {
 		this.view = view;
 		this.dbManager = dbManager;
 	}
 
-	public List<CommandProcess> initCommandList() {
+	List<CommandProcess> initCommandList() {
 		List<CommandProcess> commands = new LinkedList<>();
 		commands.add(new Exit(dbManager, view));
 		commands.add(new Help(view));
 		commands.add(new PostgreConnect(dbManager, view));
-		commands.add(new TableCreater(dbManager, view));
-		commands.add(new TableViewer(dbManager, view));
-		commands.add(new DataInserter(dbManager, view));
-		commands.add(new DataFinder(dbManager, view));
-		commands.add(new TableCleaner(dbManager, view));
-		commands.add(new TableDroper(dbManager, view));
-		commands.add(new DataDeleter(dbManager, view));
-		commands.add(new DataUpdater(dbManager, view));
+		commands.add(new TableCreate(dbManager, view));
+		commands.add(new TableView(dbManager, view));
+		commands.add(new DataInsert(dbManager, view));
+		commands.add(new DataFind(dbManager, view));
+		commands.add(new TableClean(dbManager, view));
+		commands.add(new TableDrop(dbManager, view));
+		commands.add(new DataDelete(dbManager, view));
+		commands.add(new DataUpdate(dbManager, view));
 		commands.add(new ChkConnection(dbManager, view));
 		commands.add(new Unreachable(view));
 

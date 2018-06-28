@@ -9,12 +9,12 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
 
-public class DataDeleter implements CommandProcess, PrepareCmdLine, PrepareCommandData {
+public class DataDelete implements CommandProcess, PrepareCmdLine, PrepareCommandData {
 	private DBCommandManager dbManager;
 	private View view;
 	private DataContainer dataContainer;
 
-	public DataDeleter(DBCommandManager dbManager, View view) {
+	public DataDelete(DBCommandManager dbManager, View view) {
 		this.dbManager = dbManager;
 		this.view = view;
 		dataContainer = new DataContainer();

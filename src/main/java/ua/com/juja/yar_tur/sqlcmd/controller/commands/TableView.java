@@ -7,12 +7,12 @@ import ua.com.juja.yar_tur.sqlcmd.viewer.View;
 
 import java.sql.SQLException;
 
-public class TableViewer implements CommandProcess, PrepareCmdLine, PrepareCommandData {
+public class TableView implements CommandProcess, PrepareCmdLine, PrepareCommandData {
     private DBCommandManager dbManager;
     private View view;
     private String tableName;
 
-    public TableViewer(DBCommandManager dbManager, View view) {
+    public TableView(DBCommandManager dbManager, View view) {
         this.dbManager = dbManager;
         this.view = view;
     }

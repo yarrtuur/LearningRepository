@@ -7,7 +7,7 @@ interface PrepareCommandData {
 
     default DataSet getFieldsParams(String[] commandLine) throws ExitException {
         DataSet dataSet;
-        if (commandLine.length % 2 != 0 && commandLine.length > 2) {
+        if (commandLine.length % 2 != 0 && commandLine.length >= 2) {
             throw new ExitException("String format is wrong. Try again.");
         } else {
             dataSet = new DataSet();
